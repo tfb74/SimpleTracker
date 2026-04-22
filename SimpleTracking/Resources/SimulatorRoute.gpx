@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="SimpleTracking Simulator">
+  <trk>
+    <name>Teststrecke München Englischer Garten</name>
+    <trkseg>
+      <trkpt lat="48.1642" lon="11.6052"><time>2026-01-01T08:00:00Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1649" lon="11.6065"><time>2026-01-01T08:00:30Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1658" lon="11.6075"><time>2026-01-01T08:01:00Z</time><ele>522</ele></trkpt>
+      <trkpt lat="48.1670" lon="11.6081"><time>2026-01-01T08:01:30Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1682" lon="11.6079"><time>2026-01-01T08:02:00Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1694" lon="11.6070"><time>2026-01-01T08:02:30Z</time><ele>519</ele></trkpt>
+      <trkpt lat="48.1703" lon="11.6058"><time>2026-01-01T08:03:00Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1712" lon="11.6044"><time>2026-01-01T08:03:30Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1718" lon="11.6028"><time>2026-01-01T08:04:00Z</time><ele>522</ele></trkpt>
+      <trkpt lat="48.1722" lon="11.6010"><time>2026-01-01T08:04:30Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1724" lon="11.5991"><time>2026-01-01T08:05:00Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1723" lon="11.5972"><time>2026-01-01T08:05:30Z</time><ele>519</ele></trkpt>
+      <trkpt lat="48.1720" lon="11.5954"><time>2026-01-01T08:06:00Z</time><ele>519</ele></trkpt>
+      <trkpt lat="48.1715" lon="11.5937"><time>2026-01-01T08:06:30Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1707" lon="11.5922"><time>2026-01-01T08:07:00Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1698" lon="11.5910"><time>2026-01-01T08:07:30Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1687" lon="11.5901"><time>2026-01-01T08:08:00Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1675" lon="11.5896"><time>2026-01-01T08:08:30Z</time><ele>519</ele></trkpt>
+      <trkpt lat="48.1662" lon="11.5897"><time>2026-01-01T08:09:00Z</time><ele>519</ele></trkpt>
+      <trkpt lat="48.1650" lon="11.5903"><time>2026-01-01T08:09:30Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1640" lon="11.5914"><time>2026-01-01T08:10:00Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1633" lon="11.5928"><time>2026-01-01T08:10:30Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1629" lon="11.5945"><time>2026-01-01T08:11:00Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1628" lon="11.5963"><time>2026-01-01T08:11:30Z</time><ele>519</ele></trkpt>
+      <trkpt lat="48.1631" lon="11.5981"><time>2026-01-01T08:12:00Z</time><ele>519</ele></trkpt>
+      <trkpt lat="48.1636" lon="11.5998"><time>2026-01-01T08:12:30Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1642" lon="11.6014"><time>2026-01-01T08:13:00Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1647" lon="11.6030"><time>2026-01-01T08:13:30Z</time><ele>521</ele></trkpt>
+      <trkpt lat="48.1648" lon="11.6047"><time>2026-01-01T08:14:00Z</time><ele>520</ele></trkpt>
+      <trkpt lat="48.1643" lon="11.6052"><time>2026-01-01T08:14:30Z</time><ele>520</ele></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

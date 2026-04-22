@@ -1,0 +1,658 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01B237E25F29FC1547D4FC7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3C8C7F08A3D070D21C9817A /* Assets.xcassets */; };
+		054AC71DE863B5A3B6D66AD0 /* FoodLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69E4167DF195C81C61C613C /* FoodLogView.swift */; };
+		0E5EA09B4859F146374D5E5E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAD8979730DDAE8AF89874DE /* LaunchScreen.storyboard */; };
+		15510935D1FB2525B36534A0 /* RoutePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8884A9C2C1BCBDE44B4369DF /* RoutePoint.swift */; };
+		1933D434DB91A546E2E5FCCF /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530F033807612D81958F1F5 /* Theme.swift */; };
+		198841300B136A1D75A9180A /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E2EDDA57CD10467C2CD21 /* LocationService.swift */; };
+		1D3803FB942693CB9929555F /* OpenFoodFactsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE74BA5135FFC241966564A /* OpenFoodFactsService.swift */; };
+		248D84F53A2FEF3F6F650CDD /* WorkoutRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A859EEDFD3DE42F5F24F4235 /* WorkoutRecord.swift */; };
+		25821F13A3BD1D21D4F600AE /* RouteCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3027143CE52153DCACF74B /* RouteCache.swift */; };
+		3698B044ED2B6D56306B1855 /* WorkoutDraftStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771523E0B21ADD17AA5B0111 /* WorkoutDraftStore.swift */; };
+		3901A0FF458E3F4F58A8E92B /* PhotoFoodAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072C3F1F32BF255F195E3A50 /* PhotoFoodAnalysisView.swift */; };
+		3E24A6A87FF52B1516F98EB7 /* CaloricEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE85FCC4302BD4356ED2E08 /* CaloricEstimator.swift */; };
+		4311069FC82291039428F1DC /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0382C2AD7B0614074D69DE /* WorkoutType.swift */; };
+		4AF5059ABE234D75D1E97AC2 /* NativeAdTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D239B7E41C0A348086C2C49 /* NativeAdTile.swift */; };
+		524C952D81385694F4DA75A9 /* WatchConnectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D01A12E68433EE17EFE5E10 /* WatchConnectivityService.swift */; };
+		54F0F1534F5E879A8D7FAB48 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B267A76599364626764F51 /* NotificationService.swift */; };
+		57CBBB31185EEE3DBE2B25CC /* FoodEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC3D6CD46ABA05374E8B7D9 /* FoodEntry.swift */; };
+		58C18714286F691FB07AC482 /* AddFoodSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3143698EC3E1DC17B6CAE4F3 /* AddFoodSheet.swift */; };
+		5B22B6729659D96965BBDEFF /* WatchMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A957D1B48A14640FBB513ED8 /* WatchMessage.swift */; };
+		5C1BA14BBFF92C0CB78D3464 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74F5273292724BBB3939B12 /* StatisticsView.swift */; };
+		6269BE9185C5FA62919FEA74 /* MockDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91C76B654239609FF536AE /* MockDataService.swift */; };
+		6B45B4F3CA44BBCF54A1A9BF /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FF41F4D4DCBC4244E23D8F /* WorkoutDetailView.swift */; };
+		72A56C4D641E505CFD808ED4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEBEF66F066ED3A2AB31A0 /* UserSettings.swift */; };
+		76DB7CD36FA44AEBE18FD062 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4290AEA61B242A793BEB95B /* SettingsView.swift */; };
+		7EE33A4C95F1AEF5DF0E5D8F /* GameCenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEE66565CBC7505022D97F2 /* GameCenterService.swift */; };
+		8CFDB0E7F307DE134793D197 /* RouteMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6A4CCA5B4AD6C6662A76D7 /* RouteMapView.swift */; };
+		951EFD32B09FDE746E029C55 /* WorkoutScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A88CA86E5B9FDC13B47401 /* WorkoutScore.swift */; };
+		95B1730F89B8B26AD98E8981 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99D0A04D793FF48CB40A5DF /* HealthKitService.swift */; };
+		9AA995CA7FE32A821F3F7758 /* BarcodeEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E39D6C1802E34E1928383C /* BarcodeEntryView.swift */; };
+		A5F32D276AC3415D641B3073 /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AE38963F371F35C6FAC901 /* AchievementsView.swift */; };
+		AA9FA0455F9D3954FA7096C5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62EB950A3779799F32E17B3 /* ContentView.swift */; };
+		AF0AB498CAB0AFC715BC97DD /* FoodPhotoAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C734424CE024A74AC92082C3 /* FoodPhotoAnalyzer.swift */; };
+		B24D8E96668A9EB9B61F64F2 /* FoodLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DF3A133D0FF36C0C0CDCBC /* FoodLogStore.swift */; };
+		B3C6438F66A303D2C7100098 /* SimpleTrackingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67072E3AF083859B8F0DA369 /* SimpleTrackingApp.swift */; };
+		B6FA5942EAD959D2A76A80F9 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CCF82E4F33954FB73164EF /* DashboardView.swift */; };
+		BD782DFAB85AFBE4EB6DA7FF /* QuickFoodPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515FECDBCEB3B0D0EF07C115 /* QuickFoodPreset.swift */; };
+		BEA3EDBE48E41FD392C05584 /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C688B58AE05B5D56F7D555A /* ActiveWorkoutView.swift */; };
+		BEF5CA00C6C437ACFD1D5D4D /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A39F33DF899D9F146B3B6F4 /* ScoreView.swift */; };
+		C8774AA9882534AB34C68709 /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC161528971BCD80FA5D0817 /* ImportView.swift */; };
+		CCF5EF1073A317DEED0F6CF3 /* ManualFoodEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421C0D69FBE302D68B7A13C /* ManualFoodEntryView.swift */; };
+		D137D2E364810AD46567BD4F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FEC0ACFDBBA462C63FA7A18F /* GoogleMobileAds */; };
+		D57BDC80CF9546D1139496D4 /* WorkoutDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DCA90EDA375E3939B121A5 /* WorkoutDraft.swift */; };
+		EF4E3D56FF06435BEF498A68 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AACFFEA7C9755DCB920747A /* AdService.swift */; };
+		F23C9114ACD28C0EB4E80874 /* QuickFoodStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D245E177D79D9FBF2B02C2A /* QuickFoodStore.swift */; };
+		F3F313767BE83B399251E94B /* LocalAchievementStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4701C6465B715D6F21CD5035 /* LocalAchievementStore.swift */; };
+		F760D9F3AF65F8D7E270B4FE /* WorkoutHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14697FD1A03A348C8DD58D80 /* WorkoutHistoryView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		072C3F1F32BF255F195E3A50 /* PhotoFoodAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFoodAnalysisView.swift; sourceTree = "<group>"; };
+		0A39F33DF899D9F146B3B6F4 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
+		0BF60AA909643648B514A504 /* SimulatorRoute.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SimulatorRoute.gpx; sourceTree = "<group>"; };
+		14697FD1A03A348C8DD58D80 /* WorkoutHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryView.swift; sourceTree = "<group>"; };
+		1D239B7E41C0A348086C2C49 /* NativeAdTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdTile.swift; sourceTree = "<group>"; };
+		23B267A76599364626764F51 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		2CC3D6CD46ABA05374E8B7D9 /* FoodEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodEntry.swift; sourceTree = "<group>"; };
+		2DEE66565CBC7505022D97F2 /* GameCenterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterService.swift; sourceTree = "<group>"; };
+		3143698EC3E1DC17B6CAE4F3 /* AddFoodSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFoodSheet.swift; sourceTree = "<group>"; };
+		3421C0D69FBE302D68B7A13C /* ManualFoodEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualFoodEntryView.swift; sourceTree = "<group>"; };
+		4701C6465B715D6F21CD5035 /* LocalAchievementStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAchievementStore.swift; sourceTree = "<group>"; };
+		4AACFFEA7C9755DCB920747A /* AdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdService.swift; sourceTree = "<group>"; };
+		4D245E177D79D9FBF2B02C2A /* QuickFoodStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickFoodStore.swift; sourceTree = "<group>"; };
+		515FECDBCEB3B0D0EF07C115 /* QuickFoodPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickFoodPreset.swift; sourceTree = "<group>"; };
+		5D01A12E68433EE17EFE5E10 /* WatchConnectivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityService.swift; sourceTree = "<group>"; };
+		658920A04C0706839927A9FA /* SimpleTracking.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleTracking.entitlements; sourceTree = "<group>"; };
+		67072E3AF083859B8F0DA369 /* SimpleTrackingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackingApp.swift; sourceTree = "<group>"; };
+		771523E0B21ADD17AA5B0111 /* WorkoutDraftStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDraftStore.swift; sourceTree = "<group>"; };
+		7A9AED8DEAA25827B863B3CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7E3027143CE52153DCACF74B /* RouteCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCache.swift; sourceTree = "<group>"; };
+		8884A9C2C1BCBDE44B4369DF /* RoutePoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePoint.swift; sourceTree = "<group>"; };
+		89DF3A133D0FF36C0C0CDCBC /* FoodLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogStore.swift; sourceTree = "<group>"; };
+		8B91C76B654239609FF536AE /* MockDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataService.swift; sourceTree = "<group>"; };
+		8C688B58AE05B5D56F7D555A /* ActiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveWorkoutView.swift; sourceTree = "<group>"; };
+		9CE74BA5135FFC241966564A /* OpenFoodFactsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFoodFactsService.swift; sourceTree = "<group>"; };
+		A3C8C7F08A3D070D21C9817A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A69E4167DF195C81C61C613C /* FoodLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogView.swift; sourceTree = "<group>"; };
+		A74F5273292724BBB3939B12 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		A859EEDFD3DE42F5F24F4235 /* WorkoutRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutRecord.swift; sourceTree = "<group>"; };
+		A957D1B48A14640FBB513ED8 /* WatchMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchMessage.swift; sourceTree = "<group>"; };
+		AC161528971BCD80FA5D0817 /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
+		AD0382C2AD7B0614074D69DE /* WorkoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutType.swift; sourceTree = "<group>"; };
+		B4290AEA61B242A793BEB95B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B99D0A04D793FF48CB40A5DF /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		BFBEBEF66F066ED3A2AB31A0 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		C530F033807612D81958F1F5 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		C62EB950A3779799F32E17B3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C6AE38963F371F35C6FAC901 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
+		C734424CE024A74AC92082C3 /* FoodPhotoAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodPhotoAnalyzer.swift; sourceTree = "<group>"; };
+		D0E39D6C1802E34E1928383C /* BarcodeEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeEntryView.swift; sourceTree = "<group>"; };
+		D8DCA90EDA375E3939B121A5 /* WorkoutDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDraft.swift; sourceTree = "<group>"; };
+		DAD8979730DDAE8AF89874DE /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E1CCF82E4F33954FB73164EF /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		EF6A4CCA5B4AD6C6662A76D7 /* RouteMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteMapView.swift; sourceTree = "<group>"; };
+		F003C5750AA46B21F8C8D16E /* SimpleTracking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleTracking.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F30E2EDDA57CD10467C2CD21 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		F6A88CA86E5B9FDC13B47401 /* WorkoutScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutScore.swift; sourceTree = "<group>"; };
+		F9FF41F4D4DCBC4244E23D8F /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
+		FEE85FCC4302BD4356ED2E08 /* CaloricEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloricEstimator.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FFA329E8268B75E0B2860DAF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D137D2E364810AD46567BD4F /* GoogleMobileAds in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A453A68B0E3DDC800402E4D /* App */ = {
+			isa = PBXGroup;
+			children = (
+				7A9AED8DEAA25827B863B3CC /* Info.plist */,
+				67072E3AF083859B8F0DA369 /* SimpleTrackingApp.swift */,
+				C530F033807612D81958F1F5 /* Theme.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		0EDFE48F14E8B5E69DCE6410 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C62EB950A3779799F32E17B3 /* ContentView.swift */,
+				B1E93D045D094DCD11D5E3F2 /* Achievements */,
+				63DA8057979AACAE45AF5DC3 /* Ads */,
+				70EFC2860C911E2F4FEA5DCA /* Dashboard */,
+				7D8F2D80B2A285FA5EE70D0E /* Food */,
+				7E775B41C0BAAAECE7AF80D5 /* History */,
+				5B0BF521105DA47F5F009B5E /* Import */,
+				F7F3BA9F6FBCA8D4CC693EE9 /* Map */,
+				F2C5E11831AE82B1A6ACB1D6 /* Score */,
+				7B774F54C124FC99FF31F3F0 /* Settings */,
+				8108E253A07821039E43A49D /* Statistics */,
+				2294FBABA706C5A4F8E7B140 /* Workout */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1AAC0C6BFADC7B7289C4B4F0 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4AACFFEA7C9755DCB920747A /* AdService.swift */,
+				FEE85FCC4302BD4356ED2E08 /* CaloricEstimator.swift */,
+				89DF3A133D0FF36C0C0CDCBC /* FoodLogStore.swift */,
+				C734424CE024A74AC92082C3 /* FoodPhotoAnalyzer.swift */,
+				2DEE66565CBC7505022D97F2 /* GameCenterService.swift */,
+				B99D0A04D793FF48CB40A5DF /* HealthKitService.swift */,
+				4701C6465B715D6F21CD5035 /* LocalAchievementStore.swift */,
+				F30E2EDDA57CD10467C2CD21 /* LocationService.swift */,
+				8B91C76B654239609FF536AE /* MockDataService.swift */,
+				23B267A76599364626764F51 /* NotificationService.swift */,
+				9CE74BA5135FFC241966564A /* OpenFoodFactsService.swift */,
+				4D245E177D79D9FBF2B02C2A /* QuickFoodStore.swift */,
+				7E3027143CE52153DCACF74B /* RouteCache.swift */,
+				5D01A12E68433EE17EFE5E10 /* WatchConnectivityService.swift */,
+				771523E0B21ADD17AA5B0111 /* WorkoutDraftStore.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		2294FBABA706C5A4F8E7B140 /* Workout */ = {
+			isa = PBXGroup;
+			children = (
+				8C688B58AE05B5D56F7D555A /* ActiveWorkoutView.swift */,
+			);
+			path = Workout;
+			sourceTree = "<group>";
+		};
+		5B0BF521105DA47F5F009B5E /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				AC161528971BCD80FA5D0817 /* ImportView.swift */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
+		63DA8057979AACAE45AF5DC3 /* Ads */ = {
+			isa = PBXGroup;
+			children = (
+				1D239B7E41C0A348086C2C49 /* NativeAdTile.swift */,
+			);
+			path = Ads;
+			sourceTree = "<group>";
+		};
+		6CC06C10D3DCF4EDAC537FCA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A3C8C7F08A3D070D21C9817A /* Assets.xcassets */,
+				DAD8979730DDAE8AF89874DE /* LaunchScreen.storyboard */,
+				0BF60AA909643648B514A504 /* SimulatorRoute.gpx */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		70EFC2860C911E2F4FEA5DCA /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				E1CCF82E4F33954FB73164EF /* DashboardView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		7B774F54C124FC99FF31F3F0 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				B4290AEA61B242A793BEB95B /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		7D8F2D80B2A285FA5EE70D0E /* Food */ = {
+			isa = PBXGroup;
+			children = (
+				3143698EC3E1DC17B6CAE4F3 /* AddFoodSheet.swift */,
+				D0E39D6C1802E34E1928383C /* BarcodeEntryView.swift */,
+				A69E4167DF195C81C61C613C /* FoodLogView.swift */,
+				3421C0D69FBE302D68B7A13C /* ManualFoodEntryView.swift */,
+				072C3F1F32BF255F195E3A50 /* PhotoFoodAnalysisView.swift */,
+			);
+			path = Food;
+			sourceTree = "<group>";
+		};
+		7E775B41C0BAAAECE7AF80D5 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				F9FF41F4D4DCBC4244E23D8F /* WorkoutDetailView.swift */,
+				14697FD1A03A348C8DD58D80 /* WorkoutHistoryView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		8108E253A07821039E43A49D /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				A74F5273292724BBB3939B12 /* StatisticsView.swift */,
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
+		A929286976FD80418981E9F2 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				BFBEBEF66F066ED3A2AB31A0 /* UserSettings.swift */,
+				A957D1B48A14640FBB513ED8 /* WatchMessage.swift */,
+				AD0382C2AD7B0614074D69DE /* WorkoutType.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		B1E93D045D094DCD11D5E3F2 /* Achievements */ = {
+			isa = PBXGroup;
+			children = (
+				C6AE38963F371F35C6FAC901 /* AchievementsView.swift */,
+			);
+			path = Achievements;
+			sourceTree = "<group>";
+		};
+		B2B89E20B6248ABC6F4936AE = {
+			isa = PBXGroup;
+			children = (
+				A929286976FD80418981E9F2 /* Shared */,
+				CB9D6B457EDF25679CB9D167 /* SimpleTracking */,
+				F463886F279BDD945DA98F43 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BF1EE703AB59C87C5AE9F325 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2CC3D6CD46ABA05374E8B7D9 /* FoodEntry.swift */,
+				515FECDBCEB3B0D0EF07C115 /* QuickFoodPreset.swift */,
+				8884A9C2C1BCBDE44B4369DF /* RoutePoint.swift */,
+				D8DCA90EDA375E3939B121A5 /* WorkoutDraft.swift */,
+				A859EEDFD3DE42F5F24F4235 /* WorkoutRecord.swift */,
+				F6A88CA86E5B9FDC13B47401 /* WorkoutScore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		CB9D6B457EDF25679CB9D167 /* SimpleTracking */ = {
+			isa = PBXGroup;
+			children = (
+				658920A04C0706839927A9FA /* SimpleTracking.entitlements */,
+				0A453A68B0E3DDC800402E4D /* App */,
+				BF1EE703AB59C87C5AE9F325 /* Models */,
+				6CC06C10D3DCF4EDAC537FCA /* Resources */,
+				1AAC0C6BFADC7B7289C4B4F0 /* Services */,
+				0EDFE48F14E8B5E69DCE6410 /* Views */,
+			);
+			path = SimpleTracking;
+			sourceTree = "<group>";
+		};
+		F2C5E11831AE82B1A6ACB1D6 /* Score */ = {
+			isa = PBXGroup;
+			children = (
+				0A39F33DF899D9F146B3B6F4 /* ScoreView.swift */,
+			);
+			path = Score;
+			sourceTree = "<group>";
+		};
+		F463886F279BDD945DA98F43 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F003C5750AA46B21F8C8D16E /* SimpleTracking.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F7F3BA9F6FBCA8D4CC693EE9 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				EF6A4CCA5B4AD6C6662A76D7 /* RouteMapView.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F33297F250329B57B2FAB161 /* SimpleTracking */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EE95465DB15A464FD88CF7F /* Build configuration list for PBXNativeTarget "SimpleTracking" */;
+			buildPhases = (
+				0B4EA08AAD92E91BE05AF78D /* Sources */,
+				D12073613617320652B89296 /* Resources */,
+				FFA329E8268B75E0B2860DAF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimpleTracking;
+			packageProductDependencies = (
+				FEC0ACFDBBA462C63FA7A18F /* GoogleMobileAds */,
+			);
+			productName = SimpleTracking;
+			productReference = F003C5750AA46B21F8C8D16E /* SimpleTracking.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F9A5532C87D4BA9DC3B022D8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					F33297F250329B57B2FAB161 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C8DCA120CC0FE2B09B85C204 /* Build configuration list for PBXProject "SimpleTracking" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = B2B89E20B6248ABC6F4936AE;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				49090797592A957730CBA3A6 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F463886F279BDD945DA98F43 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F33297F250329B57B2FAB161 /* SimpleTracking */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D12073613617320652B89296 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01B237E25F29FC1547D4FC7A /* Assets.xcassets in Resources */,
+				0E5EA09B4859F146374D5E5E /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0B4EA08AAD92E91BE05AF78D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5F32D276AC3415D641B3073 /* AchievementsView.swift in Sources */,
+				BEA3EDBE48E41FD392C05584 /* ActiveWorkoutView.swift in Sources */,
+				EF4E3D56FF06435BEF498A68 /* AdService.swift in Sources */,
+				58C18714286F691FB07AC482 /* AddFoodSheet.swift in Sources */,
+				9AA995CA7FE32A821F3F7758 /* BarcodeEntryView.swift in Sources */,
+				3E24A6A87FF52B1516F98EB7 /* CaloricEstimator.swift in Sources */,
+				AA9FA0455F9D3954FA7096C5 /* ContentView.swift in Sources */,
+				B6FA5942EAD959D2A76A80F9 /* DashboardView.swift in Sources */,
+				57CBBB31185EEE3DBE2B25CC /* FoodEntry.swift in Sources */,
+				B24D8E96668A9EB9B61F64F2 /* FoodLogStore.swift in Sources */,
+				054AC71DE863B5A3B6D66AD0 /* FoodLogView.swift in Sources */,
+				AF0AB498CAB0AFC715BC97DD /* FoodPhotoAnalyzer.swift in Sources */,
+				7EE33A4C95F1AEF5DF0E5D8F /* GameCenterService.swift in Sources */,
+				95B1730F89B8B26AD98E8981 /* HealthKitService.swift in Sources */,
+				C8774AA9882534AB34C68709 /* ImportView.swift in Sources */,
+				F3F313767BE83B399251E94B /* LocalAchievementStore.swift in Sources */,
+				198841300B136A1D75A9180A /* LocationService.swift in Sources */,
+				CCF5EF1073A317DEED0F6CF3 /* ManualFoodEntryView.swift in Sources */,
+				6269BE9185C5FA62919FEA74 /* MockDataService.swift in Sources */,
+				4AF5059ABE234D75D1E97AC2 /* NativeAdTile.swift in Sources */,
+				54F0F1534F5E879A8D7FAB48 /* NotificationService.swift in Sources */,
+				1D3803FB942693CB9929555F /* OpenFoodFactsService.swift in Sources */,
+				3901A0FF458E3F4F58A8E92B /* PhotoFoodAnalysisView.swift in Sources */,
+				BD782DFAB85AFBE4EB6DA7FF /* QuickFoodPreset.swift in Sources */,
+				F23C9114ACD28C0EB4E80874 /* QuickFoodStore.swift in Sources */,
+				25821F13A3BD1D21D4F600AE /* RouteCache.swift in Sources */,
+				8CFDB0E7F307DE134793D197 /* RouteMapView.swift in Sources */,
+				15510935D1FB2525B36534A0 /* RoutePoint.swift in Sources */,
+				BEF5CA00C6C437ACFD1D5D4D /* ScoreView.swift in Sources */,
+				76DB7CD36FA44AEBE18FD062 /* SettingsView.swift in Sources */,
+				B3C6438F66A303D2C7100098 /* SimpleTrackingApp.swift in Sources */,
+				5C1BA14BBFF92C0CB78D3464 /* StatisticsView.swift in Sources */,
+				1933D434DB91A546E2E5FCCF /* Theme.swift in Sources */,
+				72A56C4D641E505CFD808ED4 /* UserSettings.swift in Sources */,
+				524C952D81385694F4DA75A9 /* WatchConnectivityService.swift in Sources */,
+				5B22B6729659D96965BBDEFF /* WatchMessage.swift in Sources */,
+				6B45B4F3CA44BBCF54A1A9BF /* WorkoutDetailView.swift in Sources */,
+				D57BDC80CF9546D1139496D4 /* WorkoutDraft.swift in Sources */,
+				3698B044ED2B6D56306B1855 /* WorkoutDraftStore.swift in Sources */,
+				F760D9F3AF65F8D7E270B4FE /* WorkoutHistoryView.swift in Sources */,
+				248D84F53A2FEF3F6F650CDD /* WorkoutRecord.swift in Sources */,
+				951EFD32B09FDE746E029C55 /* WorkoutScore.swift in Sources */,
+				4311069FC82291039428F1DC /* WorkoutType.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		10FC037201160791DF7A4EF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SimpleTracking/SimpleTracking.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 38L98QMZN7;
+				INFOPLIST_FILE = SimpleTracking/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.felix.SimpleTracking;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6EA985E9C66CDA4F0A2E348B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		C3AC76978AD7E78C2967062F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SimpleTracking/SimpleTracking.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 38L98QMZN7;
+				INFOPLIST_FILE = SimpleTracking/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.felix.SimpleTracking;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DAB16927C6787F3E783F4A02 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6EE95465DB15A464FD88CF7F /* Build configuration list for PBXNativeTarget "SimpleTracking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3AC76978AD7E78C2967062F /* Debug */,
+				10FC037201160791DF7A4EF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C8DCA120CC0FE2B09B85C204 /* Build configuration list for PBXProject "SimpleTracking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAB16927C6787F3E783F4A02 /* Debug */,
+				6EA985E9C66CDA4F0A2E348B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		49090797592A957730CBA3A6 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FEC0ACFDBBA462C63FA7A18F /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49090797592A957730CBA3A6 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = F9A5532C87D4BA9DC3B022D8 /* Project object */;
+}

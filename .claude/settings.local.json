@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Users/felix/Projects/SimpleTracking -name \"*.swift\" -type f -exec grep -l \"NativeAdTile\\\\|weeklyInterstitial\\\\|AdService\\\\|GADInterstitial\" {} \\\\;)"
+    ]
+  }
+}
