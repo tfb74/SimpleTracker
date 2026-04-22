@@ -130,6 +130,8 @@ targets:
       SWIFT_VERSION: "5.9"
       CODE_SIGN_STYLE: Automatic
       DEVELOPMENT_TEAM: ""
+      MARKETING_VERSION: "1.0"
+      CURRENT_PROJECT_VERSION: "1"
 
   SimpleTrackingWatch:
     type: application
@@ -156,3 +158,5 @@ targets:
       CODE_SIGN_STYLE: Automatic
       DEVELOPMENT_TEAM: ""
       WATCHOS_DEPLOYMENT_TARGET: "10.0"
+      MARKETING_VERSION: "1.0"
+      CURRENT_PROJECT_VERSION: "1"

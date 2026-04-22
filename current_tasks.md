@@ -1,29 +1,41 @@
 # Current Tasks — SimpleTracking
 
-> Meilenstein: **M3 — Erstes Deployment auf echtem Gerät + Live-Test**
+> Meilenstein: **M4 — App Store Submission**
+> Blocker: Apple Developer Account in Review (seit ~8h, 22.04.2026)
 
 ## Status
-- ✅ M1: Basis-Setup abgeschlossen (alle Dateien, XcodeGen-Projekt)
-- ✅ M2: Beide Targets kompilieren fehlerfrei (iOS + watchOS Simulator)
+- ✅ M1: Basis-Setup (iOS + watchOS, alle Core-Features)
+- ✅ M2: Beide Targets kompilieren fehlerfrei (Simulator)
+- ✅ M3: Feature-Vollständigkeit (Ads, Food, Score, Achievements, Friends-Stub)
+- 🔄 M4: App Store Submission — wartet auf Dev Account
 
-## Offen
+## Erledigt heute (22.04.2026)
+- [x] CloudKitService durch Stub ersetzt (kein CloudKit-Entitlement nötig)
+- [x] Watch-Build-Fehler gefixt (`#if os(iOS)` um HealthKitService-Calls in UserSettings)
+- [x] Datenschutzerklärung erstellt (HTML, responsive, DSGVO-konform)
+- [x] GitHub Repository angelegt: github.com/tfb74/SimpleTracker
+- [x] Gesamtes Projekt auf GitHub gepusht
+- [x] GitHub Pages aktiviert → Datenschutz-URL live
+- [x] MARKETING_VERSION "1.0" + CURRENT_PROJECT_VERSION "1" in project.yml
+- [x] App Store Metadaten-Dokument erstellt (app_store_metadata.md)
+- [x] Alle MD-Files aktualisiert
 
-### Signing für echtes Gerät
-- [ ] Xcode öffnen → Projekt-Target „SimpleTracking" → Signing & Capabilities → Apple ID auswählen
-- [ ] Gleiches für „SimpleTrackingWatch"
-- [ ] iPhone + Watch per USB anschließen, Scheme anpassen, Run
+## Offen — wartet auf Dev Account
+- [ ] DEVELOPMENT_TEAM in project.yml eintragen
+- [ ] xcodegen regenerieren
+- [ ] App auf echtem iPhone + Watch abnehmen (Abnahmekriterien in next_steps.md)
+- [ ] App Store Connect: App-Eintrag anlegen
+- [ ] Screenshots erstellen (6.9", 6.5", Watch 46mm)
+- [ ] Archive + Upload via Xcode Organizer
 
-### Erster Live-Test (Abnahmekriterien M3)
-- [ ] App startet auf iPhone ohne Crash
-- [ ] HealthKit-Berechtigungsdialog erscheint + wird bestätigt
-- [ ] Standort-Berechtigungsdialog erscheint + „Immer erlauben" gewählt
-- [ ] Watch-App ist auf der Watch sichtbar
-- [ ] Workout auf Watch starten → Live-Metriken erscheinen auf iPhone
-- [ ] 1 km zurücklegen → Benachrichtigung auf iPhone + Haptic auf Watch
-- [ ] Workout beenden → Eintrag in Apple Health-App sichtbar
-- [ ] Import-Tab öffnen → bisherige Workouts erscheinen als Liste
+## Offen — sofort möglich (kein Dev Account nötig)
+- [ ] AdMob: Datenschutz-URL hinterlegen (`https://tfb74.github.io/SimpleTracker/privacy-policy/`)
+- [ ] AdMob: DSGVO-Consent-Nachricht konfigurieren
+- [ ] AdMob: Zahlungsprofil + Steuer-ID + IBAN eintragen
 
-### Bekannte Einschränkungen (für M3 akzeptiert)
-- Schritte beim iPhone-GPS-Workout: fest auf „--" (HKPedometer-Integration kommt in M4)
-- Kalorien bei iPhone-Workout: Schätzwerte, nicht aus HKWorkoutSession
+## Bekannte Einschränkungen (für 1.0 akzeptiert)
+- CloudKit/Friends: deaktiviert (reaktivierung nach Dev Account, M5)
+- Schritte beim iPhone-GPS-Workout: Schätzwert (HKPedometer kommt in M6)
+- Kalorien bei iPhone-Workout: Schätzwert aus CaloricEstimator
 - Landscape auf Watch: nicht unterstützt (watchOS-Systembeschränkung)
+- Watch-Face Complication: nicht vorhanden (kommt M6)

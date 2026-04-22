@@ -8,7 +8,8 @@
       "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=iOS Simulator,name=iPhone 17' build)",
       "Bash(open -a Simulator)",
       "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=iOS Simulator,id=B0905D18-0E12-4F01-BA29-A5E09751EDAF' install)",
-      "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=iOS Simulator,id=B0905D18-0E12-4F01-BA29-A5E09751EDAF' build)"
+      "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=iOS Simulator,id=B0905D18-0E12-4F01-BA29-A5E09751EDAF' build)",
+      "Bash(git add *)"
     ]
   }
 }

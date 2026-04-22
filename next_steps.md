@@ -1,70 +1,91 @@
 # Next Steps — SimpleTracking
 
-## Sofort (Meilenstein M2 freischalten)
+## Sofort möglich (kein Dev Account nötig)
 
-### 1. Team-ID konfigurieren
-Öffne `project.yml` und trage deine Apple Developer Team-ID ein:
-```yaml
-settings:
-  DEVELOPMENT_TEAM: "ABCDE12345"   # ← deine 10-stellige Team-ID
-```
-Dann `xcodegen generate` im Projektordner ausführen.
-
-### 2. Erstes Build & Test auf Gerät
+### 1. Testen im Simulator
 ```bash
 cd /Users/felix/Projects/SimpleTracking
-xcodegen generate   # immer nach project.yml-Änderungen!
+xcodegen generate   # nach project.yml-Änderungen
 open SimpleTracking.xcodeproj
 ```
-In Xcode:
-- Scheme "SimpleTracking" → dein iPhone → Run
-- Scheme "SimpleTrackingWatch" → deine Watch → Run
+- Scheme "SimpleTracking" → iPhone 17 Simulator → Run
+- Ads erscheinen als Test-Ads (automatisch im DEBUG-Build)
+- AdMob Debug-Controls unter Einstellungen → Werbung
 
-### 3. Berechtigungen on-device bestätigen
-- HealthKit: alle Kategorien erlauben
-- Standort: "Immer erlauben" (für Hintergrund-GPS)
-- Benachrichtigungen: erlauben
+### 2. AdMob Datenschutz-URL hinterlegen
+- admob.google.com → Apps → SimpleTracker → App-Einstellungen
+- Datenschutz-URL: `https://tfb74.github.io/SimpleTracker/privacy-policy/`
 
-## Meilenstein M2 — Prüfkriterien
-Meilenstein gilt als erreicht wenn:
-1. App startet ohne Crash auf iPhone + iPad
-2. Workout (laufen/gehen) auf Watch startbar
-3. Live-Metriken erscheinen auf iPhone während Watch-Workout
-4. Nach 1 km erscheint Benachrichtigung auf beiden Geräten
-5. Workout-Ende speichert Eintrag in Apple Health
-6. Import-Tab lädt alle bisherigen Workouts aus Apple Health
+### 3. AdMob DSGVO-Nachricht konfigurieren
+- admob.google.com → Datenschutz & Messaging → GDPR → Nachricht erstellen
+- Eigene Consent-Message anlegen (Pflicht für EU-Traffic)
 
-## Mittelfristig (M3)
+### 4. AdMob Zahlungsprofil vervollständigen
+- admob.google.com → Zahlungen → Zahlungsprofil
+- Name, Adresse, Steuer-Identifikationsnummer (persönliche IdNr.) eintragen
+- Auszahlungsmethode (IBAN) hinterlegen
 
-### HKPedometer für echte Schrittzählung beim iPhone-Workout
-```swift
-// In LocationService oder separatem PedometerService
-import CoreMotion
-let pedometer = CMPedometer()
-pedometer.startUpdates(from: Date()) { data, _ in
-    self.steps = Int(data?.numberOfSteps ?? 0)
-}
+---
+
+## Sobald Apple Developer Account aktiv ist
+
+### 5. DEVELOPMENT_TEAM eintragen
+```yaml
+# project.yml — beide Targets:
+DEVELOPMENT_TEAM: "DEIN10ZEICHENID"
 ```
-
-### Watch-Face Complication
-- `WidgetKit`-Extension dem Watch-Target hinzufügen
-- Tages-Schritte als Complication-Wert
-
-### Laps / Kilometerzeiten
-- Pro Milestone-Event einen `LapRecord` speichern
-- In `WorkoutDetailView` als Liste anzeigen
-
-## Langfristig (M4)
-
-### iPad Split-View
-```swift
-NavigationSplitView {
-    WorkoutHistoryView()
-} detail: {
-    WorkoutDetailView(workout: selected)
-}
+```bash
+xcodegen generate
 ```
+Team-ID findest du unter: developer.apple.com → Account → Membership
 
-### Wochenziel
-- In `UserSettings` ein tägliches Schrittziel speichern
-- In `DashboardView` als Fortschrittsring anzeigen (analog Activity-Ringe)
+### 6. App Store Connect: App anlegen
+- appstoreconnect.apple.com → Apps → + → Neue App
+- Bundle ID: `com.felix.SimpleTracking`
+- Name: `SimpleTracker` (prüfen ob verfügbar)
+- Primäre Sprache: Deutsch
+- SKU: `simpletracker-ios-2026`
+- Alle Metadaten aus `app_store_metadata.md` übernehmen
+
+### 7. Auf echtem Gerät testen (Abnahmekriterien)
+- [ ] App startet ohne Crash auf iPhone
+- [ ] HealthKit-Berechtigungen erscheinen + bestätigt
+- [ ] Standort "Immer erlauben" gesetzt
+- [ ] Watch-App sichtbar + startet
+- [ ] Live-Metriken Watch → iPhone funktionieren
+- [ ] Workout beenden → Eintrag in Apple Health
+- [ ] AdMob UMP-Consent-Dialog erscheint beim ersten Start
+- [ ] Test-Ad lädt in Statistik-Tab
+
+### 8. Screenshots erstellen
+- iPhone 6.9" (iPhone 16 Pro Max): 5 Screenshots
+- iPhone 6.5" (iPhone 14 Plus): 5 Screenshots  
+- Apple Watch 46mm: 3 Screenshots
+- Reihenfolge: Dashboard → Workout aktiv → Karte → Statistik → Ernährung
+
+### 9. Archive + Upload
+- Xcode → Product → Archive
+- Organizer → Distribute App → App Store Connect → Upload
+- Danach in App Store Connect: Build auswählen + einreichen
+
+### 10. AdMob: App Store URL eintragen
+- Nach Veröffentlichung: admob.google.com → Apps → App Store URL hinterlegen
+- Echte Ads werden dann vollständig ausgespielt
+
+---
+
+## Nach App Store Live
+
+### 11. CloudKit reaktivieren (M5)
+- Xcode → Signing & Capabilities → + Capability → CloudKit
+- CloudKit Dashboard: Record-Typen anlegen
+  - `STUserProfile`: friendCode (String), displayName (String), avatarPreset (String)
+  - `STActivity`: friendCode (String), displayName (String), avatarPreset (String),
+    eventType (String), eventTitle (String), eventDetail (String),
+    workoutTypeRaw (String), timestamp (Date)
+- `CloudKitService.swift` aus Git-History wiederherstellen:
+  ```bash
+  git show HEAD~1:SimpleTracking/Services/CloudKitService.swift > CloudKitService.swift
+  ```
+- `project.yml`: CloudKit-Entitlement wieder hinzufügen
+- Update pushen → App Store Update einreichen

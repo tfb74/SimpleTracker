@@ -1,57 +1,88 @@
 # Work Log — SimpleTracking
 
+## 2026-04-22 — Meilenstein M3 abgeschlossen + M4 vorbereitet ✅
+
+### Ziel
+App Store Submission vorbereiten, solange Apple Developer Account in Review ist.
+
+### Infrastruktur
+- GitHub Repository angelegt: github.com/tfb74/SimpleTracker (Public)
+- `.gitignore` erstellt (Xcode-Standard: DerivedData, xcuserdata, build/)
+- Gesamtes Projekt gepusht (119 Objekte, 1.24 MiB)
+- GitHub Pages aktiviert → Branch: main, Ordner: / (root)
+
+### Datenschutzerklärung
+- `privacy-policy/index.html` erstellt — vollständige DSGVO-konforme Datenschutzerklärung
+- Abgedeckt: HealthKit, GPS, AdMob, ATT, CloudKit (Community), Game Center, WatchConnectivity
+- URL live: `https://tfb74.github.io/SimpleTracker/privacy-policy/`
+- Link in SettingsView eingebaut (Abschnitt "Rechtliches")
+
+### Build-Fixes
+- `CloudKitService.swift`: Echte CloudKit-Implementierung durch Stub ersetzt
+  - Entfernt: `import CloudKit`, alle `CKContainer`/`CKDatabase`/`CKRecord`-Aufrufe
+  - Beibehalten: alle public Properties + Methoden-Signaturen (gleiche API)
+  - Grund: CloudKit-Capability erfordert bezahlten Developer Account
+  - Reaktivierung: nach Dev Account, CloudKit Capability + echte Impl. aus Git-History
+- `UserSettings.swift`: `#if os(iOS)` Guards um HealthKitService-Calls
+  - `writeBodyMass(kg:)` und `writeHeight(cm:)` nur auf iOS kompiliert
+  - Verhindert Watch-Build-Fehler ("Cannot find 'HealthKitService' in scope")
+
+### Versioning
+- `MARKETING_VERSION: "1.0"` in beiden Targets (project.yml)
+- `CURRENT_PROJECT_VERSION: "1"` in beiden Targets (project.yml)
+
+### Dokumentation
+- `goals.md`: M3 als abgeschlossen markiert, M4/M5/M6 neu definiert
+- `next_steps.md`: Komplett neu geschrieben — strukturiert nach "sofort möglich" vs. "nach Dev Account"
+- `current_tasks.md`: Auf M4 aktualisiert, Tages-Log ergänzt
+- `architecture.md`: Komplett neu — alle Services, Views, Datenfluss, AdMob-Konfiguration
+- `app_store_metadata.md`: Neu erstellt — App Store Beschreibung DE+EN, Keywords, Metadaten
+
+### App Store Metadaten (vorbereitet)
+- App-Name: SimpleTracker
+- Kategorie: Gesundheit & Fitness
+- Altersfreigabe: 4+
+- Vollständige Beschreibung (DE + EN) in app_store_metadata.md
+- 30 Keywords definiert
+
+---
+
 ## 2026-04-19 — Meilenstein M2: Beide Targets kompilieren fehlerfrei ✅
 
 ### Fixes
-- `foregroundStyle(.accentColor)` → `foregroundStyle(Color.accentColor)` in ImportView, SettingsView, WorkoutDetailView (SwiftUI akzeptiert `.accentColor` nicht als `ShapeStyle` direkt)
-- XcodeGen-Entitlements-Problem gelöst: HealthKit-Properties direkt in `project.yml` unter `entitlements.properties` konfiguriert (verhindert Überschreiben beim `xcodegen generate`)
-- Signing: `CODE_SIGN_STYLE: Automatic` gesetzt, `DEVELOPMENT_TEAM` bleibt leer — Xcode übernimmt Apple-ID-Team automatisch
+- `foregroundStyle(.accentColor)` → `foregroundStyle(Color.accentColor)` in ImportView, SettingsView, WorkoutDetailView
+- XcodeGen-Entitlements-Problem gelöst: HealthKit-Properties direkt in `project.yml`
+- Signing: `CODE_SIGN_STYLE: Automatic`, `DEVELOPMENT_TEAM` leer
 
 ### Build-Status
-- ✅ `SimpleTracking` (iOS 17, iPhone 17 Simulator) — **BUILD SUCCEEDED**
-- ✅ `SimpleTrackingWatch` (watchOS 10, Apple Watch Series 11 Simulator) — **BUILD SUCCEEDED**
+- ✅ `SimpleTracking` (iOS 17, iPhone 17 Simulator) — BUILD SUCCEEDED
+- ✅ `SimpleTrackingWatch` (watchOS 10, Apple Watch Series 11 Simulator) — BUILD SUCCEEDED
 
-
+---
 
 ## 2026-04-19 — Meilenstein M1: Basis-Setup abgeschlossen
 
 ### Erstellt
 - Vollständige Projektstruktur (iOS + watchOS)
-- `project.yml` für XcodeGen mit korrekten Targets, Entitlements und Info.plist-Keys
-- `SimpleTracking.xcodeproj` via `xcodegen generate` generiert
+- `project.yml` für XcodeGen
+- `SimpleTracking.xcodeproj` via `xcodegen generate`
 
 ### Shared
-- `WorkoutType.swift` — Enum mit HealthKit-Mapping
-- `WatchMessage.swift` — WorkoutMetrics (Codable), WatchCommand, Keys
-- `UserSettings.swift` — UnitPreference (metric/imperial + Intervallogik), AppColorScheme (system/light/dark)
+- `WorkoutType.swift`, `WatchMessage.swift`, `UserSettings.swift`
 
 ### iOS Services
-- `HealthKitService.swift` — Authorization, Today-Stats, Statistiken (Tag/Woche/Monat), Workout-Laden, Route-Fetching, Speichern, Import
-- `LocationService.swift` — GPS-Tracking, Distanz-Akkumulation, Milestone-Vorbereitung
-- `NotificationService.swift` — UNUserNotificationCenter, km/mi-Milestone-Prüfung mit Tempo-Anzeige
-- `WatchConnectivityService.swift` — WCSession iOS-Seite, Live-Metriken empfangen
+- HealthKitService, LocationService, NotificationService, WatchConnectivityService
 
 ### iOS Views
-- `SimpleTrackingApp.swift` — @main, Environment-Injection, preferredColorScheme
-- `ContentView.swift` — TabView (5 Tabs)
-- `DashboardView.swift` — Heute-Übersicht, MetricCard, WorkoutRowView
-- `ActiveWorkoutView.swift` — Portrait/Landscape-Layout, Live-Tracking, Milestone-Trigger
-- `RouteMapView.swift` — Live-Karte (MapPolyline + UserLocation) + StaticRouteMapView
-- `StatisticsView.swift` — CatmullRom-Linien + AreaMark (geglättet), Tag/Woche/Monat, Zusammenfassung
-- `WorkoutHistoryView.swift` — gruppiert nach Datum
-- `WorkoutDetailView.swift` — Portrait/Landscape-Layout, Route-Karte + Metriken
-- `ImportView.swift` — Import aus Apple Health
-- `SettingsView.swift` — Dark/Light/System-Modus, km/mi-Auswahl
+- SimpleTrackingApp, ContentView, DashboardView, ActiveWorkoutView, RouteMapView
+- StatisticsView, WorkoutHistoryView, WorkoutDetailView, ImportView, SettingsView
 
 ### watchOS
-- `WatchWorkoutService.swift` — HKWorkoutSession + HKLiveWorkoutBuilder, WCSession, Haptic-Milestone, lokale Notifications
-- `SimpleTrackingWatchApp.swift` — @main, Environment
-- `WatchMainView.swift` — Workout-Typ-Auswahl
-- `WatchActiveWorkoutView.swift` — TimelineView, Live-Metriken, Pause/Stop
+- WatchWorkoutService, SimpleTrackingWatchApp, WatchMainView, WatchActiveWorkoutView
 
 ### Technische Entscheidungen
 - `@Observable` statt `ObservableObject` → iOS 17+ / watchOS 10+
-- Deployment Target: iOS 17.0, watchOS 10.0 (Series 4+)
-- CatmullRom-Interpolation in Swift Charts für geglättete Kurven ohne Extremspitzen
-- Interne Einheit immer Meter/m/s, Umrechnung nur in UnitPreference + Views
-- XcodeGen verwaltet .xcodeproj (nie manuell in Xcode-Projekt-Einstellungen persistieren ohne project.yml-Update)
+- Deployment Target: iOS 17.0, watchOS 10.0
+- CatmullRom-Interpolation in Swift Charts
+- Interne Einheit immer Meter/m/s
+- XcodeGen als einzige Projektquelle

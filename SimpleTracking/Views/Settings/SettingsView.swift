@@ -307,6 +307,14 @@ struct SettingsView: View {
                     Text(lt("Die Vollbild-Ad wird maximal einmal pro Kalenderwoche gezeigt. Vorher erscheint ein Hinweis; bis zu drei Mal pro Woche darfst du verschieben."))
                 }
 
+                // MARK: Rechtliches
+                Section(lt("Rechtliches")) {
+                    Link(destination: URL(string: "https://tfb74.github.io/SimpleTracker/privacy-policy/")!) {
+                        Label(lt("Datenschutzerklärung"), systemImage: "hand.raised.fill")
+                    }
+                    .foregroundStyle(.primary)
+                }
+
                 // MARK: Info
                 Section(lt("Info")) {
                     LabeledContent(lt("Version"), value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
