@@ -150,8 +150,11 @@ struct UserAvatarView: View {
 }
 
 private struct AppChromeHeader<Accessory: View>: View {
-    @Environment(UserSettings.self) private var settings
+    @Environment(UserSettings.self)      private var settings
     @Environment(GameCenterService.self) private var gameCenter
+    @Environment(CloudKitService.self)   private var cloudKit
+
+    @State private var showFriends = false
 
     let title: String
     let accent: Color
@@ -216,21 +219,36 @@ private struct AppChromeHeader<Accessory: View>: View {
 
     @ViewBuilder
     private var avatar: some View {
-        ZStack(alignment: .bottomTrailing) {
-            UserAvatarView(
-                size: 42,
-                name: displayName,
-                photoData: settings.avatarImageData,
-                preset: settings.avatarPreset,
-                fallbackImage: gameCenter.isAuthenticated ? gameCenter.playerAvatar : nil
-            )
+        Button { showFriends = true } label: {
+            ZStack(alignment: .bottomTrailing) {
+                UserAvatarView(
+                    size: 42,
+                    name: displayName,
+                    photoData: settings.avatarImageData,
+                    preset: settings.avatarPreset,
+                    fallbackImage: gameCenter.isAuthenticated ? gameCenter.playerAvatar : nil
+                )
+                .overlay(alignment: .topTrailing) {
+                    if cloudKit.unreadCount > 0 {
+                        Circle()
+                            .fill(Color.red)
+                            .frame(width: 11, height: 11)
+                            .overlay { Circle().strokeBorder(.background, lineWidth: 2) }
+                            .offset(x: 3, y: -3)
+                    }
+                }
 
-            Circle()
-                .fill(gameCenter.isAuthenticated ? Color.green : Color.secondary.opacity(0.5))
-                .frame(width: 10, height: 10)
-                .overlay {
-                    Circle().strokeBorder(.background, lineWidth: 2)
+                Circle()
+                    .fill(gameCenter.isAuthenticated ? Color.green : Color.secondary.opacity(0.5))
+                    .frame(width: 10, height: 10)
+                    .overlay {
+                        Circle().strokeBorder(.background, lineWidth: 2)
+                    }
             }
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showFriends) {
+            FriendsView()
         }
     }
 

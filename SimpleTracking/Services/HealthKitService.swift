@@ -587,6 +587,10 @@ final class HealthKitService {
 
         await loadWorkouts()
         await refreshTodayData()
+
+        if let newest = workouts.first {
+            Task { await CloudKitService.shared.publishWorkoutIfNeeded(newest) }
+        }
     }
 
     // MARK: - Nutrition Writes

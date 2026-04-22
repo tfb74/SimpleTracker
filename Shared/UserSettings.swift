@@ -660,7 +660,9 @@ final class UserSettings {
             // doppelte Samples beim Laden.
             if weightKg > 0, weightKg != oldValue {
                 let new = weightKg
+                #if os(iOS)
                 Task { await HealthKitService.shared.writeBodyMass(kg: new) }
+                #endif
             }
         }
     }
@@ -669,7 +671,9 @@ final class UserSettings {
             save("heightCm", heightCm)
             if heightCm > 0, heightCm != oldValue {
                 let new = heightCm
+                #if os(iOS)
                 Task { await HealthKitService.shared.writeHeight(cm: new) }
+                #endif
             }
         }
     }

@@ -168,10 +168,12 @@ struct ActiveWorkoutView: View {
 
     private var liveMetricsGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-            LiveMetric(title: lt("Zeit"),     value: elapsed.formatted,             icon: "timer",       color: .primary)
-            LiveMetric(title: lt("Distanz"),  value: settings.unitPreference.formatted(meters: location.totalDistanceMeters), icon: "map",         color: .blue)
-            LiveMetric(title: lt("Tempo"),    value: speedLabel,                    icon: "speedometer", color: .purple)
-            LiveMetric(title: lt("Schritte"), value: "--",                          icon: "figure.walk", color: .green)
+            LiveMetric(title: lt("Zeit"),         value: elapsed.formatted,             icon: "timer",          color: .primary)
+            LiveMetric(title: lt("Distanz"),      value: settings.unitPreference.formatted(meters: location.totalDistanceMeters), icon: "map", color: .blue)
+            LiveMetric(title: lt("Tempo"),        value: speedLabel,                    icon: "speedometer",    color: .purple)
+            LiveMetric(title: lt("Schritte"),     value: "--",                          icon: "figure.walk",    color: .green)
+            LiveMetric(title: lt("Höhe"),         value: altitudeLabel,                 icon: "mountain.2",     color: .orange)
+            LiveMetric(title: lt("Höhengewinn"),  value: elevationGainLabel,            icon: "arrow.up.right", color: .teal)
         }
         .padding()
     }
@@ -243,6 +245,22 @@ struct ActiveWorkoutView: View {
         case .imperial:
             let secPerMi = 1_609.344 / location.currentSpeedMPS
             return String(format: "%d:%02d /mi", Int(secPerMi) / 60, Int(secPerMi) % 60)
+        }
+    }
+
+    private var altitudeLabel: String {
+        let m = location.currentAltitudeMeters
+        switch settings.unitPreference {
+        case .metric:   return String(format: "%.0f m", m)
+        case .imperial: return String(format: "%.0f ft", m * 3.28084)
+        }
+    }
+
+    private var elevationGainLabel: String {
+        let m = location.totalElevationGainMeters
+        switch settings.unitPreference {
+        case .metric:   return String(format: "%.0f m", m)
+        case .imperial: return String(format: "%.0f ft", m * 3.28084)
         }
     }
 

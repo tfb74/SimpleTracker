@@ -12,11 +12,13 @@ struct SimpleTrackingApp: App {
     @State private var foodLog           = FoodLogStore.shared
     @State private var workoutDrafts     = WorkoutDraftStore.shared
     @State private var ads               = AdService.shared
+    @State private var cloudKit          = CloudKitService.shared
 
     init() {
         Theme.applyAppearance()
         UserSettings.shared.ensureProfileDefaults(deviceName: UIDevice.current.name)
         AdService.shared.start()
+        Task { await CloudKitService.shared.setup() }
     }
 
     var body: some Scene {
@@ -32,6 +34,7 @@ struct SimpleTrackingApp: App {
                 .environment(foodLog)
                 .environment(workoutDrafts)
                 .environment(ads)
+                .environment(cloudKit)
                 .preferredColorScheme(settings.colorScheme.colorScheme)
         }
     }

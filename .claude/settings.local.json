@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(find /Users/felix/Projects/SimpleTracking -name \"*.swift\" -type f -exec grep -l \"NativeAdTile\\\\|weeklyInterstitial\\\\|AdService\\\\|GADInterstitial\" {} \\\\;)"
+      "Bash(find /Users/felix/Projects/SimpleTracking -name \"*.swift\" -type f -exec grep -l \"NativeAdTile\\\\|weeklyInterstitial\\\\|AdService\\\\|GADInterstitial\" {} \\\\;)",
+      "Bash(xcrun simctl *)",
+      "Bash(xcodegen generate *)",
+      "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=watchOS Simulator,name=Apple Watch Series 11 \\(46mm\\)' -target SimpleTrackingWatch build)",
+      "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=iOS Simulator,name=iPhone 17' build)",
+      "Bash(open -a Simulator)",
+      "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=iOS Simulator,id=B0905D18-0E12-4F01-BA29-A5E09751EDAF' install)",
+      "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=iOS Simulator,id=B0905D18-0E12-4F01-BA29-A5E09751EDAF' build)"
     ]
   }
 }

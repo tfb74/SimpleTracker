@@ -13,9 +13,13 @@
 		15510935D1FB2525B36534A0 /* RoutePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8884A9C2C1BCBDE44B4369DF /* RoutePoint.swift */; };
 		1933D434DB91A546E2E5FCCF /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530F033807612D81958F1F5 /* Theme.swift */; };
 		198841300B136A1D75A9180A /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E2EDDA57CD10467C2CD21 /* LocationService.swift */; };
+		1B8A8B0265B0AE82FD2C47AB /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0382C2AD7B0614074D69DE /* WorkoutType.swift */; };
 		1D3803FB942693CB9929555F /* OpenFoodFactsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE74BA5135FFC241966564A /* OpenFoodFactsService.swift */; };
+		1FE00FA6BC9129D9BD00F00E /* WatchMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A957D1B48A14640FBB513ED8 /* WatchMessage.swift */; };
 		248D84F53A2FEF3F6F650CDD /* WorkoutRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A859EEDFD3DE42F5F24F4235 /* WorkoutRecord.swift */; };
+		24BF0A16023BC50A7AFA91A6 /* WatchWorkoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B259F9E520BE3353A3BDD618 /* WatchWorkoutService.swift */; };
 		25821F13A3BD1D21D4F600AE /* RouteCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3027143CE52153DCACF74B /* RouteCache.swift */; };
+		32FAC0E86871098DBDDE968C /* WatchMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841FD73C2DFA61CC7A7F2645 /* WatchMainView.swift */; };
 		3698B044ED2B6D56306B1855 /* WorkoutDraftStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771523E0B21ADD17AA5B0111 /* WorkoutDraftStore.swift */; };
 		3901A0FF458E3F4F58A8E92B /* PhotoFoodAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072C3F1F32BF255F195E3A50 /* PhotoFoodAnalysisView.swift */; };
 		3E24A6A87FF52B1516F98EB7 /* CaloricEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE85FCC4302BD4356ED2E08 /* CaloricEstimator.swift */; };
@@ -23,6 +27,7 @@
 		4AF5059ABE234D75D1E97AC2 /* NativeAdTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D239B7E41C0A348086C2C49 /* NativeAdTile.swift */; };
 		524C952D81385694F4DA75A9 /* WatchConnectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D01A12E68433EE17EFE5E10 /* WatchConnectivityService.swift */; };
 		54F0F1534F5E879A8D7FAB48 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B267A76599364626764F51 /* NotificationService.swift */; };
+		5603968BBA5E56AB8F22420D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78CA8FE64B7833748010AD83 /* Assets.xcassets */; };
 		57CBBB31185EEE3DBE2B25CC /* FoodEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC3D6CD46ABA05374E8B7D9 /* FoodEntry.swift */; };
 		58C18714286F691FB07AC482 /* AddFoodSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3143698EC3E1DC17B6CAE4F3 /* AddFoodSheet.swift */; };
 		5B22B6729659D96965BBDEFF /* WatchMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A957D1B48A14640FBB513ED8 /* WatchMessage.swift */; };
@@ -31,6 +36,7 @@
 		6B45B4F3CA44BBCF54A1A9BF /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FF41F4D4DCBC4244E23D8F /* WorkoutDetailView.swift */; };
 		72A56C4D641E505CFD808ED4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEBEF66F066ED3A2AB31A0 /* UserSettings.swift */; };
 		76DB7CD36FA44AEBE18FD062 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4290AEA61B242A793BEB95B /* SettingsView.swift */; };
+		7AD93048A20DECE2AB1EB2CF /* WatchActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0D0CFC0C091416DA37220C /* WatchActiveWorkoutView.swift */; };
 		7EE33A4C95F1AEF5DF0E5D8F /* GameCenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEE66565CBC7505022D97F2 /* GameCenterService.swift */; };
 		8CFDB0E7F307DE134793D197 /* RouteMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6A4CCA5B4AD6C6662A76D7 /* RouteMapView.swift */; };
 		951EFD32B09FDE746E029C55 /* WorkoutScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A88CA86E5B9FDC13B47401 /* WorkoutScore.swift */; };
@@ -43,17 +49,46 @@
 		B3C6438F66A303D2C7100098 /* SimpleTrackingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67072E3AF083859B8F0DA369 /* SimpleTrackingApp.swift */; };
 		B6FA5942EAD959D2A76A80F9 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CCF82E4F33954FB73164EF /* DashboardView.swift */; };
 		BD782DFAB85AFBE4EB6DA7FF /* QuickFoodPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515FECDBCEB3B0D0EF07C115 /* QuickFoodPreset.swift */; };
+		BDD7BF63639171E2E1F3B756 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEBEF66F066ED3A2AB31A0 /* UserSettings.swift */; };
 		BEA3EDBE48E41FD392C05584 /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C688B58AE05B5D56F7D555A /* ActiveWorkoutView.swift */; };
 		BEF5CA00C6C437ACFD1D5D4D /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A39F33DF899D9F146B3B6F4 /* ScoreView.swift */; };
 		C8774AA9882534AB34C68709 /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC161528971BCD80FA5D0817 /* ImportView.swift */; };
 		CCF5EF1073A317DEED0F6CF3 /* ManualFoodEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421C0D69FBE302D68B7A13C /* ManualFoodEntryView.swift */; };
+		CDC941C27281CFA9AE24EE8B /* SimpleTrackingWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = F4256EE881C5D8C646A6917A /* SimpleTrackingWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D137D2E364810AD46567BD4F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FEC0ACFDBBA462C63FA7A18F /* GoogleMobileAds */; };
 		D57BDC80CF9546D1139496D4 /* WorkoutDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DCA90EDA375E3939B121A5 /* WorkoutDraft.swift */; };
+		E5F8096BF20B0D55133E0553 /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869A4DF88B4B0F87CAEA129 /* CloudKitService.swift */; };
+		E70AE97D8DE1FE9932C87394 /* SimpleTrackingWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C161A945F80B4C5537515 /* SimpleTrackingWatchApp.swift */; };
+		EBEA9520E6258982D6F6B805 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1E6A4916A0E7437E5AB93A /* FriendsView.swift */; };
 		EF4E3D56FF06435BEF498A68 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AACFFEA7C9755DCB920747A /* AdService.swift */; };
 		F23C9114ACD28C0EB4E80874 /* QuickFoodStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D245E177D79D9FBF2B02C2A /* QuickFoodStore.swift */; };
 		F3F313767BE83B399251E94B /* LocalAchievementStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4701C6465B715D6F21CD5035 /* LocalAchievementStore.swift */; };
 		F760D9F3AF65F8D7E270B4FE /* WorkoutHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14697FD1A03A348C8DD58D80 /* WorkoutHistoryView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6A95E3F80BFFA1ABAA07B402 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F9A5532C87D4BA9DC3B022D8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F8F22584D4C939F6B4BEFFEE;
+			remoteInfo = SimpleTrackingWatch;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B4579236D44BD424615BECF6 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				CDC941C27281CFA9AE24EE8B /* SimpleTrackingWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		072C3F1F32BF255F195E3A50 /* PhotoFoodAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFoodAnalysisView.swift; sourceTree = "<group>"; };
@@ -74,12 +109,16 @@
 		658920A04C0706839927A9FA /* SimpleTracking.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleTracking.entitlements; sourceTree = "<group>"; };
 		67072E3AF083859B8F0DA369 /* SimpleTrackingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackingApp.swift; sourceTree = "<group>"; };
 		771523E0B21ADD17AA5B0111 /* WorkoutDraftStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDraftStore.swift; sourceTree = "<group>"; };
+		7869A4DF88B4B0F87CAEA129 /* CloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitService.swift; sourceTree = "<group>"; };
+		78CA8FE64B7833748010AD83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7A9AED8DEAA25827B863B3CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7E3027143CE52153DCACF74B /* RouteCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCache.swift; sourceTree = "<group>"; };
+		841FD73C2DFA61CC7A7F2645 /* WatchMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchMainView.swift; sourceTree = "<group>"; };
 		8884A9C2C1BCBDE44B4369DF /* RoutePoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePoint.swift; sourceTree = "<group>"; };
 		89DF3A133D0FF36C0C0CDCBC /* FoodLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogStore.swift; sourceTree = "<group>"; };
 		8B91C76B654239609FF536AE /* MockDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataService.swift; sourceTree = "<group>"; };
 		8C688B58AE05B5D56F7D555A /* ActiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveWorkoutView.swift; sourceTree = "<group>"; };
+		8D0D0CFC0C091416DA37220C /* WatchActiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchActiveWorkoutView.swift; sourceTree = "<group>"; };
 		9CE74BA5135FFC241966564A /* OpenFoodFactsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFoodFactsService.swift; sourceTree = "<group>"; };
 		A3C8C7F08A3D070D21C9817A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A69E4167DF195C81C61C613C /* FoodLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogView.swift; sourceTree = "<group>"; };
@@ -88,22 +127,28 @@
 		A957D1B48A14640FBB513ED8 /* WatchMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchMessage.swift; sourceTree = "<group>"; };
 		AC161528971BCD80FA5D0817 /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
 		AD0382C2AD7B0614074D69DE /* WorkoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutType.swift; sourceTree = "<group>"; };
+		B259F9E520BE3353A3BDD618 /* WatchWorkoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWorkoutService.swift; sourceTree = "<group>"; };
 		B4290AEA61B242A793BEB95B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B99D0A04D793FF48CB40A5DF /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		BFBEBEF66F066ED3A2AB31A0 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		C47C161A945F80B4C5537515 /* SimpleTrackingWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackingWatchApp.swift; sourceTree = "<group>"; };
 		C530F033807612D81958F1F5 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		C62EB950A3779799F32E17B3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C6AE38963F371F35C6FAC901 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
 		C734424CE024A74AC92082C3 /* FoodPhotoAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodPhotoAnalyzer.swift; sourceTree = "<group>"; };
+		CBDF86B29AB8B880B93880D3 /* SimpleTrackingWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleTrackingWatch.entitlements; sourceTree = "<group>"; };
 		D0E39D6C1802E34E1928383C /* BarcodeEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeEntryView.swift; sourceTree = "<group>"; };
+		D55899468CBC529C794E5D91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D8DCA90EDA375E3939B121A5 /* WorkoutDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDraft.swift; sourceTree = "<group>"; };
 		DAD8979730DDAE8AF89874DE /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E1CCF82E4F33954FB73164EF /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		EF6A4CCA5B4AD6C6662A76D7 /* RouteMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteMapView.swift; sourceTree = "<group>"; };
 		F003C5750AA46B21F8C8D16E /* SimpleTracking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleTracking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F30E2EDDA57CD10467C2CD21 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		F4256EE881C5D8C646A6917A /* SimpleTrackingWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleTrackingWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6A88CA86E5B9FDC13B47401 /* WorkoutScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutScore.swift; sourceTree = "<group>"; };
 		F9FF41F4D4DCBC4244E23D8F /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
+		FC1E6A4916A0E7437E5AB93A /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		FEE85FCC4302BD4356ED2E08 /* CaloricEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloricEstimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,6 +182,7 @@
 				63DA8057979AACAE45AF5DC3 /* Ads */,
 				70EFC2860C911E2F4FEA5DCA /* Dashboard */,
 				7D8F2D80B2A285FA5EE70D0E /* Food */,
+				79B516FA0D9D4103E58A5552 /* Friends */,
 				7E775B41C0BAAAECE7AF80D5 /* History */,
 				5B0BF521105DA47F5F009B5E /* Import */,
 				F7F3BA9F6FBCA8D4CC693EE9 /* Map */,
@@ -148,11 +194,21 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		175B9623D302CEA64F68E733 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D55899468CBC529C794E5D91 /* Info.plist */,
+				C47C161A945F80B4C5537515 /* SimpleTrackingWatchApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		1AAC0C6BFADC7B7289C4B4F0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				4AACFFEA7C9755DCB920747A /* AdService.swift */,
 				FEE85FCC4302BD4356ED2E08 /* CaloricEstimator.swift */,
+				7869A4DF88B4B0F87CAEA129 /* CloudKitService.swift */,
 				89DF3A133D0FF36C0C0CDCBC /* FoodLogStore.swift */,
 				C734424CE024A74AC92082C3 /* FoodPhotoAnalyzer.swift */,
 				2DEE66565CBC7505022D97F2 /* GameCenterService.swift */,
@@ -176,6 +232,18 @@
 				8C688B58AE05B5D56F7D555A /* ActiveWorkoutView.swift */,
 			);
 			path = Workout;
+			sourceTree = "<group>";
+		};
+		44C532C2FE39CF78E90D0053 /* SimpleTrackingWatch */ = {
+			isa = PBXGroup;
+			children = (
+				CBDF86B29AB8B880B93880D3 /* SimpleTrackingWatch.entitlements */,
+				175B9623D302CEA64F68E733 /* App */,
+				EF2B909A463BA61669ABD78B /* Resources */,
+				FE49E377BBCB28B2F2484CBA /* Services */,
+				C7DF344AD42FBB71524C908F /* Views */,
+			);
+			path = SimpleTrackingWatch;
 			sourceTree = "<group>";
 		};
 		5B0BF521105DA47F5F009B5E /* Import */ = {
@@ -210,6 +278,14 @@
 				E1CCF82E4F33954FB73164EF /* DashboardView.swift */,
 			);
 			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		79B516FA0D9D4103E58A5552 /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				FC1E6A4916A0E7437E5AB93A /* FriendsView.swift */,
+			);
+			path = Friends;
 			sourceTree = "<group>";
 		};
 		7B774F54C124FC99FF31F3F0 /* Settings */ = {
@@ -272,6 +348,7 @@
 			children = (
 				A929286976FD80418981E9F2 /* Shared */,
 				CB9D6B457EDF25679CB9D167 /* SimpleTracking */,
+				44C532C2FE39CF78E90D0053 /* SimpleTrackingWatch */,
 				F463886F279BDD945DA98F43 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -289,6 +366,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		C7DF344AD42FBB71524C908F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8D0D0CFC0C091416DA37220C /* WatchActiveWorkoutView.swift */,
+				841FD73C2DFA61CC7A7F2645 /* WatchMainView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		CB9D6B457EDF25679CB9D167 /* SimpleTracking */ = {
 			isa = PBXGroup;
 			children = (
@@ -300,6 +386,14 @@
 				0EDFE48F14E8B5E69DCE6410 /* Views */,
 			);
 			path = SimpleTracking;
+			sourceTree = "<group>";
+		};
+		EF2B909A463BA61669ABD78B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				78CA8FE64B7833748010AD83 /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		F2C5E11831AE82B1A6ACB1D6 /* Score */ = {
@@ -314,6 +408,7 @@
 			isa = PBXGroup;
 			children = (
 				F003C5750AA46B21F8C8D16E /* SimpleTracking.app */,
+				F4256EE881C5D8C646A6917A /* SimpleTrackingWatch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -326,6 +421,14 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		FE49E377BBCB28B2F2484CBA /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B259F9E520BE3353A3BDD618 /* WatchWorkoutService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -336,10 +439,12 @@
 				0B4EA08AAD92E91BE05AF78D /* Sources */,
 				D12073613617320652B89296 /* Resources */,
 				FFA329E8268B75E0B2860DAF /* Frameworks */,
+				B4579236D44BD424615BECF6 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AF20EFA0693A17E03003F8BE /* PBXTargetDependency */,
 			);
 			name = SimpleTracking;
 			packageProductDependencies = (
@@ -347,6 +452,24 @@
 			);
 			productName = SimpleTracking;
 			productReference = F003C5750AA46B21F8C8D16E /* SimpleTracking.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F8F22584D4C939F6B4BEFFEE /* SimpleTrackingWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AE42682E85BAF90150860B7D /* Build configuration list for PBXNativeTarget "SimpleTrackingWatch" */;
+			buildPhases = (
+				60796467CEC52A47E1B47B16 /* Sources */,
+				2604DA1A22E0A58BAF5D9434 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimpleTrackingWatch;
+			packageProductDependencies = (
+			);
+			productName = SimpleTrackingWatch;
+			productReference = F4256EE881C5D8C646A6917A /* SimpleTrackingWatch.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -359,6 +482,9 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					F33297F250329B57B2FAB161 = {
+						ProvisioningStyle = Automatic;
+					};
+					F8F22584D4C939F6B4BEFFEE = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -381,11 +507,20 @@
 			projectRoot = "";
 			targets = (
 				F33297F250329B57B2FAB161 /* SimpleTracking */,
+				F8F22584D4C939F6B4BEFFEE /* SimpleTrackingWatch */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2604DA1A22E0A58BAF5D9434 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5603968BBA5E56AB8F22420D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D12073613617320652B89296 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -408,12 +543,14 @@
 				58C18714286F691FB07AC482 /* AddFoodSheet.swift in Sources */,
 				9AA995CA7FE32A821F3F7758 /* BarcodeEntryView.swift in Sources */,
 				3E24A6A87FF52B1516F98EB7 /* CaloricEstimator.swift in Sources */,
+				E5F8096BF20B0D55133E0553 /* CloudKitService.swift in Sources */,
 				AA9FA0455F9D3954FA7096C5 /* ContentView.swift in Sources */,
 				B6FA5942EAD959D2A76A80F9 /* DashboardView.swift in Sources */,
 				57CBBB31185EEE3DBE2B25CC /* FoodEntry.swift in Sources */,
 				B24D8E96668A9EB9B61F64F2 /* FoodLogStore.swift in Sources */,
 				054AC71DE863B5A3B6D66AD0 /* FoodLogView.swift in Sources */,
 				AF0AB498CAB0AFC715BC97DD /* FoodPhotoAnalyzer.swift in Sources */,
+				EBEA9520E6258982D6F6B805 /* FriendsView.swift in Sources */,
 				7EE33A4C95F1AEF5DF0E5D8F /* GameCenterService.swift in Sources */,
 				95B1730F89B8B26AD98E8981 /* HealthKitService.swift in Sources */,
 				C8774AA9882534AB34C68709 /* ImportView.swift in Sources */,
@@ -448,9 +585,48 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		60796467CEC52A47E1B47B16 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E70AE97D8DE1FE9932C87394 /* SimpleTrackingWatchApp.swift in Sources */,
+				BDD7BF63639171E2E1F3B756 /* UserSettings.swift in Sources */,
+				7AD93048A20DECE2AB1EB2CF /* WatchActiveWorkoutView.swift in Sources */,
+				32FAC0E86871098DBDDE968C /* WatchMainView.swift in Sources */,
+				1FE00FA6BC9129D9BD00F00E /* WatchMessage.swift in Sources */,
+				24BF0A16023BC50A7AFA91A6 /* WatchWorkoutService.swift in Sources */,
+				1B8A8B0265B0AE82FD2C47AB /* WorkoutType.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		AF20EFA0693A17E03003F8BE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F8F22584D4C939F6B4BEFFEE /* SimpleTrackingWatch */;
+			targetProxy = 6A95E3F80BFFA1ABAA07B402 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		0B6591FE8A75F21DCC49B5D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SimpleTrackingWatch/SimpleTrackingWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 87G432SJNY;
+				INFOPLIST_FILE = SimpleTrackingWatch/App/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.felix.SimpleTracking.watchkitapp;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 		10FC037201160791DF7A4EF8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -458,7 +634,7 @@
 				CODE_SIGN_ENTITLEMENTS = SimpleTracking/SimpleTracking.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 38L98QMZN7;
+				DEVELOPMENT_TEAM = 87G432SJNY;
 				INFOPLIST_FILE = SimpleTracking/App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -468,9 +644,26 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.felix.SimpleTracking;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
+		};
+		58ED3F3119E1F995F249E460 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SimpleTrackingWatch/SimpleTrackingWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 87G432SJNY;
+				INFOPLIST_FILE = SimpleTrackingWatch/App/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.felix.SimpleTracking.watchkitapp;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
 		};
 		6EA985E9C66CDA4F0A2E348B /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -521,10 +714,10 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Release;
 		};
@@ -535,7 +728,7 @@
 				CODE_SIGN_ENTITLEMENTS = SimpleTracking/SimpleTracking.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 38L98QMZN7;
+				DEVELOPMENT_TEAM = 87G432SJNY;
 				INFOPLIST_FILE = SimpleTracking/App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -545,7 +738,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.felix.SimpleTracking;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -605,10 +798,10 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
 		};
@@ -620,6 +813,15 @@
 			buildConfigurations = (
 				C3AC76978AD7E78C2967062F /* Debug */,
 				10FC037201160791DF7A4EF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AE42682E85BAF90150860B7D /* Build configuration list for PBXNativeTarget "SimpleTrackingWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58ED3F3119E1F995F249E460 /* Debug */,
+				0B6591FE8A75F21DCC49B5D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

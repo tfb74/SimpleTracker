@@ -142,6 +142,10 @@ final class GameCenterService {
     func unlock(_ achievement: Achievement, percentComplete: Double = 100) {
         let justUnlocked = localStore.unlock(achievement.rawValue)
 
+        if justUnlocked {
+            Task { await CloudKitService.shared.publishAchievement(achievement) }
+        }
+
         guard isAuthenticated else { return }
         let gk = GKAchievement(identifier: achievement.rawValue)
         gk.percentComplete = percentComplete
