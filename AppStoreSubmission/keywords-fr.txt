@@ -1,0 +1,1 @@
+entrainement,fitness,gps,course,velo,calories,nutrition,pas,sante,sport,randonnee

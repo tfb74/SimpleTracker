@@ -49,6 +49,13 @@ final class AdService: NSObject {
     private(set) var lastWeeklyInterstitialShownAt: Date?
     private(set) var weeklyInterstitialSkipCount = 0
 
+    // Debug-Diagnose: für DEBUG-Anzeige im UI
+    private(set) var diag_umpStatus: String = "—"
+    private(set) var diag_attStatus: String = "—"
+    private(set) var diag_sdkStarted: Bool = false
+    private(set) var diag_lastNativeAdError: String?
+    private(set) var diag_lastNativeAdLoadedAt: Date?
+
     var weeklyInterstitialPrompt: WeeklyInterstitialPrompt?
     var debugInterstitialPreviewPresented = false
 
@@ -122,7 +129,26 @@ final class AdService: NSObject {
         Task {
             await requestConsentIfNeeded()
             await requestATTIfNeeded()
+
+            // Test-Device automatisch registrieren in DEBUG, damit auf dem
+            // realen iPhone garantiert Test-Ads kommen.
+            #if DEBUG
+            // GADSimulatorID ist nur für den Simulator — auf einem echten
+            // iPhone genügen die TEST-Ad-Unit-IDs (ca-app-pub-3940256099942544/...).
+            // Diese liefern auf JEDEM Gerät immer Test-Ads.
+            GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = []
+            print("[Ads] DEBUG mode — using TEST ad unit IDs")
+            print("[Ads] App ID from Info.plist: \(Bundle.main.object(forInfoDictionaryKey: "GADApplicationIdentifier") ?? "missing!")")
+            print("[Ads] Native ad unit ID: \(nativeAdUnitID)")
+            print("[Ads] Interstitial ad unit ID: \(interstitialAdUnitID)")
+            #endif
+
             _ = await GADMobileAds.sharedInstance().start()
+            diag_sdkStarted = true
+            print("[Ads] GoogleMobileAds SDK started. Adapter status:")
+            for (name, status) in GADMobileAds.sharedInstance().initializationStatus.adapterStatusesByClassName {
+                print("[Ads]   • \(name): \(status.state.rawValue) — \(status.description)")
+            }
             isReady = true
             preloadInterstitialIfNeeded()
         }
@@ -159,7 +185,9 @@ final class AdService: NSObject {
         weeklyInterstitialPrompt = nil
 
         Task {
-            try? await Task.sleep(for: .milliseconds(350))
+            // Sheet braucht Zeit zum dismissen — sonst kann der nächste Modal
+            // nicht präsentiert werden (Top-VC ist noch das Sheet das gerade verschwindet).
+            try? await Task.sleep(for: .milliseconds(700))
             presentWeeklyInterstitial()
         }
     }
@@ -167,6 +195,32 @@ final class AdService: NSObject {
     func forceDebugWeeklyInterstitialPrompt() {
         preloadInterstitialIfNeeded()
         weeklyInterstitialPrompt = WeeklyInterstitialPrompt(skipsRemaining: weeklyInterstitialSkipsRemaining)
+    }
+
+    /// Direktes Testen: Vollbild-Ad SOFORT zeigen ohne Prompt-Sheet.
+    /// Wartet bis zu 10 Sekunden auf die Ad falls noch nicht geladen.
+    /// Nur als Debug-Hilfe gedacht.
+    func showInterstitialNow() {
+        print("[Ads] showInterstitialNow: load-state=\(interstitialLoadState), hasAd=\(interstitialAd != nil)")
+        Task { @MainActor in
+            // Trigger preload falls noch nicht passiert
+            preloadInterstitialIfNeeded()
+
+            // Warte bis zu 10s auf Load
+            for attempt in 0..<20 {
+                if interstitialAd != nil {
+                    print("[Ads] showInterstitialNow: ad ready after \(attempt * 500)ms")
+                    presentWeeklyInterstitial()
+                    return
+                }
+                if case .failed(let msg) = interstitialLoadState {
+                    print("[Ads] showInterstitialNow: aborted, load failed: \(msg)")
+                    return
+                }
+                try? await Task.sleep(for: .milliseconds(500))
+            }
+            print("[Ads] showInterstitialNow: TIMEOUT after 10s, state=\(interstitialLoadState)")
+        }
     }
 
     func resetWeeklyInterstitialState() {
@@ -211,16 +265,23 @@ final class AdService: NSObject {
 
         #if canImport(GoogleMobileAds)
         guard let interstitialAd else {
+            print("[Ads] presentWeeklyInterstitial: no ad loaded, triggering preload (state=\(interstitialLoadState))")
             preloadInterstitialIfNeeded()
             return
         }
 
-        guard let rootViewController = topViewController() else { return }
+        guard let rootViewController = topViewController() else {
+            print("[Ads] presentWeeklyInterstitial: NO topViewController found")
+            return
+        }
+        print("[Ads] presentWeeklyInterstitial: presenting from \(type(of: rootViewController))")
 
         do {
             try interstitialAd.canPresent(fromRootViewController: rootViewController)
             interstitialAd.present(fromRootViewController: rootViewController)
+            print("[Ads] presentWeeklyInterstitial: present() called successfully")
         } catch {
+            print("[Ads] presentWeeklyInterstitial: canPresent failed: \(error.localizedDescription)")
             interstitialLoadState = .failed(error.localizedDescription)
             self.interstitialAd = nil
             preloadInterstitialIfNeeded()
@@ -287,17 +348,86 @@ final class AdService: NSObject {
             }
         }
 
+        // Status loggen
+        let info = UMPConsentInformation.sharedInstance
+        let status = info.consentStatus
+        let formStatus = info.formStatus
+        diag_umpStatus = "consent=\(consentLabel(status)) form=\(formLabel(formStatus))"
+        print("[Ads] UMP consent status: \(diag_umpStatus)")
+
+        // Form präsentieren — mit explizitem Top-View-Controller, nicht nil.
+        let topVC: UIViewController? = topViewController()
         do {
-            try await UMPConsentForm.loadAndPresentIfRequired(from: nil)
+            try await UMPConsentForm.loadAndPresentIfRequired(from: topVC)
+            print("[Ads] UMP form presented (or not required)")
         } catch {
             print("[Ads] UMP form present failed: \(error.localizedDescription)")
+            diag_umpStatus += " · form-error"
+        }
+    }
+
+    private func consentLabel(_ s: UMPConsentStatus) -> String {
+        switch s {
+        case .notRequired: return "notRequired"
+        case .required: return "required"
+        case .obtained: return "obtained"
+        case .unknown: return "unknown"
+        @unknown default: return "??"
+        }
+    }
+    private func formLabel(_ s: UMPFormStatus) -> String {
+        switch s {
+        case .available: return "available"
+        case .unavailable: return "unavailable"
+        case .unknown: return "unknown"
+        @unknown default: return "??"
         }
     }
     #endif
 
     private func requestATTIfNeeded() async {
-        guard ATTrackingManager.trackingAuthorizationStatus == .notDetermined else { return }
-        _ = await ATTrackingManager.requestTrackingAuthorization()
+        if ATTrackingManager.trackingAuthorizationStatus != .notDetermined {
+            diag_attStatus = attLabel(ATTrackingManager.trackingAuthorizationStatus)
+            return
+        }
+        let result = await ATTrackingManager.requestTrackingAuthorization()
+        diag_attStatus = attLabel(result)
+        print("[Ads] ATT result: \(diag_attStatus)")
+    }
+
+    private func attLabel(_ s: ATTrackingManager.AuthorizationStatus) -> String {
+        switch s {
+        case .notDetermined: return "notDetermined"
+        case .restricted: return "restricted"
+        case .denied: return "denied"
+        case .authorized: return "authorized"
+        @unknown default: return "??"
+        }
+    }
+
+    /// Setzt den UMP-Consent komplett zurück — User muss beim nächsten
+    /// App-Start neu zustimmen. Hilfreich zum Testen.
+    func resetUMPConsent() {
+        #if canImport(GoogleMobileAds)
+        UMPConsentInformation.sharedInstance.reset()
+        diag_umpStatus = "reset"
+        print("[Ads] UMP consent reset")
+        #endif
+    }
+
+    /// Notiert einen Native-Ad-Fehler/Erfolg fürs Debug-UI.
+    func recordNativeAdResult(error: String?) {
+        diag_lastNativeAdError = error
+        if error == nil { diag_lastNativeAdLoadedAt = Date() }
+    }
+
+    func topViewController() -> UIViewController? {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first(where: \.isKeyWindow)?
+            .rootViewController?
+            .topMostPresentedViewController
     }
 
     func preloadInterstitialIfNeeded() {
@@ -333,16 +463,6 @@ final class AdService: NSObject {
         #endif
     }
 
-    #if canImport(GoogleMobileAds)
-    private func topViewController() -> UIViewController? {
-        UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap(\.windows)
-            .first(where: \.isKeyWindow)?
-            .rootViewController?
-            .topMostPresentedViewController
-    }
-    #endif
 }
 
 #if canImport(GoogleMobileAds)
@@ -366,7 +486,9 @@ extension AdService: @preconcurrency GADFullScreenContentDelegate {
     }
 }
 
-private extension UIViewController {
+#endif
+
+extension UIViewController {
     var topMostPresentedViewController: UIViewController {
         if let presentedViewController {
             return presentedViewController.topMostPresentedViewController
@@ -380,4 +502,3 @@ private extension UIViewController {
         return self
     }
 }
-#endif

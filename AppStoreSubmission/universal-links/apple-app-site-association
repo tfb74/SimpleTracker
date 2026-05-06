@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "87G432SJNY.de.baumannheim.SimpleTracking",
+        "paths": [
+          "/SimpleTracker/friend",
+          "/SimpleTracker/friend/*",
+          "/friend",
+          "/friend/*"
+        ]
+      }
+    ]
+  }
+}

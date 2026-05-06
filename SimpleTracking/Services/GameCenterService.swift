@@ -4,20 +4,20 @@ import HealthKit
 
 // MARK: - Achievement IDs  (müssen 1:1 in App Store Connect angelegt werden)
 enum Achievement: String, CaseIterable {
-    case firstWorkout      = "com.felix.SimpleTracking.first_workout"
-    case fiveWorkouts      = "com.felix.SimpleTracking.five_workouts"
-    case twentyWorkouts    = "com.felix.SimpleTracking.twenty_workouts"
-    case firstKilometer    = "com.felix.SimpleTracking.first_km"
-    case run5km            = "com.felix.SimpleTracking.run_5km"
-    case run10km           = "com.felix.SimpleTracking.run_10km"
-    case run21km           = "com.felix.SimpleTracking.run_halfmarathon"
-    case run42km           = "com.felix.SimpleTracking.run_marathon"
-    case total50km         = "com.felix.SimpleTracking.total_50km"
-    case total100km        = "com.felix.SimpleTracking.total_100km"
-    case steps10k          = "com.felix.SimpleTracking.steps_10k_day"
-    case earlyBird         = "com.felix.SimpleTracking.early_bird"    // vor 7 Uhr
-    case nightOwl          = "com.felix.SimpleTracking.night_owl"     // nach 20 Uhr
-    case allTypes          = "com.felix.SimpleTracking.all_types"     // alle 4 Sportarten
+    case firstWorkout      = "de.baumannheim.SimpleTracking.first_workout"
+    case fiveWorkouts      = "de.baumannheim.SimpleTracking.five_workouts"
+    case twentyWorkouts    = "de.baumannheim.SimpleTracking.twenty_workouts"
+    case firstKilometer    = "de.baumannheim.SimpleTracking.first_km"
+    case run5km            = "de.baumannheim.SimpleTracking.run_5km"
+    case run10km           = "de.baumannheim.SimpleTracking.run_10km"
+    case run21km           = "de.baumannheim.SimpleTracking.run_halfmarathon"
+    case run42km           = "de.baumannheim.SimpleTracking.run_marathon"
+    case total50km         = "de.baumannheim.SimpleTracking.total_50km"
+    case total100km        = "de.baumannheim.SimpleTracking.total_100km"
+    case steps10k          = "de.baumannheim.SimpleTracking.steps_10k_day"
+    case earlyBird         = "de.baumannheim.SimpleTracking.early_bird"    // vor 7 Uhr
+    case nightOwl          = "de.baumannheim.SimpleTracking.night_owl"     // nach 20 Uhr
+    case allTypes          = "de.baumannheim.SimpleTracking.all_types"     // alle 4 Sportarten
 
     var displayName: String {
         switch self {
@@ -79,10 +79,10 @@ enum Achievement: String, CaseIterable {
 
 // MARK: - Leaderboard IDs
 enum Leaderboard: String {
-    case weeklySteps      = "com.felix.SimpleTracking.leaderboard.weekly_steps"
-    case monthlyDistKm    = "com.felix.SimpleTracking.leaderboard.monthly_dist"
-    case bestWorkoutScore = "com.felix.SimpleTracking.leaderboard.best_score"
-    case totalScore       = "com.felix.SimpleTracking.leaderboard.total_score"
+    case weeklySteps      = "de.baumannheim.SimpleTracking.leaderboard.weekly_steps"
+    case monthlyDistKm    = "de.baumannheim.SimpleTracking.leaderboard.monthly_dist"
+    case bestWorkoutScore = "de.baumannheim.SimpleTracking.leaderboard.best_score"
+    case totalScore       = "de.baumannheim.SimpleTracking.leaderboard.total_score"
 }
 
 // MARK: - Service
@@ -106,10 +106,34 @@ final class GameCenterService {
 
     // MARK: - Authentication (only used when user opted into GC sync)
 
+    /// Game Center ruft `authenticateHandler` MEHRFACH auf:
+    /// - direkt nach dem Setzen, falls bereits eingeloggt
+    /// - mit einem UIViewController falls der Nutzer sich einloggen muss
+    /// - nach abgeschlossenem Login mit dem Ergebnis
+    /// - später bei State-Wechseln (z.B. Logout)
+    /// Wir dürfen die Continuation aber nur EINMAL resumen — sonst Crash.
     func authenticate() async {
         await withCheckedContinuation { cont in
-            GKLocalPlayer.local.authenticateHandler = { [weak self] _, _ in
-                guard let self else { cont.resume(); return }
+            // Single-Resume-Guard: nur der erste definitive Auth-Status
+            // resumed die Continuation, alle weiteren Callbacks werden
+            // nur noch zum State-Update genutzt.
+            final class Resumer { var done = false }
+            let state = Resumer()
+
+            GKLocalPlayer.local.authenticateHandler = { [weak self] viewController, _ in
+                // Falls Game Center einen Login-Screen zeigen will: präsentieren.
+                if let viewController {
+                    Task { @MainActor in
+                        Self.presentTopMost(viewController)
+                    }
+                    return  // Continuation noch NICHT resumen — wir warten auf das Auth-Ergebnis
+                }
+
+                guard let self else {
+                    if !state.done { state.done = true; cont.resume() }
+                    return
+                }
+
                 if GKLocalPlayer.local.isAuthenticated {
                     Task { @MainActor in
                         self.isAuthenticated = true
@@ -117,10 +141,30 @@ final class GameCenterService {
                         self.playerAvatar = try? await GKLocalPlayer.local.loadPhoto(for: .small)
                         self.syncLocalToGameCenter()
                     }
+                } else {
+                    Task { @MainActor in
+                        self.isAuthenticated = false
+                    }
                 }
-                cont.resume()
+
+                if !state.done {
+                    state.done = true
+                    cont.resume()
+                }
             }
         }
+    }
+
+    @MainActor
+    private static func presentTopMost(_ vc: UIViewController) {
+        guard let root = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first?.windows.first?.rootViewController
+        else { return }
+        // Falls bereits etwas modal präsentiert wird, dort drauf legen
+        var top: UIViewController = root
+        while let presented = top.presentedViewController { top = presented }
+        top.present(vc, animated: true)
     }
 
     /// Replays every locally unlocked achievement to Game Center.
@@ -243,6 +287,8 @@ final class GameCenterService {
 private final class GameCenterDismissDelegate: NSObject, GKGameCenterControllerDelegate {
     static let shared = GameCenterDismissDelegate()
     nonisolated func gameCenterViewControllerDidFinish(_ vc: GKGameCenterViewController) {
-        vc.dismiss(animated: true)
+        Task { @MainActor in
+            vc.dismiss(animated: true)
+        }
     }
 }

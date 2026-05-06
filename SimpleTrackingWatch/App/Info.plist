@@ -27,6 +27,6 @@
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>com.felix.SimpleTracking</string>
+	<string>de.baumannheim.SimpleTracking</string>
 </dict>
 </plist>

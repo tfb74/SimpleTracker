@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleTracking · Freund hinzufügen</title>
+
+    <!-- Open Graph für iMessage / WhatsApp / Slack Rich Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SimpleTracking">
+    <meta property="og:description" content="Tippe auf den Link, um dem Freund-Code automatisch in SimpleTracking zu folgen.">
+    <meta property="og:image" content="https://tfb74.github.io/SimpleTracker/friend/preview.png">
+    <meta property="og:url" content="https://tfb74.github.io/SimpleTracker/friend">
+
+    <!-- Twitter Card (für Twitter/X-User) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SimpleTracking">
+    <meta name="twitter:description" content="Tippe auf den Link, um dem Freund-Code automatisch in SimpleTracking zu folgen.">
+    <meta name="twitter:image" content="https://tfb74.github.io/SimpleTracker/friend/preview.png">
+
+    <!-- iOS Smart Banner: zeigt direkt einen "App öffnen"-Banner wenn die App installiert ist -->
+    <!-- ITUNES_APP_ID muss nach App-Store-Approval ersetzt werden -->
+    <meta name="apple-itunes-app" content="app-id=PLACEHOLDER_APP_STORE_ID">
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+            background: linear-gradient(180deg, #f4f7ff 0%, #e0e8ff 100%);
+            color: #1d1d1f;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            max-width: 420px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 32px 28px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .logo {
+            font-size: 56px;
+            margin-bottom: 8px;
+        }
+        h1 {
+            font-size: 24px;
+            margin: 0 0 6px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #6b7280;
+            font-size: 15px;
+            margin: 0 0 24px;
+        }
+        .code-block {
+            background: #f4f7ff;
+            border: 1px solid #d8def0;
+            border-radius: 12px;
+            padding: 16px;
+            font-family: ui-monospace, SFMono-Regular, monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-bottom: 24px;
+            letter-spacing: 2px;
+        }
+        .button {
+            display: inline-block;
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        .secondary {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 16px;
+        }
+        .secondary a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">🏃‍♂️</div>
+        <h1>SimpleTracking</h1>
+        <p class="subtitle">Ein Freund möchte dich hinzufügen</p>
+
+        <div class="code-block" id="code">…</div>
+
+        <a href="#" id="open-app" class="button">In App öffnen</a>
+
+        <p class="secondary">
+            App noch nicht installiert?
+            <a href="https://apps.apple.com/app/idPLACEHOLDER_APP_STORE_ID">Im App&nbsp;Store laden</a>
+        </p>
+    </div>
+
+    <script>
+        // Code aus Query-Parameter lesen und anzeigen
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code") || "";
+        document.getElementById("code").textContent = code || "—";
+
+        // Deep-Link via simpletracking://-Schema
+        const deepLink = "simpletracking://friend?code=" + encodeURIComponent(code);
+        document.getElementById("open-app").href = deepLink;
+
+        // Wenn auf iOS und App installiert ist: automatisch öffnen.
+        // Universal Link auf den iOS-Devices triggert iOS, die App direkt zu
+        // öffnen statt diese Seite anzuzeigen — das hier ist nur Fallback.
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            setTimeout(() => {
+                window.location.href = deepLink;
+            }, 200);
+        }
+    </script>
+</body>
+</html>

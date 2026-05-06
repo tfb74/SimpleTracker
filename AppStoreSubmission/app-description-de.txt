@@ -1,0 +1,42 @@
+SimpleTracking – Workout, Ernährung und Schritte. Alles auf einen Blick.
+
+SimpleTracking begleitet dich durch deinen aktiven Alltag: GPS-Workouts, Schritte, Kalorien und Ernährungstracking – ohne Schnickschnack, ohne Abo, mit voller Kontrolle über deine Daten.
+
+WORKOUT-TRACKING
+• 19 Aktivitätstypen: Laufen, Radfahren, Wandern, Schwimmen, Krafttraining, Yoga, HIIT und mehr
+• Live-Karte mit GPS-Aufzeichnung deiner Route
+• Höhe, Pace, Distanz, Kalorien in Echtzeit
+• Manuelle Eintragung für Indoor-Workouts und Studio-Sessions
+• Eigene Sportarten anlegen und als Favoriten speichern
+• Apple Watch Begleit-App: Workouts direkt am Handgelenk starten
+
+ERNÄHRUNGSTRACKING – KI-GESTÜTZT
+• Foto-Analyse: Mahlzeit fotografieren, KI erkennt Lebensmittel und schätzt Kalorien, Kohlenhydrate und BE
+• Barcode-Scanner für verpackte Produkte (Open Food Facts)
+• Manuelle Eingabe mit KI-Vorschlag für typische Portionen (z. B. „Spaghetti Bolognese", „Gänsebraten")
+• Quick-Auswahl gängiger Snacks und Getränke, eigene Presets möglich
+• BE-Berechnung für Diabetiker integriert
+
+STATISTIKEN UND HISTORIE
+• Tagesübersicht mit Schritten, Kalorien, Distanz
+• Wochen-, Monats- und Gesamtansichten
+• Detail-Ansicht jedes Workouts mit Karte, Tempo und Herzfrequenz
+
+GAMIFICATION
+• 14 Achievements für deine Meilensteine
+• Leaderboards via Game Center
+• CloudKit-Sync zwischen iPhone und iPad
+
+DATENSCHUTZ
+• Foto-Analyse läuft komplett auf deinem Gerät (Apple Intelligence)
+• Apple Health bidirektional integriert – deine Daten bleiben deine Daten
+• Keine versteckten Tracker, keine Daten-Weitergabe
+
+TECHNISCHE FEATURES
+• iOS 17+ inklusive iOS 26 mit Apple Intelligence
+• watchOS-App
+• Widgets für den Homescreen
+• Live Activities für aktive Workouts
+• Vollständig auf Deutsch und Englisch
+
+Lade SimpleTracking jetzt und behalte den Überblick über deinen aktiven Alltag.

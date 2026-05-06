@@ -11,17 +11,33 @@ struct PhotoFoodAnalysisView: View {
     @State private var selectedItem: PhotosPickerItem?
     @State private var image: UIImage?
     @State private var showCamera = false
+    @State private var kindHint: FoodKind?
     @State private var analyzing = false
     @State private var items: [RecognizedFoodItem] = []
     @State private var diagnostics: AnalysisDiagnostics?
     @State private var errorMessage: String?
     @State private var timestamp = Date()
 
+    // Live-Fortschritt während der Analyse
+    @State private var progressLog: [ProgressEntry] = []
+    @State private var currentStageMessage: String = ""
+    @State private var currentStageIcon: String = "viewfinder"
+
+    private struct ProgressEntry: Identifiable {
+        let id = UUID()
+        let icon: String
+        let title: String
+        let detail: String?
+        let isReasoning: Bool
+    }
+
     var body: some View {
         NavigationStack {
             Group {
                 if image == nil {
                     pickerSection
+                } else if kindHint == nil {
+                    kindSelectionSection
                 } else if analyzing {
                     analyzingSection
                 } else if !items.isEmpty {
@@ -49,7 +65,7 @@ struct PhotoFoodAnalysisView: View {
             .sheet(isPresented: $showCamera) {
                 CameraPicker { uiImage in
                     image = uiImage
-                    Task { await analyze() }
+                    kindHint = nil
                 }
             }
         }
@@ -94,6 +110,62 @@ struct PhotoFoodAnalysisView: View {
         }
     }
 
+    // MARK: - Kind Selection
+
+    private var kindSelectionSection: some View {
+        VStack(spacing: 24) {
+            if let image {
+                Image(uiImage: image)
+                    .resizable().scaledToFit()
+                    .frame(maxHeight: 240)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+            }
+
+            VStack(spacing: 6) {
+                Text("Was ist auf dem Foto?")
+                    .font(.title3.bold())
+                Text("Der Hinweis verbessert die Erkennung.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            HStack(spacing: 16) {
+                kindButton(title: "Essen", systemImage: "fork.knife", kind: .food, tint: .orange)
+                kindButton(title: "Getränk", systemImage: "cup.and.saucer.fill", kind: .drink, tint: .blue)
+            }
+            .padding(.horizontal)
+
+            Spacer()
+        }
+    }
+
+    private func kindButton(title: String, systemImage: String, kind: FoodKind, tint: Color) -> some View {
+        Button {
+            kindHint = kind
+            Task { await analyze() }
+        } label: {
+            VStack(spacing: 10) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 32))
+                    .foregroundStyle(tint)
+                Text(title)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 28)
+            .background(tint.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(tint.opacity(0.3), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
     private var availabilityBadge: some View {
         let available = FoodPhotoAnalyzer.isLLMAvailable
         return HStack(spacing: 6) {
@@ -107,20 +179,106 @@ struct PhotoFoodAnalysisView: View {
     }
 
     private var analyzingSection: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 14) {
             if let image {
                 Image(uiImage: image)
                     .resizable().scaledToFit()
-                    .frame(maxHeight: 260)
+                    .frame(maxHeight: 180)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .padding(.horizontal)
             }
-            ProgressView(FoodPhotoAnalyzer.isLLMAvailable
-                         ? "Apple Intelligence erkennt Lebensmittel…"
-                         : "Analysiere Bild…")
-                .padding()
+
+            // Aktueller Schritt prominent
+            HStack(spacing: 10) {
+                ProgressView().scaleEffect(0.85)
+                Image(systemName: currentStageIcon)
+                    .foregroundStyle(Color.accentColor)
+                Text(currentStageMessage.isEmpty ? "Starte Analyse…" : currentStageMessage)
+                    .font(.subheadline.weight(.medium))
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .padding(.horizontal)
+
+            // Reasoning-Log: feste Höhe, intern scrollend, auto-scroll ans Ende
+            reasoningLog
+                .padding(.horizontal)
+
+            Spacer(minLength: 0)
+        }
+        .padding(.vertical)
+    }
+
+    private var reasoningLog: some View {
+        ScrollViewReader { proxy in
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 8) {
+                    if progressLog.isEmpty {
+                        Text("KI-Verlauf erscheint hier…")
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 4)
+                    } else {
+                        ForEach(progressLog) { entry in
+                            progressEntryView(entry)
+                                .id(entry.id)
+                        }
+                    }
+                    Color.clear.frame(height: 1).id("bottom")
+                }
+                .padding(10)
+            }
+            .frame(height: 170)              // ~5-7 Zeilen, kompakt
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(Color.secondary.opacity(0.15), lineWidth: 1)
+            )
+            // Sanfter Verlauf oben/unten als visueller Scroll-Hint
+            .mask(
+                LinearGradient(
+                    colors: [.clear, .black, .black, .black, .black, .black, .clear],
+                    startPoint: .top, endPoint: .bottom
+                )
+            )
+            .onChange(of: progressLog.count) { _, _ in
+                withAnimation(.easeOut(duration: 0.3)) {
+                    proxy.scrollTo("bottom", anchor: .bottom)
+                }
+            }
+        }
+    }
+
+    private func progressEntryView(_ entry: ProgressEntry) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: entry.icon)
+                .font(.caption)
+                .foregroundStyle(entry.isReasoning ? Color.purple : Color.green)
+                .frame(width: 18)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(entry.title)
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.primary)
+                if let detail = entry.detail {
+                    Text(detail)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .italic(entry.isReasoning)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
             Spacer()
         }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(entry.isReasoning ? Color.purple.opacity(0.08) : Color.green.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .transition(.opacity.combined(with: .move(edge: .bottom)))
     }
 
     private var resultSection: some View {
@@ -217,19 +375,74 @@ struct PhotoFoodAnalysisView: View {
         guard let data = try? await item.loadTransferable(type: Data.self),
               let ui = UIImage(data: data) else { return }
         image = ui
-        await analyze()
+        kindHint = nil
     }
 
     private func analyze() async {
         guard let image else { return }
         analyzing = true
+        progressLog = []
+        currentStageMessage = ""
+        currentStageIcon = "viewfinder"
         defer { analyzing = false }
         do {
-            let (result, diag) = try await FoodPhotoAnalyzer.analyzeDetailed(image: image)
+            let (result, diag) = try await FoodPhotoAnalyzer.analyzeDetailed(
+                image: image,
+                kindHint: kindHint,
+                progress: { stage in
+                    await handleProgress(stage)
+                }
+            )
             items = result
             diagnostics = diag
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    @MainActor
+    private func handleProgress(_ stage: AnalysisStage) async {
+        // Aktueller Stage oben prominent anzeigen
+        currentStageMessage = stage.displayMessage
+        currentStageIcon    = stage.systemImage
+
+        // Bei "Result"-Stages: ins Verlaufsprotokoll aufnehmen
+        switch stage {
+        case .visionCompleted(let labels):
+            withAnimation(.easeOut(duration: 0.25)) {
+                progressLog.append(ProgressEntry(
+                    icon: "viewfinder",
+                    title: "Bildlabels erkannt",
+                    detail: labels.prefix(5).joined(separator: ", "),
+                    isReasoning: false
+                ))
+            }
+
+        case .llmReasoningResult(let text):
+            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            withAnimation(.easeOut(duration: 0.25)) {
+                progressLog.append(ProgressEntry(
+                    icon: "brain",
+                    title: "Überlegung",
+                    detail: trimmed.isEmpty ? nil : trimmed,
+                    isReasoning: true
+                ))
+            }
+
+        case .llmVerifyingResult(let text):
+            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            withAnimation(.easeOut(duration: 0.25)) {
+                progressLog.append(ProgressEntry(
+                    icon: "checkmark.circle",
+                    title: "Selbstprüfung",
+                    detail: trimmed.isEmpty ? nil : trimmed,
+                    isReasoning: true
+                ))
+            }
+
+        default:
+            // Andere Stages werden nur in der oberen Statuszeile angezeigt
+            break
         }
     }
 
@@ -241,12 +454,14 @@ struct PhotoFoodAnalysisView: View {
     }
 
     private func saveAll() {
+        let kind = kindHint ?? .food
         for item in items {
             let entry = FoodEntry(
                 timestamp: timestamp,
                 name: item.name,
-                kind: .food,
-                portionGrams: Double(item.portionGrams),
+                kind: kind,
+                portionGrams: kind == .food ? Double(item.portionGrams) : nil,
+                portionMilliliters: kind == .drink ? Double(item.portionGrams) : nil,
                 calories: Double(item.calories),
                 carbsGrams: Double(item.carbsGrams),
                 source: .photo

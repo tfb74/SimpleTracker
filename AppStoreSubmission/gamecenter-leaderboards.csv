@@ -1,0 +1,5 @@
+Identifier,Reference Name,Display Name (DE),Display Name (EN),Score Format Type,Sort Order,Score Range Min,Score Range Max
+de.baumannheim.SimpleTracking.leaderboard.weekly_steps,Weekly Steps,Wochenschritte,Weekly Steps,Integer,Higher to Lower,0,1000000
+de.baumannheim.SimpleTracking.leaderboard.monthly_dist,Monthly Distance,Monats-Kilometer,Monthly Distance (km),Integer,Higher to Lower,0,10000
+de.baumannheim.SimpleTracking.leaderboard.best_score,Best Workout Score,Bester Workout-Score,Best Workout Score,Integer,Higher to Lower,0,100000
+de.baumannheim.SimpleTracking.leaderboard.total_score,Total Score,Gesamt-Score,Total Score,Integer,Higher to Lower,0,10000000

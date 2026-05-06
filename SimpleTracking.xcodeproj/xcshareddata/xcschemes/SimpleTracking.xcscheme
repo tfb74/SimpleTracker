@@ -35,6 +35,20 @@
                ReferencedContainer = "container:SimpleTracking.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6F250820F343C3C499CF2FF2"
+               BuildableName = "SimpleTrackingWidgets.appex"
+               BlueprintName = "SimpleTrackingWidgets"
+               ReferencedContainer = "container:SimpleTracking.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

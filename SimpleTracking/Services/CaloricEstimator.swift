@@ -74,6 +74,30 @@ enum NutritionBaselineEstimator {
     }
 }
 
+enum WorkoutIntensity: String, CaseIterable, Identifiable {
+    case low    = "Niedrig"
+    case medium = "Mittel"
+    case high   = "Hoch"
+
+    var id: String { rawValue }
+
+    var metMultiplier: Double {
+        switch self {
+        case .low:    return 0.75
+        case .medium: return 1.00
+        case .high:   return 1.30
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .low:    return "tortoise"
+        case .medium: return "figure.walk"
+        case .high:   return "flame"
+        }
+    }
+}
+
 enum CaloricEstimator {
     /// MET lookup (Compendium of Physical Activities, piecewise-linear).
     static func metValue(type: WorkoutType, speedMPS: Double) -> Double {
@@ -110,10 +134,11 @@ enum CaloricEstimator {
     static func estimate(type: WorkoutType,
                          distanceMeters: Double,
                          durationSec: TimeInterval,
-                         profile: ProfileSnapshot) -> Double {
+                         profile: ProfileSnapshot,
+                         intensity: WorkoutIntensity = .medium) -> Double {
         guard durationSec > 0 else { return 0 }
         let speed  = distanceMeters / durationSec
-        let met    = metValue(type: type, speedMPS: speed)
+        let met    = metValue(type: type, speedMPS: speed) * intensity.metMultiplier
         let weight = profile.weightKg > 0 ? profile.weightKg : ProfileSnapshot.neutral.weightKg
         let hours  = durationSec / 3600
 

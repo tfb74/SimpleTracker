@@ -21,7 +21,7 @@ struct DashboardView: View {
                 NavigationLink {
                     WorkoutGuideView()
                 } label: {
-                    AppChromeActionLabel(systemImage: "info.circle", tint: .blue)
+                    AppChromeActionLabel(systemImage: "info.circle", tint: .blue, style: .prominent)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(lt("Tracking-Hilfe"))
@@ -198,7 +198,7 @@ struct WorkoutRowView: View {
                 .clipShape(Circle())
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(workout.workoutType.displayName).font(.subheadline.bold())
+                Text(workout.displayName).font(.subheadline.bold())
                 Text(workout.startDate.formatted(date: .abbreviated, time: .shortened))
                     .font(.caption).foregroundStyle(.secondary)
             }

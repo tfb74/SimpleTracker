@@ -1,0 +1,15 @@
+Identifier,Reference Name,Display Name (DE),Display Name (EN),Description Before (DE),Description Before (EN),Description After (DE),Description After (EN),Points,Hidden
+de.baumannheim.SimpleTracking.first_workout,First Workout,Erster Schritt,First Step,Schließe dein erstes Workout ab.,Complete your first workout.,Erstes Workout abgeschlossen!,First workout completed!,5,No
+de.baumannheim.SimpleTracking.five_workouts,Five Workouts,Fünf Workouts,Five Workouts,Schließe 5 Workouts ab.,Complete 5 workouts.,5 Workouts abgeschlossen!,5 workouts completed!,15,No
+de.baumannheim.SimpleTracking.twenty_workouts,Twenty Workouts,Fitness-Enthusiast,Fitness Enthusiast,Schließe 20 Workouts ab.,Complete 20 workouts.,20 Workouts abgeschlossen!,20 workouts completed!,50,No
+de.baumannheim.SimpleTracking.first_km,First Kilometer,Erster Kilometer,First Kilometer,Lege deinen ersten Kilometer zurück.,Cover your first kilometre.,Ersten Kilometer geschafft!,First kilometre done!,5,No
+de.baumannheim.SimpleTracking.run_5km,5 km Run,5-km-Läufer,5 km Runner,Laufe 5 km am Stück.,Run 5 km in one go.,5 km am Stück gelaufen!,Ran 5 km in one go!,15,No
+de.baumannheim.SimpleTracking.run_10km,10 km Run,10-km-Läufer,10 km Runner,Laufe 10 km am Stück.,Run 10 km in one go.,10 km am Stück gelaufen!,Ran 10 km in one go!,30,No
+de.baumannheim.SimpleTracking.run_halfmarathon,Half Marathon,Halbmarathon,Half Marathon,Laufe 21.1 km am Stück.,Run 21.1 km in one go.,Halbmarathon geschafft!,Half marathon completed!,75,No
+de.baumannheim.SimpleTracking.run_marathon,Marathon,Marathonläufer,Marathon Runner,Laufe 42.2 km am Stück.,Run 42.2 km in one go.,Marathon geschafft!,Marathon completed!,100,No
+de.baumannheim.SimpleTracking.total_50km,50 km Total,50 km Gesamtstrecke,50 km Total,Schaffe insgesamt 50 km über alle Workouts.,Cover 50 km in total.,50 km Gesamtstrecke erreicht!,50 km total reached!,30,No
+de.baumannheim.SimpleTracking.total_100km,100 km Total,100 km Gesamtstrecke,100 km Total,Schaffe insgesamt 100 km über alle Workouts.,Cover 100 km in total.,100 km Gesamtstrecke erreicht!,100 km total reached!,75,No
+de.baumannheim.SimpleTracking.steps_10k_day,10000 Steps,10.000 Schritte,10000 Steps,Erreiche 10.000 Schritte an einem Tag.,Reach 10000 steps in one day.,10.000 Schritte geschafft!,10000 steps reached!,15,No
+de.baumannheim.SimpleTracking.early_bird,Early Bird,Frühaufsteher,Early Bird,Starte ein Workout vor 7 Uhr.,Start a workout before 7 AM.,Frühaufsteher!,Early bird!,10,No
+de.baumannheim.SimpleTracking.night_owl,Night Owl,Nachteule,Night Owl,Starte ein Workout nach 20 Uhr.,Start a workout after 8 PM.,Nachteule!,Night owl!,10,No
+de.baumannheim.SimpleTracking.all_types,All Types,Allrounder,All-Rounder,Absolviere Laufen Gehen Radfahren und Wandern.,Complete running walking cycling and hiking.,Alle Typen abgehakt!,All types covered!,40,No

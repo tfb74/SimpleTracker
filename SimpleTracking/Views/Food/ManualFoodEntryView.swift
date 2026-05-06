@@ -34,7 +34,36 @@ struct ManualFoodEntryView: View {
     @State private var name = ""
     @State private var kind: FoodKind = .food
     @State private var metric: Metric = .calories
-    @State private var amount: Int = 100
+    // Separate Werte pro Metrik – so bleibt jede Eingabe erhalten
+    // und jede Metrik startet mit einem sinnvollen Default.
+    @State private var calorieAmount: Int = 200
+    @State private var carbAmount: Int = 25
+    @State private var beAmount: Int = 2
+
+    private var amount: Int {
+        switch metric {
+        case .calories: calorieAmount
+        case .carbs:    carbAmount
+        case .be:       beAmount
+        }
+    }
+    private var amountBinding: Binding<Int> {
+        Binding(
+            get: { amount },
+            set: { val in
+                switch metric {
+                case .calories: calorieAmount = val
+                case .carbs:    carbAmount    = val
+                case .be:       beAmount      = val
+                }
+            }
+        )
+    }
+
+    // LLM-Vorschlag
+    @State private var suggestion: RecognizedFoodItem?
+    @State private var isLoadingSuggestion = false
+    @State private var suggestionTask: Task<Void, Never>?
 
     // Quick-Select
     @State private var showQuickSelect = false
@@ -51,10 +80,10 @@ struct ManualFoodEntryView: View {
             _name = State(initialValue: draft.name)
             if draft.calories > 0 {
                 _metric = State(initialValue: .calories)
-                _amount = State(initialValue: Self.clamp(draft.calories))
+                _calorieAmount = State(initialValue: Self.clamp(draft.calories))
             } else if draft.carbsGrams > 0 {
                 _metric = State(initialValue: .carbs)
-                _amount = State(initialValue: Self.clamp(draft.carbsGrams))
+                _carbAmount = State(initialValue: Self.clamp(draft.carbsGrams))
             }
         }
     }
@@ -165,8 +194,43 @@ struct ManualFoodEntryView: View {
                 }
 
                 Section("Name") {
-                    TextField("z. B. Vollkornbrot", text: $name)
+                    TextField("z. B. Spaghetti oder Gänsebraten", text: $name)
                         .textInputAutocapitalization(.sentences)
+                        .onChange(of: name) { _, new in triggerNameLookup(new) }
+
+                    if isLoadingSuggestion {
+                        HStack(spacing: 8) {
+                            ProgressView().scaleEffect(0.75)
+                            Text("Nährwerte werden gesucht…")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    if let s = suggestion, !isLoadingSuggestion {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "sparkles")
+                                    .font(.caption)
+                                    .foregroundStyle(.purple)
+                                Text("Vorschlag für typische Portion (\(s.portionGrams) g):")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            HStack(spacing: 8) {
+                                suggestionPill("\(s.calories) kcal", color: .orange)
+                                suggestionPill("\(s.carbsGrams) g KH", color: .blue)
+                                let be = Double(s.carbsGrams) / 12.0
+                                suggestionPill(String(format: "%.1f BE", be), color: .purple)
+                                Spacer()
+                                Button("Übernehmen") { applySuggestion(s) }
+                                    .font(.caption.weight(.semibold))
+                                    .buttonStyle(.borderedProminent)
+                                    .controlSize(.mini)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
                 }
 
                 Section {
@@ -180,7 +244,7 @@ struct ManualFoodEntryView: View {
                         .frame(maxWidth: .infinity)
                         .clipped()
 
-                        Picker("Wert", selection: $amount) {
+                        Picker("Wert", selection: amountBinding) {
                             ForEach(1...999, id: \.self) { n in
                                 Text("\(n)").tag(n)
                             }
@@ -329,6 +393,45 @@ struct ManualFoodEntryView: View {
         store.add(entry)
         dismiss()
         onComplete()
+    }
+
+    // MARK: - LLM Name Lookup
+
+    private func triggerNameLookup(_ text: String) {
+        suggestionTask?.cancel()
+        suggestion = nil
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        guard trimmed.count >= 3, FoodNameLookupService.isAvailable else {
+            isLoadingSuggestion = false
+            return
+        }
+        isLoadingSuggestion = true
+        suggestionTask = Task {
+            try? await Task.sleep(nanoseconds: 700_000_000)
+            guard !Task.isCancelled else { return }
+            let result = await FoodNameLookupService.lookup(name: trimmed)
+            await MainActor.run {
+                isLoadingSuggestion = false
+                suggestion = result
+            }
+        }
+    }
+
+    private func applySuggestion(_ s: RecognizedFoodItem) {
+        // Kalorien direkt übernehmen, da am direktesten
+        metric = .calories
+        calorieAmount = Self.clamp(s.calories)
+        suggestion = nil
+    }
+
+    private func suggestionPill(_ text: String, color: Color) -> some View {
+        Text(text)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(color)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(color.opacity(0.12))
+            .clipShape(Capsule())
     }
 
     private var caloriePreviewLabel: String {

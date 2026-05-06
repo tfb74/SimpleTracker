@@ -12,6 +12,8 @@ struct ContentView: View {
     @Environment(HealthKitService.self) private var healthKit
     @Environment(WatchConnectivityService.self) private var watch
     @Environment(NotificationService.self) private var notifications
+    @Environment(UserSettings.self) private var settings
+    @Environment(FoodLogStore.self) private var foodLog
     @Environment(AdService.self) private var ads
     @Environment(\.scenePhase) private var scenePhase
 
@@ -71,6 +73,9 @@ struct ContentView: View {
             Task {
                 await healthKit.refreshTodayData()
                 await healthKit.loadWorkouts()
+                await MainActor.run {
+                    refreshWidgetStatistics()
+                }
             }
             if selectedTab == .statistics && autoShowDetail == nil {
                 ads.considerWeeklyInterstitialOffer()
@@ -81,15 +86,37 @@ struct ContentView: View {
             Task {
                 await healthKit.refreshTodayData()
                 await healthKit.loadWorkouts()
+                await MainActor.run {
+                    refreshWidgetStatistics()
+                }
             }
         }
         .onChange(of: selectedTab) { _, newValue in
             guard newValue == .statistics, autoShowDetail == nil else { return }
             ads.considerWeeklyInterstitialOffer()
         }
+        .onChange(of: foodLog.entries) { _, _ in
+            refreshWidgetStatistics()
+        }
+        .onChange(of: settings.unitPreference) { _, _ in
+            refreshWidgetStatistics()
+        }
+        .onChange(of: healthKit.todaySteps) { _, _ in
+            refreshWidgetStatistics()
+        }
+        .onChange(of: healthKit.todayCalories) { _, _ in
+            refreshWidgetStatistics()
+        }
+        .onChange(of: healthKit.todayDistanceKm) { _, _ in
+            refreshWidgetStatistics()
+        }
+        .onChange(of: healthKit.workouts.count) { _, _ in
+            refreshWidgetStatistics()
+        }
         .task {
             try? await healthKit.requestAuthorization()
             await notifications.requestAuthorization()
+            refreshWidgetStatistics()
 
             if ProcessInfo.processInfo.arguments.contains("-previewRoute") {
                 autoShowDetail = MockDataService.shared.buildPreviewRecord()
@@ -101,6 +128,31 @@ struct ContentView: View {
                 autoShowDetail = healthKit.workouts.first
             }
         }
+        .onOpenURL { url in
+            handleDeepLink(url)
+        }
+    }
+
+    private func handleDeepLink(_ url: URL) {
+        guard url.scheme == "simpletracking" else { return }
+
+        let destination = url.host ?? url.pathComponents.dropFirst().first
+        switch destination {
+        case "workout":
+            selectedTab = .workout
+        case "today":
+            selectedTab = .dashboard
+        default:
+            break
+        }
+    }
+
+    private func refreshWidgetStatistics() {
+        WorkoutSurfaceService.shared.updateStatistics(
+            healthKit: healthKit,
+            settings: settings,
+            foodLog: foodLog
+        )
     }
 }
 

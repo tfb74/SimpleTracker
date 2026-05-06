@@ -7,15 +7,23 @@ struct ActiveWorkoutView: View {
     @Environment(NotificationService.self)    private var notifications
     @Environment(UserSettings.self)           private var settings
     @Environment(WorkoutDraftStore.self)      private var draftStore
+    @Environment(FoodLogStore.self)           private var foodLog
     @Environment(\.scenePhase)                private var scenePhase
 
+    private let workoutSurface = WorkoutSurfaceService.shared
+
+    @State private var favoriteStore    = WorkoutFavoriteStore.shared
+    @State private var customSportStore = CustomSportStore.shared
     @State private var selectedType:     WorkoutType = .running
+    @State private var selectedCustomSport: CustomSport? = nil
+    @State private var showAddCustomSport = false
     @State private var isActive          = false
     @State private var workoutStart:     Date?
     @State private var elapsed:          TimeInterval = 0
     @State private var timer:            Timer?
     @State private var previousDistance: Double = 0
     @State private var lastDraftSaveMark: Int = -1
+    @State private var lastSurfaceUpdateMark: Int = -1
     @State private var isSavingRecoveredDraft = false
     @State private var isMapExpanded = false
 
@@ -38,7 +46,7 @@ struct ActiveWorkoutView: View {
                 NavigationLink {
                     WorkoutHistoryView()
                 } label: {
-                    AppChromeActionLabel(systemImage: "clock.arrow.circlepath", tint: .green)
+                    AppChromeActionLabel(systemImage: "clock.arrow.circlepath", tint: .green, style: .prominent)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(lt("Workout-Verlauf"))
@@ -64,11 +72,13 @@ struct ActiveWorkoutView: View {
             ]
         }
 
+        let currentName = selectedCustomSport?.name ?? selectedType.displayName
+        let currentImage = selectedCustomSport.map { $0.symbol } ?? selectedType.systemImage
         return [
             AppHeaderMetric(
                 title: lt("Workout"),
-                value: selectedType.displayName,
-                systemImage: selectedType.systemImage,
+                value: currentName,
+                systemImage: currentImage,
                 tint: .green
             ),
             AppHeaderMetric(
@@ -134,6 +144,7 @@ struct ActiveWorkoutView: View {
         .onChange(of: scenePhase) { _, newPhase in
             guard isActive, newPhase != .active else { return }
             persistCurrentDraft(status: .active)
+            refreshWorkoutSurface(force: true)
         }
         .task {
             restoreDraftPreviewIfNeeded()
@@ -149,20 +160,101 @@ struct ActiveWorkoutView: View {
     private var workoutTypePicker: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
-                ForEach(WorkoutType.allCases) { type in
-                    Button { selectedType = type } label: {
+                // Favoriten (built-in) zuerst
+                let favTypes = WorkoutType.allCases.filter { favoriteStore.isFavorite($0) }
+                if !favTypes.isEmpty {
+                    ForEach(favTypes) { type in
+                        builtInTypeChip(type)
+                    }
+                    Divider().frame(height: 40)
+                }
+
+                // Benutzerdefinierte Sportarten
+                ForEach(customSportStore.sports) { sport in
+                    Button {
+                        selectedCustomSport = sport
+                        selectedType = .other
+                    } label: {
                         VStack(spacing: 4) {
-                            Image(systemName: type.systemImage).font(.title3)
-                            Text(type.displayName).font(.caption2)
+                            ZStack(alignment: .topTrailing) {
+                                Image(systemName: sport.symbol).font(.title3)
+                                Image(systemName: "star.fill")
+                                    .font(.system(size: 8))
+                                    .foregroundStyle(.yellow)
+                                    .offset(x: 6, y: -4)
+                            }
+                            Text(sport.name).font(.caption2).lineLimit(1)
                         }
                         .padding(.horizontal, 14).padding(.vertical, 10)
-                        .background(selectedType == type ? Color.accentColor : Color.secondary.opacity(0.15))
-                        .foregroundStyle(selectedType == type ? .white : .primary)
+                        .background(selectedCustomSport?.id == sport.id ? Color.accentColor : Color.secondary.opacity(0.15))
+                        .foregroundStyle(selectedCustomSport?.id == sport.id ? .white : .primary)
                         .clipShape(Capsule())
                     }
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            if selectedCustomSport?.id == sport.id { selectedCustomSport = nil }
+                            customSportStore.remove(sport)
+                        } label: {
+                            Label("Entfernen", systemImage: "trash")
+                        }
+                    }
+                }
+
+                // Alle Standard-Typen (Favoriten ohne Duplikat)
+                ForEach(WorkoutType.allCases.filter { !favoriteStore.isFavorite($0) }) { type in
+                    builtInTypeChip(type)
+                }
+
+                // '+' zum Hinzufügen einer eigenen Sportart
+                Button { showAddCustomSport = true } label: {
+                    VStack(spacing: 4) {
+                        Image(systemName: "plus.circle.fill").font(.title3)
+                        Text("Eigene").font(.caption2)
+                    }
+                    .padding(.horizontal, 14).padding(.vertical, 10)
+                    .background(Color.accentColor.opacity(0.15))
+                    .foregroundStyle(Color.accentColor)
+                    .clipShape(Capsule())
                 }
             }
             .padding(.horizontal).padding(.vertical, 10)
+        }
+        .sheet(isPresented: $showAddCustomSport) {
+            AddCustomSportSheet(store: customSportStore)
+        }
+    }
+
+    private func builtInTypeChip(_ type: WorkoutType) -> some View {
+        Button {
+            selectedType = type
+            selectedCustomSport = nil
+        } label: {
+            VStack(spacing: 4) {
+                ZStack(alignment: .topTrailing) {
+                    Image(systemName: type.systemImage).font(.title3)
+                    if favoriteStore.isFavorite(type) {
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 8))
+                            .foregroundStyle(.yellow)
+                            .offset(x: 6, y: -4)
+                    }
+                }
+                Text(type.displayName).font(.caption2)
+            }
+            .padding(.horizontal, 14).padding(.vertical, 10)
+            .background(selectedCustomSport == nil && selectedType == type ? Color.accentColor : Color.secondary.opacity(0.15))
+            .foregroundStyle(selectedCustomSport == nil && selectedType == type ? .white : .primary)
+            .clipShape(Capsule())
+        }
+        .contextMenu {
+            Button {
+                favoriteStore.toggle(type)
+            } label: {
+                Label(
+                    favoriteStore.isFavorite(type) ? "Aus Favoriten" : "Als Favorit",
+                    systemImage: favoriteStore.isFavorite(type) ? "star.slash" : "star"
+                )
+            }
         }
     }
 
@@ -264,6 +356,18 @@ struct ActiveWorkoutView: View {
         }
     }
 
+    private var selectedWorkoutName: String {
+        selectedCustomSport?.name ?? selectedType.displayName
+    }
+
+    private var selectedWorkoutSymbol: String {
+        selectedCustomSport?.symbol ?? selectedType.systemImage
+    }
+
+    private var trackingDistanceUnit: TrackingDistanceUnit {
+        TrackingDistanceUnit(rawValue: settings.unitPreference.rawValue) ?? .metric
+    }
+
     private func draftSummary(_ draft: WorkoutDraft) -> String {
         let end = draft.endDate ?? draft.lastUpdated
         let duration = max(0, end.timeIntervalSince(draft.startDate))
@@ -280,21 +384,35 @@ struct ActiveWorkoutView: View {
         draftStore.clear()
         location.requestAuthorization()
         location.startTracking()
-        workoutStart    = Date()
+        let start        = Date()
+        workoutStart    = start
         elapsed         = 0
         previousDistance = 0
         lastDraftSaveMark = -1
+        lastSurfaceUpdateMark = -1
         isActive        = true
         persistCurrentDraft(status: .active)
+        workoutSurface.startWorkout(
+            workoutName: selectedWorkoutName,
+            systemImageName: selectedWorkoutSymbol,
+            startDate: start,
+            distanceMeters: location.totalDistanceMeters,
+            speedMetersPerSecond: location.currentSpeedMPS,
+            unit: trackingDistanceUnit
+        )
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             elapsed += 1
             checkMilestone()
             autosaveIfNeeded()
+            refreshWorkoutSurface()
         }
     }
 
     private func stopWorkout() {
+        let workoutName = selectedWorkoutName
+        let workoutSymbol = selectedWorkoutSymbol
+        let unit = trackingDistanceUnit
         let route = location.stopTracking()
         timer?.invalidate(); timer = nil
         isActive = false
@@ -303,6 +421,14 @@ struct ActiveWorkoutView: View {
         let end      = Date()
         let distance = location.totalDistanceMeters
         persistCurrentDraft(status: .pendingSave, route: route, distanceMeters: distance, endDate: end)
+        workoutSurface.finishWorkout(
+            workoutName: workoutName,
+            systemImageName: workoutSymbol,
+            startDate: start,
+            endDate: end,
+            distanceMeters: distance,
+            unit: unit
+        )
 
         Task {
             do {
@@ -314,6 +440,11 @@ struct ActiveWorkoutView: View {
                     route: route
                 )
                 draftStore.clear()
+                await healthKit.refreshTodayData()
+                await healthKit.loadWorkouts()
+                await MainActor.run {
+                    refreshStatisticsSurface()
+                }
             } catch {
                 print("[WorkoutDraft] save on stop failed: \(error.localizedDescription)")
             }
@@ -346,14 +477,24 @@ struct ActiveWorkoutView: View {
         elapsed = max(0, Date().timeIntervalSince(draft.startDate))
         previousDistance = draft.distanceMeters
         lastDraftSaveMark = -1
+        lastSurfaceUpdateMark = -1
         location.requestAuthorization()
         location.startTracking(route: draft.route, totalDistanceMeters: draft.distanceMeters)
         isActive = true
         timer?.invalidate()
+        workoutSurface.startWorkout(
+            workoutName: selectedWorkoutName,
+            systemImageName: selectedWorkoutSymbol,
+            startDate: draft.startDate,
+            distanceMeters: draft.distanceMeters,
+            speedMetersPerSecond: location.currentSpeedMPS,
+            unit: trackingDistanceUnit
+        )
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             elapsed += 1
             checkMilestone()
             autosaveIfNeeded()
+            refreshWorkoutSurface()
         }
     }
 
@@ -383,6 +524,21 @@ struct ActiveWorkoutView: View {
         draftStore.save(draft)
     }
 
+    private func refreshWorkoutSurface(force: Bool = false) {
+        guard isActive, let start = workoutStart else { return }
+        let mark = Int(elapsed)
+        guard force || (mark > 0 && mark.isMultiple(of: 15) && mark != lastSurfaceUpdateMark) else { return }
+        lastSurfaceUpdateMark = mark
+        workoutSurface.updateWorkout(
+            workoutName: selectedWorkoutName,
+            systemImageName: selectedWorkoutSymbol,
+            startDate: start,
+            distanceMeters: location.totalDistanceMeters,
+            speedMetersPerSecond: location.currentSpeedMPS,
+            unit: trackingDistanceUnit
+        )
+    }
+
     private func saveWorkoutToHealth(
         type: WorkoutType,
         start: Date,
@@ -405,7 +561,8 @@ struct ActiveWorkoutView: View {
             steps: 0,
             calories: calories,
             distanceMeters: distanceMeters,
-            routePoints: route
+            routePoints: route,
+            customName: selectedCustomSport?.name
         )
     }
 
@@ -423,10 +580,21 @@ struct ActiveWorkoutView: View {
                 route: draft.route
             )
             draftStore.clear()
+            await healthKit.refreshTodayData()
+            await healthKit.loadWorkouts()
+            refreshStatisticsSurface()
             elapsed = 0
         } catch {
             print("[WorkoutDraft] recovered save failed: \(error.localizedDescription)")
         }
+    }
+
+    private func refreshStatisticsSurface() {
+        workoutSurface.updateStatistics(
+            healthKit: healthKit,
+            settings: settings,
+            foodLog: foodLog
+        )
     }
 
     private func checkMilestone() {
@@ -441,6 +609,55 @@ struct ActiveWorkoutView: View {
         previousDistance = current
     }
 
+}
+
+// MARK: - AddCustomSportSheet
+
+private struct AddCustomSportSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let store: CustomSportStore
+
+    @State private var name = ""
+    @State private var symbol = "figure.mixed.cardio"
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Name der Sportart") {
+                    TextField("z. B. Bouldern, Crossfit, Kickboxen", text: $name)
+                        .textInputAutocapitalization(.sentences)
+                }
+                Section("Symbol") {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 44))], spacing: 6) {
+                        ForEach(CustomSportStore.symbolChoices, id: \.self) { s in
+                            Image(systemName: s)
+                                .font(.title3)
+                                .foregroundStyle(s == symbol ? Color.accentColor : .secondary)
+                                .frame(width: 44, height: 44)
+                                .background(s == symbol ? Color.accentColor.opacity(0.2) : Color.secondary.opacity(0.1))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .onTapGesture { symbol = s }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Sportart hinzufügen")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Abbrechen") { dismiss() }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Hinzufügen") {
+                        store.add(name: name, symbol: symbol)
+                        dismiss()
+                    }
+                    .fontWeight(.semibold)
+                    .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+        }
+    }
 }
 
 // MARK: - LiveMetric tile

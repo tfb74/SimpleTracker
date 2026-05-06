@@ -105,6 +105,7 @@ final class MockDataService {
         return WorkoutRecord(
             id: UUID(),
             workoutType: .running,
+            customName: nil,
             startDate: start,
             endDate: end,
             steps: Int(distance / 0.78),
@@ -231,18 +232,13 @@ final class MockDataService {
         else { return }
 
         let routeKey = UUID().uuidString
-        let workout = HKWorkout(
-            activityType: type.hkWorkoutActivityType,
-            start: start, end: end,
-            duration: end.timeIntervalSince(start),
-            totalEnergyBurned: HKQuantity(unit: .kilocalorie(), doubleValue: calories),
-            totalDistance: HKQuantity(unit: .meter(), doubleValue: distance),
-            metadata: ["SimpleTrackingRouteID": routeKey]
-        )
-        try await store.save(workout)
+        let config = HKWorkoutConfiguration()
+        config.activityType = type.hkWorkoutActivityType
 
-        // Cache the route IMMEDIATELY after successful workout save,
-        // so later errors on quantity samples don't prevent route storage.
+        let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: nil)
+        try await builder.beginCollection(at: start)
+
+        // Cache the route IMMEDIATELY after starting collection.
         if locations.count >= 2 {
             let routePoints = locations.map { RoutePoint(location: $0) }
             RouteCache.shared.setRoute(routePoints, forKey: routeKey)
@@ -271,8 +267,10 @@ final class MockDataService {
                 start: t, end: t.addingTimeInterval(1)))
             t = t.addingTimeInterval(60)
         }
-        try await store.save(samples)
-
+        try await builder.addSamples(samples)
+        try await builder.addMetadata(["SimpleTrackingRouteID": routeKey])
+        try await builder.endCollection(at: end)
+        _ = try await builder.finishWorkout()
     }
 
     // MARK: - Coordinate Interpolation

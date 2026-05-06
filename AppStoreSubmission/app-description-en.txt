@@ -1,0 +1,42 @@
+SimpleTracking – Workouts, Nutrition and Steps. Everything at a glance.
+
+SimpleTracking accompanies you through your active daily life: GPS workouts, steps, calories and nutrition tracking – no clutter, no subscription, full control over your data.
+
+WORKOUT TRACKING
+• 19 activity types: running, cycling, hiking, swimming, strength training, yoga, HIIT and more
+• Live map with GPS recording of your route
+• Altitude, pace, distance, calories in real time
+• Manual entry for indoor workouts and gym sessions
+• Create custom sports and save them as favourites
+• Apple Watch companion app: start workouts right from your wrist
+
+NUTRITION TRACKING – AI POWERED
+• Photo analysis: snap a picture of your meal, AI identifies food and estimates calories, carbs and bread units
+• Barcode scanner for packaged products (Open Food Facts)
+• Manual entry with AI suggestions for typical portions (e.g. "Spaghetti Bolognese", "Roast Goose")
+• Quick-select for common snacks and drinks, custom presets supported
+• Bread units (BE) calculation built in for diabetics
+
+STATISTICS AND HISTORY
+• Daily overview with steps, calories, distance
+• Weekly, monthly and lifetime views
+• Detailed view of each workout with map, pace and heart rate
+
+GAMIFICATION
+• 14 achievements for your milestones
+• Leaderboards via Game Center
+• CloudKit sync between iPhone and iPad
+
+PRIVACY
+• Photo analysis runs entirely on your device (Apple Intelligence)
+• Bidirectional Apple Health integration – your data stays your data
+• No hidden trackers, no data sharing
+
+TECHNICAL FEATURES
+• iOS 17+ including iOS 26 with Apple Intelligence
+• watchOS companion app
+• Home Screen widgets
+• Live Activities for active workouts
+• Available in German and English
+
+Download SimpleTracking now and keep an overview of your active daily life.

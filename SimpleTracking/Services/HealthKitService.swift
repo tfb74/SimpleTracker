@@ -185,15 +185,17 @@ final class HealthKitService {
         // Commit minimal records immediately — same two-phase strategy as
         // fullImportFromHealth, so users never see a mysteriously empty list.
         var records: [WorkoutRecord] = hkList.map { minimalRecord(from: $0) }
+        let initial = records
         await MainActor.run {
-            workouts  = records
+            workouts  = initial
             isLoading = false
         }
 
         // Enrich in background (routes / HR / steps).
         for (i, hw) in hkList.enumerated() {
+            let baseRecord = records[i]
             let enriched: WorkoutRecord? = try? await withThrowingTimeout(seconds: 30) {
-                await self.enrichRecord(records[i], from: hw)
+                await self.enrichRecord(baseRecord, from: hw)
             }
             if let e = enriched {
                 records[i] = e
@@ -249,21 +251,24 @@ final class HealthKitService {
 
         // Minimal records — purely synchronous, nothing to hang on.
         var records: [WorkoutRecord] = hkList.map { minimalRecord(from: $0) }
+        let initialSnapshot = records
+        let initialCount = records.count
 
         await MainActor.run {
-            workouts           = records
-            importedCount      = records.count
+            workouts           = initialSnapshot
+            importedCount      = initialCount
             importProgress     = hkList.isEmpty ? 1 : 0.15
-            importStatus       = lf("%d Workouts importiert – werte Details aus…", records.count)
+            importStatus       = lf("%d Workouts importiert – werte Details aus…", initialCount)
         }
 
         // ── Phase 2: enrich each record with route / HR / steps ─────────
         var routeHits = 0
         for (i, hw) in hkList.enumerated() {
             let srcName = hw.sourceRevision.source.name
+            let baseRecord = records[i]
             // Whole-workout timeout (30 s) as last-line defense.
             let enriched: WorkoutRecord? = try? await withThrowingTimeout(seconds: 30) {
-                await self.enrichRecord(records[i], from: hw)
+                await self.enrichRecord(baseRecord, from: hw)
             }
             if let e = enriched {
                 records[i] = e
@@ -401,8 +406,10 @@ final class HealthKitService {
             return 0
         }()
         let duration = hw.duration
+        let customName = hw.metadata?["SimpleTrackingCustomSportName"] as? String
         return WorkoutRecord(
             id: UUID(), workoutType: type,
+            customName: customName,
             startDate: hw.startDate, endDate: hw.endDate,
             steps: 0,
             activeCalories: calories,
@@ -448,6 +455,7 @@ final class HealthKitService {
 
         return WorkoutRecord(
             id: base.id, workoutType: base.workoutType,
+            customName: base.customName,
             startDate: base.startDate, endDate: base.endDate,
             steps: Int(steps),
             activeCalories: base.activeCalories,
@@ -539,24 +547,20 @@ final class HealthKitService {
     func saveWorkout(
         type: WorkoutType, start: Date, end: Date,
         steps: Int, calories: Double, distanceMeters: Double,
-        routePoints: [RoutePoint]
+        routePoints: [RoutePoint],
+        customName: String? = nil
     ) async throws {
-        let workout = HKWorkout(
-            activityType: type.hkWorkoutActivityType,
-            start: start, end: end,
-            duration: end.timeIntervalSince(start),
-            totalEnergyBurned: HKQuantity(unit: .kilocalorie(), doubleValue: calories),
-            totalDistance: HKQuantity(unit: .meter(), doubleValue: distanceMeters),
-            metadata: nil
-        )
-        try await store.save(workout)
+        // Neuer HKWorkoutBuilder-Pfad (iOS 17+). Samples werden direkt am
+        // Workout angefügt — Tages-Aggregate aktualisieren sich genauso wie
+        // beim alten Pfad mit separaten Saves.
+        let config = HKWorkoutConfiguration()
+        config.activityType = type.hkWorkoutActivityType
 
-        // Separate Quantity-Samples, damit Tages-Aggregate (Schritte,
-        // Aktiv-Kalorien, Distanz) Apple Health sofort korrekt erreichen.
-        // HKWorkout.totalEnergyBurned/totalDistance allein reicht iOS nicht
-        // immer aus, um sie in den Tagessummen zu führen.
-        var samples: [HKQuantitySample] = []
+        let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: nil)
+        try await builder.beginCollection(at: start)
 
+        // Quantity-Samples sammeln und am Builder anhängen.
+        var samples: [HKSample] = []
         if steps > 0, let t = HKQuantityType.quantityType(forIdentifier: .stepCount) {
             samples.append(HKQuantitySample(type: t,
                 quantity: HKQuantity(unit: .count(), doubleValue: Double(steps)),
@@ -576,13 +580,24 @@ final class HealthKitService {
             }
         }
         if !samples.isEmpty {
-            try await store.save(samples)
+            try await builder.addSamples(samples)
+        }
+
+        // Metadata (z. B. benutzerdefinierter Sportarten-Name)
+        if let name = customName, !name.isEmpty {
+            try await builder.addMetadata(["SimpleTrackingCustomSportName": name])
+        }
+
+        try await builder.endCollection(at: end)
+        guard let workout = try await builder.finishWorkout() else {
+            throw NSError(domain: "HealthKit", code: -1,
+                          userInfo: [NSLocalizedDescriptionKey: "Workout konnte nicht erstellt werden"])
         }
 
         if routePoints.count >= 2 {
-            let builder = HKWorkoutRouteBuilder(healthStore: store, device: nil)
-            try await builder.insertRouteData(routePoints.map(\.clLocation))
-            try await builder.finishRoute(with: workout, metadata: nil)
+            let routeBuilder = HKWorkoutRouteBuilder(healthStore: store, device: nil)
+            try await routeBuilder.insertRouteData(routePoints.map(\.clLocation))
+            try await routeBuilder.finishRoute(with: workout, metadata: nil)
         }
 
         await loadWorkouts()

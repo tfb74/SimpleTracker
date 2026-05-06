@@ -16,6 +16,7 @@ schemes:
     build:
       targets:
         SimpleTracking: all
+        SimpleTrackingWidgets: all
         SimpleTrackingWatch: all
     run:
       config: Debug
@@ -54,8 +55,11 @@ targets:
     sources:
       - path: SimpleTracking
       - path: Shared
+      - path: SimpleTrackingShared
     dependencies:
       - package: GoogleMobileAds
+      - target: SimpleTrackingWidgets
+        embed: true
       - target: SimpleTrackingWatch
         embed: true
     info:
@@ -69,6 +73,12 @@ targets:
         NSCameraUsageDescription: "Kamera wird für Barcode-Scan und Foto-Analyse von Essen/Getränken genutzt."
         NSPhotoLibraryUsageDescription: "Auswahl von Food-Fotos zur Nährwert-Analyse."
         NSUserTrackingUsageDescription: "Deine Zustimmung ermöglicht dezente, auf dich abgestimmte Werbung in der Statistik."
+        NSSupportsLiveActivities: true
+        NSSupportsLiveActivitiesFrequentUpdates: true
+        CFBundleURLTypes:
+          - CFBundleURLName: com.felix.SimpleTracking
+            CFBundleURLSchemes:
+              - simpletracking
         # Echte AdMob-App-ID (SimpleTracking iOS).
         # Im Debug-Build nutzt AdService automatisch Google's Test-Ad-Unit-ID.
         GADApplicationIdentifier: "ca-app-pub-9685354539860584~2584848655"
@@ -124,8 +134,37 @@ targets:
       path: SimpleTracking/SimpleTracking.entitlements
       properties:
         com.apple.developer.healthkit: true
+        com.apple.security.application-groups:
+          - group.com.felix.SimpleTracking
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.felix.SimpleTracking
+      TARGETED_DEVICE_FAMILY: "1"
+      SWIFT_VERSION: "5.9"
+      CODE_SIGN_STYLE: Automatic
+      DEVELOPMENT_TEAM: ""
+      MARKETING_VERSION: "1.0"
+      CURRENT_PROJECT_VERSION: "1"
+
+  SimpleTrackingWidgets:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: SimpleTrackingWidgets
+      - path: SimpleTrackingShared
+    info:
+      path: SimpleTrackingWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: SimpleTracking Widgets
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: SimpleTrackingWidgets/SimpleTrackingWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.felix.SimpleTracking
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.felix.SimpleTracking.widgets
       TARGETED_DEVICE_FAMILY: "1"
       SWIFT_VERSION: "5.9"
       CODE_SIGN_STYLE: Automatic

@@ -9,7 +9,25 @@
       "Bash(open -a Simulator)",
       "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=iOS Simulator,id=B0905D18-0E12-4F01-BA29-A5E09751EDAF' install)",
       "Bash(xcodebuild -project /Users/felix/Projects/SimpleTracking/SimpleTracking.xcodeproj -scheme SimpleTracking -destination 'platform=iOS Simulator,id=B0905D18-0E12-4F01-BA29-A5E09751EDAF' build)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination 'platform=iOS Simulator,name=iPhone 16' -quiet build)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS:26.4.1' -quiet build)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination 'id:B0905D18-0E12-4F01-BA29-A5E09751EDAF' build)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination \"id=B0905D18-0E12-4F01-BA29-A5E09751EDAF\" build)",
+      "Bash(python3 -c \"import uuid; [print\\(uuid.uuid4\\(\\).hex[:24].upper\\(\\)\\) for _ in range\\(8\\)]\")",
+      "Bash(python3 -c \"import uuid; print\\(uuid.uuid4\\(\\).hex[:24].upper\\(\\)\\); print\\(uuid.uuid4\\(\\).hex[:24].upper\\(\\)\\)\")",
+      "Bash(xcodebuild -scheme SimpleTracking -destination 'platform=iOS Simulator,name=iPhone 16' build)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination 'platform=iOS Simulator,name=iPhone 15' build)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination 'id=46EDFD62-B765-4AB2-BB68-99F30EB8D355' build)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination 'generic/platform=iOS Simulator' -quiet build)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination 'generic/platform=iOS Simulator' build)",
+      "Bash(xcodebuild -scheme SimpleTracking -destination \"id=B0905D18-0E12-4F01-BA29-A5E09751EDAF\" -showBuildSettings)",
+      "Bash(security find-identity *)",
+      "Bash(security find-certificate *)",
+      "Bash(openssl x509 *)"
     ]
   }
 }

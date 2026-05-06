@@ -295,6 +295,12 @@ struct SettingsView: View {
                         Label(lt("Ankündigung testen"), systemImage: "play.rectangle")
                     }
 
+                    Button {
+                        ads.showInterstitialNow()
+                    } label: {
+                        Label("Ad direkt zeigen (Debug)", systemImage: "bolt.fill")
+                    }
+
                     Button(role: .destructive) {
                         ads.resetWeeklyInterstitialState()
                     } label: {

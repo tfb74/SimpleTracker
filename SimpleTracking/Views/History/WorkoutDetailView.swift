@@ -27,7 +27,7 @@ struct WorkoutDetailView: View {
                 }
             }
         }
-        .navigationTitle(workout.workoutType.displayName)
+        .navigationTitle(workout.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

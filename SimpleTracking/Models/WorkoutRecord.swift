@@ -3,6 +3,9 @@ import Foundation
 struct WorkoutRecord: Identifiable, Codable {
     let id: UUID
     let workoutType: WorkoutType
+    /// Optionaler benutzerdefinierter Name, z.B. "Bouldern" oder "Crossfit".
+    /// Wird angezeigt statt `workoutType.displayName`, falls gesetzt.
+    let customName: String?
     let startDate: Date
     let endDate: Date
     let steps: Int
@@ -13,6 +16,8 @@ struct WorkoutRecord: Identifiable, Codable {
     let maxSpeedMPS: Double
     let heartRateAvg: Double
     let hkWorkoutUUID: UUID?
+
+    var displayName: String { customName ?? workoutType.displayName }
 
     var duration: TimeInterval      { endDate.timeIntervalSince(startDate) }
     var distanceKm: Double          { distanceMeters / 1_000 }

@@ -1,0 +1,1 @@
+Entrenamiento, nutrición y pasos en una sola app. Análisis de comidas con IA, GPS para cada actividad, totalmente integrado con Apple Health.

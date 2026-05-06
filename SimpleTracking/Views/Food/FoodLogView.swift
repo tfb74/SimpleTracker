@@ -14,7 +14,7 @@ struct FoodLogView: View {
             }
             .appChrome(title: lt("Ernährung"), accent: .orange, metrics: headerMetrics) {
                 Button { showAddSheet = true } label: {
-                    AppChromeActionLabel(systemImage: "plus", tint: .orange)
+                    AppChromeActionLabel(systemImage: "plus", tint: .orange, style: .prominent)
                 }
                 .buttonStyle(.plain)
             }

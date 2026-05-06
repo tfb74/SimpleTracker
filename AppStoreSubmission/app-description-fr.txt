@@ -1,0 +1,42 @@
+SimpleTracking – Entraînements, nutrition et pas. Tout d'un coup d'œil.
+
+SimpleTracking t'accompagne dans ton quotidien actif : entraînements GPS, pas, calories et suivi nutritionnel - sans fioritures, sans abonnement, avec un contrôle total sur tes données.
+
+SUIVI D'ENTRAÎNEMENT
+• 19 types d'activité : course à pied, vélo, randonnée, natation, musculation, yoga, HIIT et plus
+• Carte en direct avec enregistrement GPS de ton itinéraire
+• Altitude, allure, distance, calories en temps réel
+• Saisie manuelle pour les entraînements en salle et au gym
+• Crée des sports personnalisés et garde-les en favoris
+• App compagnon Apple Watch : démarre tes séances directement au poignet
+
+SUIVI NUTRITIONNEL – ASSISTÉ PAR IA
+• Analyse photo : prends en photo ton repas, l'IA identifie les aliments et estime calories, glucides et unités de pain (BE)
+• Scanner de codes-barres pour les produits emballés (Open Food Facts)
+• Saisie manuelle avec suggestions IA pour les portions typiques (ex. « Spaghetti bolognaise », « Rôti »)
+• Sélection rapide de snacks et boissons courants, avec presets personnalisables
+• Calcul des unités de pain intégré pour les diabétiques
+
+STATISTIQUES ET HISTORIQUE
+• Aperçu quotidien avec pas, calories, distance
+• Vues hebdomadaires, mensuelles et globales
+• Vue détaillée de chaque entraînement avec carte, allure et fréquence cardiaque
+
+GAMIFICATION
+• 14 succès pour tes étapes clés
+• Classements via Game Center
+• Synchronisation CloudKit entre iPhone et iPad
+
+CONFIDENTIALITÉ
+• L'analyse photo s'exécute entièrement sur ton appareil (Apple Intelligence)
+• Intégration bidirectionnelle avec Apple Santé : tes données restent les tiennes
+• Aucun tracker caché, aucun partage de données
+
+CARACTÉRISTIQUES TECHNIQUES
+• iOS 17+ y compris iOS 26 avec Apple Intelligence
+• App watchOS
+• Widgets pour l'écran d'accueil
+• Live Activities pour les entraînements actifs
+• Disponible en allemand, anglais, espagnol, français et italien
+
+Télécharge SimpleTracking maintenant et garde la maîtrise de ton quotidien actif.

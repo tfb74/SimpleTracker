@@ -55,19 +55,40 @@ struct AppHeaderMetric: Identifiable {
 }
 
 struct AppChromeActionLabel: View {
+    enum Style {
+        case standard
+        case prominent
+    }
+
     let systemImage: String
     let tint: Color
+    var style: Style = .standard
 
     var body: some View {
         Image(systemName: systemImage)
-            .font(.headline.weight(.semibold))
-            .foregroundStyle(tint)
-            .frame(width: 42, height: 42)
-            .background(.thinMaterial, in: Circle())
+            .font(.system(size: 19, weight: .semibold))
+            .symbolRenderingMode(.hierarchical)
+            .foregroundStyle(foregroundColor)
+            .frame(width: 44, height: 44)
+            .background(backgroundColor, in: Circle())
             .overlay {
                 Circle()
-                    .strokeBorder(tint.opacity(0.18), lineWidth: 1)
+                    .strokeBorder(borderColor, lineWidth: 1)
             }
+            .shadow(color: .black.opacity(0.10), radius: 8, y: 3)
+            .contentShape(Circle())
+    }
+
+    private var foregroundColor: Color {
+        style == .prominent ? .white : tint
+    }
+
+    private var backgroundColor: Color {
+        style == .prominent ? tint : Color(uiColor: .systemBackground).opacity(0.82)
+    }
+
+    private var borderColor: Color {
+        style == .prominent ? Color.white.opacity(0.28) : Color.primary.opacity(0.10)
     }
 }
 
@@ -222,7 +243,7 @@ private struct AppChromeHeader<Accessory: View>: View {
         Button { showFriends = true } label: {
             ZStack(alignment: .bottomTrailing) {
                 UserAvatarView(
-                    size: 42,
+                    size: 44,
                     name: displayName,
                     photoData: settings.avatarImageData,
                     preset: settings.avatarPreset,
@@ -240,13 +261,15 @@ private struct AppChromeHeader<Accessory: View>: View {
 
                 Circle()
                     .fill(gameCenter.isAuthenticated ? Color.green : Color.secondary.opacity(0.5))
-                    .frame(width: 10, height: 10)
+                    .frame(width: 11, height: 11)
                     .overlay {
                         Circle().strokeBorder(.background, lineWidth: 2)
                     }
             }
         }
         .buttonStyle(.plain)
+        .contentShape(Circle())
+        .accessibilityLabel(lt("Freunde"))
         .sheet(isPresented: $showFriends) {
             FriendsView()
         }

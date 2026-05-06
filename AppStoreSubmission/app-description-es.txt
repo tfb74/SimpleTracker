@@ -1,0 +1,42 @@
+SimpleTracking – Entrenamientos, nutrición y pasos. Todo de un vistazo.
+
+SimpleTracking te acompaña en tu día a día activo: entrenamientos con GPS, pasos, calorías y registro de nutrición - sin complicaciones, sin suscripción, con control total sobre tus datos.
+
+REGISTRO DE ENTRENAMIENTOS
+• 19 tipos de actividad: correr, ciclismo, senderismo, natación, entrenamiento de fuerza, yoga, HIIT y más
+• Mapa en vivo con grabación GPS de tu ruta
+• Altitud, ritmo, distancia y calorías en tiempo real
+• Entrada manual para entrenamientos en interior y sesiones de gimnasio
+• Crea deportes personalizados y guárdalos como favoritos
+• App complementaria para Apple Watch: inicia entrenamientos directamente desde tu muñeca
+
+REGISTRO DE NUTRICIÓN – CON IA
+• Análisis por foto: fotografía tu comida, la IA reconoce los alimentos y estima calorías, carbohidratos y unidades de pan (BE)
+• Escáner de códigos de barras para productos envasados (Open Food Facts)
+• Entrada manual con sugerencias de IA para porciones típicas (p. ej. "Spaghetti Bolognese", "Asado")
+• Selección rápida de aperitivos y bebidas comunes, con presets personalizables
+• Cálculo de unidades de pan integrado para personas con diabetes
+
+ESTADÍSTICAS E HISTORIAL
+• Resumen diario con pasos, calorías y distancia
+• Vistas semanales, mensuales y totales
+• Vista detallada de cada entrenamiento con mapa, ritmo y frecuencia cardíaca
+
+GAMIFICACIÓN
+• 14 logros para tus hitos
+• Clasificaciones a través de Game Center
+• Sincronización con CloudKit entre iPhone y iPad
+
+PRIVACIDAD
+• El análisis por foto se ejecuta totalmente en tu dispositivo (Apple Intelligence)
+• Integración bidireccional con Apple Health: tus datos siguen siendo tuyos
+• Sin rastreadores ocultos, sin compartir datos
+
+CARACTERÍSTICAS TÉCNICAS
+• iOS 17+ incluyendo iOS 26 con Apple Intelligence
+• App para watchOS
+• Widgets para la pantalla de inicio
+• Live Activities para entrenamientos activos
+• Disponible en alemán, inglés, español, francés e italiano
+
+Descarga SimpleTracking ahora y mantén el control de tu día a día activo.

@@ -1,0 +1,42 @@
+SimpleTracking – Allenamenti, alimentazione e passi. Tutto a colpo d'occhio.
+
+SimpleTracking ti accompagna nella tua giornata attiva: allenamenti con GPS, passi, calorie e tracciamento dell'alimentazione - senza fronzoli, senza abbonamento, con il pieno controllo sui tuoi dati.
+
+TRACCIAMENTO ALLENAMENTI
+• 19 tipi di attività: corsa, ciclismo, escursionismo, nuoto, allenamento della forza, yoga, HIIT e altro
+• Mappa in tempo reale con registrazione GPS del percorso
+• Altitudine, ritmo, distanza, calorie in tempo reale
+• Inserimento manuale per allenamenti indoor e sessioni in palestra
+• Crea sport personalizzati e salvali come preferiti
+• App complementare per Apple Watch: avvia gli allenamenti direttamente dal polso
+
+TRACCIAMENTO ALIMENTAZIONE – CON IA
+• Analisi foto: scatta una foto del pasto, l'IA riconosce gli alimenti e stima calorie, carboidrati e unità di pane (UP)
+• Scanner di codici a barre per prodotti confezionati (Open Food Facts)
+• Inserimento manuale con suggerimenti IA per porzioni tipiche (es. "Spaghetti Bolognese", "Arrosto")
+• Selezione rapida di snack e bevande comuni, preset personalizzabili
+• Calcolo delle unità di pane integrato per persone con diabete
+
+STATISTICHE E CRONOLOGIA
+• Panoramica giornaliera con passi, calorie, distanza
+• Visualizzazioni settimanali, mensili e totali
+• Vista dettagliata di ogni allenamento con mappa, ritmo e frequenza cardiaca
+
+GAMIFICATION
+• 14 obiettivi per i tuoi traguardi
+• Classifiche tramite Game Center
+• Sincronizzazione CloudKit tra iPhone e iPad
+
+PRIVACY
+• L'analisi foto avviene interamente sul tuo dispositivo (Apple Intelligence)
+• Integrazione bidirezionale con Apple Salute: i tuoi dati restano tuoi
+• Nessun tracker nascosto, nessuna condivisione di dati
+
+CARATTERISTICHE TECNICHE
+• iOS 17+ inclusa iOS 26 con Apple Intelligence
+• App watchOS
+• Widget per la schermata Home
+• Live Activities per allenamenti in corso
+• Disponibile in tedesco, inglese, spagnolo, francese e italiano
+
+Scarica SimpleTracking ora e mantieni il controllo della tua giornata attiva.

@@ -5,6 +5,7 @@ struct WorkoutHistoryView: View {
 
     @State private var isImporting = false
     @State private var showImportDone = false
+    @State private var showManualEntry = false
 
     private var grouped: [(key: String, workouts: [WorkoutRecord])] {
         let fmt = DateFormatter(); fmt.dateStyle = .medium
@@ -38,18 +39,30 @@ struct WorkoutHistoryView: View {
             .navigationTitle("Verlauf")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        Task { await runImport() }
-                    } label: {
-                        if isImporting {
-                            ProgressView().scaleEffect(0.8)
-                        } else {
-                            Image(systemName: "square.and.arrow.down")
+                    HStack(spacing: 16) {
+                        Button {
+                            showManualEntry = true
+                        } label: {
+                            Image(systemName: "plus")
                         }
+                        .accessibilityLabel("Workout manuell eintragen")
+
+                        Button {
+                            Task { await runImport() }
+                        } label: {
+                            if isImporting {
+                                ProgressView().scaleEffect(0.8)
+                            } else {
+                                Image(systemName: "square.and.arrow.down")
+                            }
+                        }
+                        .disabled(isImporting)
+                        .accessibilityLabel("Von Apple Health laden")
                     }
-                    .disabled(isImporting)
-                    .accessibilityLabel("Von Apple Health laden")
                 }
+            }
+            .sheet(isPresented: $showManualEntry) {
+                ManualWorkoutEntryView()
             }
             .overlay {
                 if healthKit.isLoading {

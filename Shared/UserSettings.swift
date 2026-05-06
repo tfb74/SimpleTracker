@@ -7,6 +7,7 @@ enum AppLanguage: String, CaseIterable, Codable {
     case en
     case es
     case fr
+    case it
 
     static var current: AppLanguage {
         let stored = UserDefaults.standard.string(forKey: "appLanguage") ?? AppLanguage.system.rawValue
@@ -18,6 +19,7 @@ enum AppLanguage: String, CaseIterable, Codable {
         if preferred.hasPrefix("de") { return .de }
         if preferred.hasPrefix("es") { return .es }
         if preferred.hasPrefix("fr") { return .fr }
+        if preferred.hasPrefix("it") { return .it }
         return .en
     }
 
@@ -28,6 +30,7 @@ enum AppLanguage: String, CaseIterable, Codable {
         case .en: return "English"
         case .es: return "Español"
         case .fr: return "Français"
+        case .it: return "Italiano"
         }
     }
 }
@@ -45,6 +48,8 @@ enum AppLocalizer {
             return spanish[key] ?? english[key] ?? key
         case .fr:
             return french[key] ?? english[key] ?? key
+        case .it:
+            return italian[key] ?? english[key] ?? key
         }
     }
 
@@ -203,7 +208,18 @@ enum AppLocalizer {
         "%d Workouts importiert – werte Details aus…": "%d workouts imported - enriching details...",
         "Details %d/%d • %@": "Details %d/%d • %@",
         "Fertig: %d Workouts (%d mit Route).": "Done: %d workouts (%d with route).",
-        "%d %@ 🎉": "%d %@ 🎉"
+        "%d %@ 🎉": "%d %@ 🎉",
+        // Cheer/Reactions
+        "Reagieren auf %@": "React to %@",
+        "Reagieren": "React",
+        "Senden": "Send",
+        "Kurzer Kommentar (optional)": "Short comment (optional)",
+        "%d Zeichen übrig": "%d characters left",
+        "Schneckenpace": "Snail pace",
+        "Couch ruft": "Couch is calling",
+        "War das alles?": "That's all?",
+        "Krass!": "Wild!",
+        "Respekt!": "Respect!"
     ]
 
     private static let spanish: [String: String] = [
@@ -344,7 +360,35 @@ enum AppLocalizer {
         "%d Workouts importiert – werte Details aus…": "%d entrenamientos importados; procesando detalles...",
         "Details %d/%d • %@": "Detalles %d/%d • %@",
         "Fertig: %d Workouts (%d mit Route).": "Listo: %d entrenamientos (%d con ruta).",
-        "%d %@ 🎉": "%d %@ 🎉"
+        "%d %@ 🎉": "%d %@ 🎉",
+        "Werbung": "Anuncios",
+        "Wöchentliche Vollbild-Ad": "Anuncio semanal a pantalla completa",
+        "Skips übrig": "Omisiones restantes",
+        "Zuletzt gezeigt": "Mostrado por última vez",
+        "Ankündigung testen": "Probar anuncio",
+        "Werbe-Status zurücksetzen": "Restablecer estado de anuncios",
+        "Die Vollbild-Ad wird maximal einmal pro Kalenderwoche gezeigt. Vorher erscheint ein Hinweis; bis zu drei Mal pro Woche darfst du verschieben.": "El anuncio a pantalla completa se muestra como máximo una vez por semana. Antes aparece un aviso; puedes posponerlo hasta tres veces por semana.",
+        "Geladen": "Cargado",
+        "Lädt": "Cargando",
+        "Noch nicht geladen": "Aún no cargado",
+        "Simulator-Vorschau bereit": "Vista previa del simulador lista",
+        "Kein Fill": "Sin disponibilidad",
+        "Nicht verfügbar": "No disponible",
+        "Noch nie": "Nunca",
+        "Diese Woche bereits gezeigt": "Ya mostrado esta semana",
+        "Fällig, %d x überspringbar": "Pendiente, %d omisiones disponibles",
+        "Fällig, nächstes Mal ohne Skip": "Pendiente, la próxima vez sin omisión",
+        // Cheer/Reactions
+        "Reagieren auf %@": "Reaccionar a %@",
+        "Reagieren": "Reaccionar",
+        "Senden": "Enviar",
+        "Kurzer Kommentar (optional)": "Comentario breve (opcional)",
+        "%d Zeichen übrig": "%d caracteres restantes",
+        "Schneckenpace": "Ritmo de caracol",
+        "Couch ruft": "El sofá te llama",
+        "War das alles?": "¿Eso es todo?",
+        "Krass!": "¡Brutal!",
+        "Respekt!": "¡Respeto!"
     ]
 
     private static let french: [String: String] = [
@@ -485,7 +529,205 @@ enum AppLocalizer {
         "%d Workouts importiert – werte Details aus…": "%d entrainements importes - analyse des details...",
         "Details %d/%d • %@": "Details %d/%d • %@",
         "Fertig: %d Workouts (%d mit Route).": "Termine : %d entrainements (%d avec trace).",
-        "%d %@ 🎉": "%d %@ 🎉"
+        "%d %@ 🎉": "%d %@ 🎉",
+        "Werbung": "Publicités",
+        "Wöchentliche Vollbild-Ad": "Annonce hebdomadaire plein écran",
+        "Skips übrig": "Reports restants",
+        "Zuletzt gezeigt": "Dernière diffusion",
+        "Ankündigung testen": "Tester l'annonce",
+        "Werbe-Status zurücksetzen": "Réinitialiser l'état des publicités",
+        "Die Vollbild-Ad wird maximal einmal pro Kalenderwoche gezeigt. Vorher erscheint ein Hinweis; bis zu drei Mal pro Woche darfst du verschieben.": "L'annonce plein écran s'affiche au maximum une fois par semaine. Un message s'affiche d'abord ; tu peux la reporter jusqu'à trois fois par semaine.",
+        "Geladen": "Chargée",
+        "Lädt": "Chargement",
+        "Noch nicht geladen": "Pas encore chargée",
+        "Simulator-Vorschau bereit": "Aperçu du simulateur prêt",
+        "Kein Fill": "Pas de remplissage",
+        "Nicht verfügbar": "Indisponible",
+        "Noch nie": "Jamais",
+        "Diese Woche bereits gezeigt": "Déjà diffusée cette semaine",
+        "Fällig, %d x überspringbar": "Due, %d reports possibles",
+        "Fällig, nächstes Mal ohne Skip": "Due, la prochaine fois sans report",
+        // Cheer/Reactions
+        "Reagieren auf %@": "Réagir à %@",
+        "Reagieren": "Réagir",
+        "Senden": "Envoyer",
+        "Kurzer Kommentar (optional)": "Court commentaire (facultatif)",
+        "%d Zeichen übrig": "%d caractères restants",
+        "Schneckenpace": "Rythme d'escargot",
+        "Couch ruft": "Le canapé t'appelle",
+        "War das alles?": "C'est tout ?",
+        "Krass!": "Ouf !",
+        "Respekt!": "Respect !"
+    ]
+
+    private static let italian: [String: String] = [
+        "Heute": "Oggi",
+        "Workout": "Allenamento",
+        "Ernährung": "Alimentazione",
+        "Statistiken": "Statistiche",
+        "Mehr": "Altro",
+        "Schließen": "Chiudi",
+        "Schritte": "Passi",
+        "Bewegung": "Movimento",
+        "Kalorien": "Calorie",
+        "Energie heute": "Energia oggi",
+        "Grundbedarf": "Metabolismo basale",
+        "Aktivität": "Attività",
+        "Gesamtverbrauch": "Consumo totale",
+        "Grundbedarf bis jetzt": "Metabolismo basale finora",
+        "Gesamtverbrauch bis jetzt": "Consumo totale finora",
+        "gegen Grundbedarf": "vs metabolismo basale",
+        "inkl. Bewegung": "incl. movimento",
+        "Bilanz vs Grundbedarf": "Bilancio vs metabolismo basale",
+        "Bilanz inkl. Bewegung": "Bilancio incl. movimento",
+        "Ø Gesamt/Tag": "Media totale/giorno",
+        "Ø aufgenommen": "Media assunte/giorno",
+        "Ø vs Grundbedarf": "Media vs metabolismo basale",
+        "Ø inkl. Bewegung": "Media incl. movimento",
+        "Bewegung = Apple-Health-Aktivkalorien aus Gehen, Schritten, Alltagsaktivität und Workouts - nicht aus Nahrung.": "Movimento = calorie attive di Apple Health da camminata, passi, attività quotidiana e allenamenti - non dal cibo.",
+        "Distanz": "Distanza",
+        "Energie-Bilanz heute": "Bilancio energetico oggi",
+        "Verbraucht": "Bruciate",
+        "Aufgenommen": "Assunte",
+        "Du hast heute mehr gegessen als verbraucht.": "Oggi hai mangiato più di quanto hai bruciato.",
+        "Du bist im Defizit – mehr verbraucht als gegessen.": "Sei in deficit - hai bruciato più di quanto mangiato.",
+        "Noch keine Aktivität gemessen.": "Nessuna attività registrata.",
+        "Letzte Workouts": "Allenamenti recenti",
+        "%d:%02d:%02d h": "%d:%02d:%02d h",
+        "%d:%02d min": "%d:%02d min",
+        "Metrisch (km)": "Metrico (km)",
+        "Imperial (mi)": "Imperiale (mi)",
+        "System": "Sistema",
+        "Hell": "Chiaro",
+        "Dunkel": "Scuro",
+        "Untergewicht": "Sottopeso",
+        "Normalgewicht": "Peso normale",
+        "Übergewicht": "Sovrappeso",
+        "Adipositas": "Obesità",
+        "Laufen": "Corsa",
+        "Gehen": "Camminata",
+        "Radfahren": "Ciclismo",
+        "Wandern": "Escursionismo",
+        "Schwimmen": "Nuoto",
+        "Rudern": "Canottaggio",
+        "Crosstrainer": "Ellittica",
+        "Treppen": "Scale",
+        "Yoga": "Yoga",
+        "Krafttraining": "Allenamento forza",
+        "Tanzen": "Danza",
+        "Fußball": "Calcio",
+        "Skaten": "Pattinaggio",
+        "Ski": "Sci",
+        "Sonstiges": "Altro",
+        "Essen": "Cibo",
+        "Getränk": "Bevanda",
+        "%d %@ geschafft! 🎉": "%d %@ raggiunti! 🎉",
+        "Tempo: %d:%02d min/km": "Ritmo: %d:%02d min/km",
+        "Pace: %d:%02d min/mi": "Ritmo: %d:%02d min/mi",
+        "Workout-Verlauf": "Cronologia allenamenti",
+        "Zeit": "Tempo",
+        "Tempo": "Ritmo",
+        "Watch: %d bpm · %d kcal": "Watch: %d bpm · %d kcal",
+        "Workout beenden": "Termina allenamento",
+        "Workout starten": "Avvia allenamento",
+        "Höhe": "Altitudine",
+        "Höhengewinn": "Dislivello",
+        "Verlauf": "Cronologia",
+        "Profil": "Profilo",
+        "Spielername": "Nome giocatore",
+        "Beste Distanz": "Miglior distanza",
+        "Bestzeit": "Miglior tempo",
+        "Pause": "Pausa",
+        "Fortsetzen": "Riprendi",
+        "Abbrechen": "Annulla",
+        "Speichern": "Salva",
+        "Löschen": "Elimina",
+        "Alle Workouts": "Tutti gli allenamenti",
+        "Diese Woche": "Questa settimana",
+        "Diesen Monat": "Questo mese",
+        "Letzte 7 Tage": "Ultimi 7 giorni",
+        "Letzte 30 Tage": "Ultimi 30 giorni",
+        "Manuell": "Manuale",
+        "Foto": "Foto",
+        "Barcode": "Barcode",
+        "Kohlenhydrate": "Carboidrati",
+        "BE": "UP",
+        "Lade…": "Caricamento...",
+        "Keine Daten": "Nessun dato",
+        "Bitte erlaube den Zugriff in Einstellungen.": "Consenti l'accesso nelle Impostazioni.",
+        "Ein": "Sì",
+        "Aus": "No",
+        "Apple Health": "Apple Health",
+        "GameCenter": "GameCenter",
+        "iCloud": "iCloud",
+        "Erfolge": "Successi",
+        "Bestenlisten": "Classifiche",
+        "Freunde": "Amici",
+        "Theme": "Tema",
+        "Sprache": "Lingua",
+        "Systemsprache": "Lingua di sistema",
+        "Einheiten": "Unità",
+        "Lautstärke": "Volume",
+        "Sound": "Audio",
+        "Vibration": "Vibrazione",
+        "Benachrichtigungen": "Notifiche",
+        "Datenschutz": "Privacy",
+        "Über": "Informazioni",
+        "Version": "Versione",
+        "Entwickler": "Sviluppatore",
+        "Lizenzen": "Licenze",
+        "Support": "Supporto",
+        "Bewerten": "Valuta",
+        "Teilen": "Condividi",
+        "Impressum": "Impressum",
+        "AGB": "Termini",
+        "Profil bearbeiten": "Modifica profilo",
+        "Geschlecht": "Genere",
+        "Männlich": "Maschio",
+        "Weiblich": "Femmina",
+        "Divers": "Diverso",
+        "Alter": "Età",
+        "Größe": "Altezza",
+        "Gewicht": "Peso",
+        "Name": "Nome",
+        "Avatar": "Avatar",
+        "Foto wählen": "Scegli foto",
+        "Foto entfernen": "Rimuovi foto",
+        "Einstellungen": "Impostazioni",
+        "SimpleTracking": "SimpleTracking",
+        "Lese Workouts aus Apple Health…": "Lettura degli allenamenti da Apple Health...",
+        "%d Workouts importiert – werte Details aus…": "%d allenamenti importati - elaborazione dettagli...",
+        "Details %d/%d • %@": "Dettagli %d/%d • %@",
+        "Fertig: %d Workouts (%d mit Route).": "Completato: %d allenamenti (%d con tracciato).",
+        "%d %@ 🎉": "%d %@ 🎉",
+        "Werbung": "Pubblicità",
+        "Wöchentliche Vollbild-Ad": "Annuncio settimanale a schermo intero",
+        "Skips übrig": "Rinvii rimasti",
+        "Zuletzt gezeigt": "Ultima visualizzazione",
+        "Ankündigung testen": "Prova annuncio",
+        "Werbe-Status zurücksetzen": "Reimposta stato annunci",
+        "Die Vollbild-Ad wird maximal einmal pro Kalenderwoche gezeigt. Vorher erscheint ein Hinweis; bis zu drei Mal pro Woche darfst du verschieben.": "L'annuncio a schermo intero viene mostrato al massimo una volta a settimana. Prima appare un avviso; puoi rinviarlo fino a tre volte a settimana.",
+        "Geladen": "Caricato",
+        "Lädt": "Caricamento",
+        "Noch nicht geladen": "Non ancora caricato",
+        "Simulator-Vorschau bereit": "Anteprima del simulatore pronta",
+        "Kein Fill": "Nessuna disponibilità",
+        "Nicht verfügbar": "Non disponibile",
+        "Noch nie": "Mai",
+        "Diese Woche bereits gezeigt": "Già mostrato questa settimana",
+        "Fällig, %d x überspringbar": "In scadenza, %d rinvii disponibili",
+        "Fällig, nächstes Mal ohne Skip": "In scadenza, la prossima volta senza rinvio",
+        // Cheer/Reactions
+        "Reagieren auf %@": "Reagisci a %@",
+        "Reagieren": "Reagisci",
+        "Senden": "Invia",
+        "Kurzer Kommentar (optional)": "Commento breve (opzionale)",
+        "%d Zeichen übrig": "%d caratteri rimanenti",
+        "Schneckenpace": "Ritmo da lumaca",
+        "Couch ruft": "Il divano ti chiama",
+        "War das alles?": "Tutto qui?",
+        "Krass!": "Pazzesco!",
+        "Respekt!": "Rispetto!"
     ]
 }
 

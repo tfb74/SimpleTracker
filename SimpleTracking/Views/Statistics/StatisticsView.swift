@@ -417,10 +417,10 @@ struct StatisticsView: View {
                         MetricTile(title: "Längste Distanz", value: formattedDistance(w.distanceKm), icon: "ruler", color: .green, subtitle: w.startDate.formatted(.dateTime.day().month(.abbreviated)))
                     }
                     if let w = fastest, w.averageSpeedKmh > 0 {
-                        MetricTile(title: "Schnellstes Tempo", value: String(format: "%.1f km/h", w.averageSpeedKmh), icon: "bolt.fill", color: .yellow, subtitle: w.workoutType.displayName)
+                        MetricTile(title: "Schnellstes Tempo", value: String(format: "%.1f km/h", w.averageSpeedKmh), icon: "bolt.fill", color: .yellow, subtitle: w.displayName)
                     }
                     if let w = longestTime {
-                        MetricTile(title: "Längstes Workout", value: formatDuration(w.duration), icon: "stopwatch", color: .teal, subtitle: w.workoutType.displayName)
+                        MetricTile(title: "Längstes Workout", value: formatDuration(w.duration), icon: "stopwatch", color: .teal, subtitle: w.displayName)
                     }
                     if let d = bestSteps {
                         MetricTile(title: "Meiste Schritte", value: d.steps.formatted(), icon: "figure.walk", color: .blue, subtitle: d.date.formatted(.dateTime.day().month(.abbreviated)))
@@ -844,7 +844,7 @@ struct TodayWorkoutRow: View {
                 .background(Color.secondary.opacity(0.15))
                 .clipShape(Circle())
             VStack(alignment: .leading, spacing: 2) {
-                Text(workout.workoutType.displayName).font(.subheadline.weight(.semibold))
+                Text(workout.displayName).font(.subheadline.weight(.semibold))
                 HStack(spacing: 6) {
                     Text(workout.startDate.formatted(date: .omitted, time: .shortened))
                     Text("·")

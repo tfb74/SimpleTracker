@@ -6,6 +6,7 @@ struct FriendsView: View {
     @Environment(GameCenterService.self) private var gameCenter
 
     @State private var showAddFriend = false
+    @State private var showShareCode = false
 
     var body: some View {
         NavigationStack {
@@ -42,6 +43,9 @@ struct FriendsView: View {
             .sheet(isPresented: $showAddFriend) {
                 AddFriendSheet()
             }
+            .sheet(isPresented: $showShareCode) {
+                FriendCodeShareView(code: cloudKit.myFriendCode, displayName: displayName)
+            }
             .refreshable {
                 await cloudKit.refreshFeed()
             }
@@ -72,15 +76,15 @@ struct FriendsView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
-                    HStack(spacing: 6) {
+                    HStack(spacing: 8) {
                         Text(cloudKit.myFriendCode)
                             .font(.system(.subheadline, design: .monospaced).weight(.semibold))
                             .foregroundStyle(Color.accentColor)
 
                         Button {
-                            UIPasteboard.general.string = cloudKit.myFriendCode
+                            showShareCode = true
                         } label: {
-                            Image(systemName: "doc.on.doc")
+                            Image(systemName: "square.and.arrow.up")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -183,44 +187,76 @@ struct FriendsView: View {
 
 private struct FeedRowView: View {
     let activity: FriendActivity
+    @State private var showCheerSheet = false
+
+    private var commentReactions: [CheerReaction] {
+        activity.reactions.filter { $0.text?.isEmpty == false }
+    }
 
     var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(iconColor.opacity(0.15))
-                    .frame(width: 40, height: 40)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(iconColor.opacity(0.15))
+                        .frame(width: 40, height: 40)
 
-                Image(systemName: icon)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(iconColor)
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 4) {
-                    Text(activity.displayName)
-                        .font(.subheadline.weight(.semibold))
-                    if !activity.isRead {
-                        Circle()
-                            .fill(Color.red)
-                            .frame(width: 7, height: 7)
-                    }
+                    Image(systemName: icon)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(iconColor)
                 }
-                Text(activity.eventTitle)
-                    .font(.subheadline)
-                    .foregroundStyle(.primary)
-                Text(activity.eventDetail)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 4) {
+                        Text(activity.displayName)
+                            .font(.subheadline.weight(.semibold))
+                        if !activity.isRead {
+                            Circle()
+                                .fill(Color.red)
+                                .frame(width: 7, height: 7)
+                        }
+                    }
+                    Text(activity.eventTitle)
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                    Text(activity.eventDetail)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                VStack(alignment: .trailing, spacing: 6) {
+                    Text(activity.timestamp.relativeShort)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Button {
+                        showCheerSheet = true
+                    } label: {
+                        Image(systemName: "face.smiling")
+                            .font(.callout)
+                            .foregroundStyle(Color.accentColor)
+                            .padding(6)
+                            .background(Color.accentColor.opacity(0.12))
+                            .clipShape(Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(lt("Reagieren"))
+                }
             }
 
-            Spacer()
+            // Reactions ohne Text als kompakte Chips
+            ReactionChipsView(reactions: activity.reactions)
 
-            Text(activity.timestamp.relativeShort)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+            // Reactions mit Text als kleine Kommentar-Bubbles
+            ForEach(commentReactions) { reaction in
+                ReactionMessageView(reaction: reaction)
+            }
         }
         .padding(.vertical, 2)
+        .sheet(isPresented: $showCheerSheet) {
+            CheerSheet(activity: activity)
+        }
     }
 
     private var icon: String {
@@ -276,9 +312,12 @@ private struct FriendRowView: View {
 
 // MARK: - Add Friend Sheet
 
-private struct AddFriendSheet: View {
+struct AddFriendSheet: View {
     @Environment(CloudKitService.self) private var cloudKit
     @Environment(\.dismiss) private var dismiss
+
+    /// Optional vorbelegter Code (z.B. via Deep Link aus iMessage).
+    var prefilledCode: String? = nil
 
     @State private var code      = ""
     @State private var isAdding  = false
@@ -354,6 +393,17 @@ private struct AddFriendSheet: View {
         }
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
+        .task {
+            if let prefilledCode, code.isEmpty {
+                code = normalizeIncomingCode(prefilledCode)
+            }
+        }
+    }
+
+    private func normalizeIncomingCode(_ raw: String) -> String {
+        let cleaned = raw.uppercased().filter { $0.isLetter || $0.isNumber }
+        guard cleaned.count >= 6 else { return raw.uppercased() }
+        return "\(cleaned.prefix(3))-\(cleaned.dropFirst(3).prefix(3))"
     }
 
     private func addFriend() async {
