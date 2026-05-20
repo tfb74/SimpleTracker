@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SimpleTracking – Support</title>
+  <meta name="description" content="Support, FAQ and contact for the SimpleTracking iOS and Apple Watch app." />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: #1c1c1e;
+      background: #f2f2f7;
+    }
+    .container {
+      max-width: 760px;
+      margin: 48px auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 48px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+    h1 { font-size: 30px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: #6e6e73; font-size: 15px; margin-bottom: 32px; }
+    h2 { font-size: 20px; font-weight: 600; margin-top: 36px; margin-bottom: 12px; color: #1c1c1e; }
+    h3 { font-size: 16px; font-weight: 600; margin-top: 20px; margin-bottom: 6px; color: #1c1c1e; }
+    p { margin-bottom: 12px; color: #3a3a3c; }
+    ul { margin: 8px 0 14px 22px; color: #3a3a3c; }
+    ul li { margin-bottom: 6px; }
+    a { color: #007aff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .badge {
+      display: inline-block;
+      background: #f2f2f7;
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 13px;
+      color: #6e6e73;
+      margin-bottom: 24px;
+    }
+    .cta {
+      display: inline-block;
+      background: #007aff;
+      color: #ffffff !important;
+      border-radius: 10px;
+      padding: 10px 18px;
+      margin: 6px 8px 6px 0;
+      font-weight: 500;
+    }
+    .cta:hover { background: #0066d6; text-decoration: none; }
+    hr { border: none; border-top: 1px solid #e5e5ea; margin: 36px 0; }
+    .lang-note { font-size: 13px; color: #6e6e73; margin-top: 24px; }
+    @media (max-width: 600px) {
+      .container { margin: 0; border-radius: 0; padding: 28px 20px; }
+      h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SimpleTracking – Support</h1>
+    <div class="subtitle">Workouts, nutrition and steps for iPhone &amp; Apple Watch</div>
+    <span class="badge">Last updated: May 2026</span>
+
+    <p>
+      Welcome to the support page for <strong>SimpleTracking</strong>. If you have questions,
+      need help with a feature, or want to report a bug, you can reach us through the channels
+      below. We usually reply within a few working days.
+    </p>
+
+    <h2>Contact &amp; Support</h2>
+    <p>The fastest way to get help or report an issue is via GitHub Issues. You don't need any technical knowledge — a short description of the problem is enough.</p>
+    <p>
+      <a class="cta" href="https://github.com/tfb74/SimpleTracker/issues/new">Report an issue or ask a question</a>
+      <a class="cta" href="https://github.com/tfb74/SimpleTracker/issues" style="background:#8e8e93;">Browse existing issues</a>
+    </p>
+    <p>
+      You can also reach the developer through the GitHub profile:
+      <a href="https://github.com/tfb74">github.com/tfb74</a>.
+    </p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Which devices are supported?</h3>
+    <p>SimpleTracking runs on iPhone with iOS 17 or newer (iOS 26 recommended for Apple Intelligence photo analysis). The companion app runs on Apple Watch with watchOS 10 or newer. iPad is supported via CloudKit sync.</p>
+
+    <h3>Is there a subscription or in-app purchase?</h3>
+    <p>No subscription is required to use the core features. All workouts, nutrition tracking, statistics and Apple Health sync are included.</p>
+
+    <h3>Where is my data stored?</h3>
+    <p>Your data is stored locally on your device and, if you sign in to iCloud, synced via Apple CloudKit between your own devices (iPhone, iPad, Apple Watch). Photo analysis for meals runs entirely on-device using Apple Intelligence. We do not operate our own servers and do not share your data with third parties. See the <a href="privacy-policy/">Privacy Policy</a> for details.</p>
+
+    <h3>How are calories and macro-nutrition values calculated?</h3>
+    <p>Resting energy is estimated using the Mifflin–St Jeor equation from your profile (age, weight, height, sex). The carbohydrate reference corridor is shown as a range of 45–55&nbsp;% of total daily energy, in line with general healthy-eating guidance from the World Health Organization. Sources are linked in the app under <em>Statistics → Nutrition</em> and in <em>Settings → Profile</em>:</p>
+    <ul>
+      <li><a href="https://www.who.int/news-room/fact-sheets/detail/healthy-diet">WHO – Healthy diet (fact sheet)</a></li>
+    </ul>
+    <p>These values are general references for healthy adults and are <strong>not medical advice</strong>. If you have a medical condition (e.g. diabetes, kidney disease, pregnancy), please consult a qualified healthcare professional.</p>
+
+    <h3>The app does not track my GPS workout correctly.</h3>
+    <p>Please make sure location permission for SimpleTracking is set to "Always" in <em>Settings → Privacy &amp; Security → Location Services → SimpleTracking</em>, and that "Precise Location" is enabled. For Apple Watch workouts, GPS works best in open areas — tall buildings or dense forest can reduce accuracy.</p>
+
+    <h3>Apple Health data isn't syncing.</h3>
+    <p>Open <em>Settings → Apps → Health → Data Access &amp; Devices → SimpleTracking</em> on your iPhone and make sure both read and write access are enabled for steps, workouts, active energy and any other category you want to share.</p>
+
+    <h3>How do I export or delete my data?</h3>
+    <p>Inside the app, open <em>Settings → Data</em> to export workouts and food entries, or to permanently delete all data stored by SimpleTracking. CloudKit data is removed automatically when you delete your iCloud account or sign out from CloudKit in iOS.</p>
+
+    <h3>How do I join a contest or team?</h3>
+    <p>Contests and teams can be joined via a code or an iMessage invitation link from the host. Tap the link or enter the code under <em>Settings → Contests</em>.</p>
+
+    <h2>Reporting Bugs</h2>
+    <p>When reporting a bug, please include:</p>
+    <ul>
+      <li>Your device model and iOS version</li>
+      <li>The app version (visible in <em>Settings → About</em>)</li>
+      <li>A short description of the issue and how to reproduce it</li>
+      <li>Screenshots if applicable</li>
+    </ul>
+    <p>Open a ticket here: <a href="https://github.com/tfb74/SimpleTracker/issues/new">github.com/tfb74/SimpleTracker/issues/new</a>.</p>
+
+    <h2>Privacy &amp; Legal</h2>
+    <ul>
+      <li><a href="privacy-policy/">Privacy Policy</a></li>
+      <li><a href="docs/privacy.html">Privacy Notice (developer summary)</a></li>
+    </ul>
+
+    <hr />
+
+    <h2 lang="de">SimpleTracking – Support (Deutsch)</h2>
+    <p lang="de">
+      Willkommen auf der Support-Seite von <strong>SimpleTracking</strong>. Wenn du Fragen
+      hast, Hilfe zu einer Funktion brauchst oder einen Fehler melden möchtest, erreichst du
+      uns am schnellsten über GitHub Issues. In der Regel antworten wir innerhalb weniger
+      Werktage.
+    </p>
+    <p lang="de">
+      <a class="cta" href="https://github.com/tfb74/SimpleTracker/issues/new">Frage stellen oder Problem melden</a>
+    </p>
+
+    <h3 lang="de">Wie werden Kalorien und Makro-Nährstoffe berechnet?</h3>
+    <p lang="de">
+      Der Grundumsatz wird mit der Mifflin-St-Jeor-Formel aus deinem Profil (Alter, Gewicht,
+      Größe, Geschlecht) geschätzt. Der Kohlenhydrat-Referenzkorridor wird als 45–55&nbsp;%
+      der täglichen Energiezufuhr angezeigt, in Anlehnung an allgemeine
+      Ernährungsempfehlungen der Weltgesundheitsorganisation (WHO). Quelle:
+      <a href="https://www.who.int/news-room/fact-sheets/detail/healthy-diet">WHO – Healthy diet</a>.
+      Diese Werte sind allgemeine Orientierungswerte für gesunde Erwachsene und ersetzen
+      <strong>keine medizinische Beratung</strong>.
+    </p>
+
+    <h3 lang="de">Datenschutz</h3>
+    <p lang="de">
+      Deine Daten liegen lokal auf deinem Gerät und werden – wenn du iCloud nutzt – über
+      Apple CloudKit zwischen deinen eigenen Geräten synchronisiert. Details findest du in
+      der <a href="privacy-policy/">Datenschutzerklärung</a>.
+    </p>
+
+    <p class="lang-note">SimpleTracking is an indie project. Thank you for using the app!</p>
+  </div>
+</body>
+</html>

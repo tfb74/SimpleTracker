@@ -30,11 +30,15 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>15</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-9685354539860584~2584848655</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>Kamera wird für Barcode-Scan und Foto-Analyse von Essen/Getränken genutzt.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Optional: Damit deine Freunde mit Foto und richtigem Namen aus deinen Kontakten erscheinen (statt nur mit Code). Wir lesen nur Name und Profilbild, schicken nichts nach außen.</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>SimpleTracking liest Gesundheitsdaten für Workout-Auswertungen.</string>
 	<key>NSHealthUpdateUsageDescription</key>

@@ -136,7 +136,7 @@ struct StatisticsView: View {
     // MARK: Period Picker
 
     private var periodPicker: some View {
-        Picker("Zeitraum", selection: $period) {
+        Picker(lt("Zeitraum"), selection: $period) {
             ForEach(StatsPeriod.allCases) { Text($0.rawValue).tag($0) }
         }
         .pickerStyle(.segmented)
@@ -156,10 +156,10 @@ struct StatisticsView: View {
     private var todaySection: some View {
         let today = stats.last   // letzter Tag im Array = heute
 
-        StatsSection(title: "Heute", systemImage: "sun.max.fill") {
+        StatsSection(title: lt("Heute"), systemImage: "sun.max.fill") {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                 MetricTile(
-                    title: "Schritte",
+                    title: lt("Schritte"),
                     value: (today?.steps ?? healthKit.todaySteps).formatted(),
                     icon: "figure.walk", color: .blue
                 )
@@ -174,7 +174,7 @@ struct StatisticsView: View {
                     icon: "location.fill", color: .green
                 )
                 MetricTile(
-                    title: "Aufgenommen",
+                    title: lt("Aufgenommen"),
                     value: String(format: "%.0f kcal", foodLog.totals(on: Date()).kcal),
                     icon: "fork.knife", color: .red
                 )
@@ -212,7 +212,7 @@ struct StatisticsView: View {
                 }
                 .padding(.top, 4)
             } else {
-                Label("Noch kein Workout heute", systemImage: "figure.run.circle")
+                Label(lt("Noch kein Workout heute"), systemImage: "figure.run.circle")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .padding(.top, 4)
@@ -229,7 +229,7 @@ struct StatisticsView: View {
         let totalSteps  = stats.reduce(0)   { $0 + $1.steps }
         let activeDays  = stats.filter { $0.workoutCount > 0 }.count
 
-        return StatsSection(title: "Aktivität", systemImage: "chart.bar.fill") {
+        return StatsSection(title: lt("Aktivität"), systemImage: "chart.bar.fill") {
             Chart(stats) { s in
                 BarMark(
                     x: .value("Tag", s.date, unit: .day),
@@ -243,12 +243,12 @@ struct StatisticsView: View {
             .frame(height: 180)
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                MetricTile(title: "Workouts",     value: "\(total)",                           icon: "figure.run",      color: .purple)
-                MetricTile(title: "Aktive Tage",  value: "\(activeDays) / \(stats.count)",     icon: "calendar",        color: .teal)
-                MetricTile(title: "Distanz",      value: formattedDistance(totalKm),           icon: "map.fill",        color: .green)
-                MetricTile(title: "Ø Schritte",   value: "\(totalSteps / max(1, stats.count))", icon: "figure.walk",    color: .blue)
-                MetricTile(title: "Verbraucht",   value: String(format: "%.0f kcal", totalKcal), icon: "flame.fill",    color: .orange)
-                MetricTile(title: "Ø Tag",        value: String(format: "%.0f kcal", totalKcal / Double(max(1, stats.count))), icon: "chart.line.uptrend.xyaxis", color: .pink)
+                MetricTile(title: lt("Workouts"),     value: "\(total)",                           icon: "figure.run",      color: .purple)
+                MetricTile(title: lt("Aktive Tage"),  value: "\(activeDays) / \(stats.count)",     icon: "calendar",        color: .teal)
+                MetricTile(title: lt("Distanz"),      value: formattedDistance(totalKm),           icon: "map.fill",        color: .green)
+                MetricTile(title: lt("Ø Schritte"),   value: "\(totalSteps / max(1, stats.count))", icon: "figure.walk",    color: .blue)
+                MetricTile(title: lt("Verbraucht"),   value: String(format: "%.0f kcal", totalKcal), icon: "flame.fill",    color: .orange)
+                MetricTile(title: lt("Ø Tag"),        value: String(format: "%.0f kcal", totalKcal / Double(max(1, stats.count))), icon: "chart.line.uptrend.xyaxis", color: .pink)
             }
         }
     }
@@ -328,7 +328,7 @@ struct StatisticsView: View {
                 MetricTile(title: lt("Grundbedarf"),   value: String(format: "%.0f kcal", resting),                 icon: "bed.double.fill", color: .indigo)
                 MetricTile(title: lt("Aktivität"),     value: String(format: "%.0f kcal", active),                  icon: "figure.run", color: .orange)
                 MetricTile(title: lt("Gesamtverbrauch"), value: String(format: "%.0f kcal", burned),                icon: "flame.fill", color: .orange)
-                MetricTile(title: "Aufgenommen",   value: String(format: "%.0f kcal", consumed),                icon: "fork.knife", color: .red)
+                MetricTile(title: lt("Aufgenommen"),   value: String(format: "%.0f kcal", consumed),                icon: "fork.knife", color: .red)
                 MetricTile(title: lt("Ø Gesamt/Tag"),  value: String(format: "%.0f kcal", burned / Double(count)),  icon: "minus.circle", color: .orange)
                 MetricTile(title: lt("Ø aufgenommen"), value: String(format: "%.0f kcal", consumed / Double(count)), icon: "plus.circle",  color: .red)
                 MetricTile(
@@ -368,7 +368,7 @@ struct StatisticsView: View {
         let avgCarbLow  = stats.reduce(0.0) { $0 + $1.carbTargetLow } / Double(count)
         let avgCarbHigh = stats.reduce(0.0) { $0 + $1.carbTargetHigh } / Double(count)
 
-        return StatsSection(title: "Ernährung", systemImage: "leaf.fill") {
+        return StatsSection(title: lt("Ernährung"), systemImage: "leaf.fill") {
             Chart(stats) { s in
                 BarMark(
                     x: .value("Tag", s.date, unit: .day),
@@ -384,16 +384,21 @@ struct StatisticsView: View {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                 MetricTile(title: "Kohlenh. gesamt", value: String(format: "%.0f g",  totalCarbs), icon: "leaf", color: .blue)
                 MetricTile(title: "BE gesamt",       value: String(format: "%.1f BE", totalBE),    icon: "square.grid.2x2", color: .purple)
-                MetricTile(title: "Ø KH/Tag",        value: String(format: "%.0f g",  totalCarbs / Double(count)), icon: "leaf", color: .blue)
-                MetricTile(title: "Ø BE/Tag",        value: String(format: "%.1f BE", totalBE / Double(count)),    icon: "square.grid.2x2", color: .purple)
-                MetricTile(title: "KH-Ref. min/Tag", value: String(format: "%.0f g", avgCarbLow),  icon: "target", color: .teal)
-                MetricTile(title: "KH-Ref. max/Tag", value: String(format: "%.0f g", avgCarbHigh), icon: "target", color: .teal)
+                MetricTile(title: lt("Ø KH/Tag"),        value: String(format: "%.0f g",  totalCarbs / Double(count)), icon: "leaf", color: .blue)
+                MetricTile(title: lt("Ø BE/Tag"),        value: String(format: "%.1f BE", totalBE / Double(count)),    icon: "square.grid.2x2", color: .purple)
+                MetricTile(title: lt("KH-Ref. min/Tag"), value: String(format: "%.0f g", avgCarbLow),  icon: "target", color: .teal)
+                MetricTile(title: lt("KH-Ref. max/Tag"), value: String(format: "%.0f g", avgCarbHigh), icon: "target", color: .teal)
             }
 
-            Text("Referenz aus geschätztem Gesamtverbrauch: Grundbedarf plus erfasste Aktivität.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Referenz aus geschätztem Gesamtverbrauch: Grundbedarf plus erfasste Aktivität.")
+                Text(lt("Kohlenhydrat-Korridor 45–55 % der täglichen Energie nach Mifflin-St Jeor; allgemeine Empfehlungen zur Ernährung von der WHO."))
+                Link(lt("Quelle: WHO – Healthy diet"),
+                     destination: URL(string: "https://www.who.int/news-room/fact-sheets/detail/healthy-diet")!)
+            }
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -411,22 +416,22 @@ struct StatisticsView: View {
             let bestSteps   = stats.max(by: { $0.steps < $1.steps })
             let bestScore   = list.max(by: { $0.score(settings: settings).displayScore < $1.score(settings: settings).displayScore })
 
-            StatsSection(title: "Rekorde im Zeitraum", systemImage: "trophy.fill") {
+            StatsSection(title: lt("Rekorde im Zeitraum"), systemImage: "trophy.fill") {
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                     if let w = longestDist {
-                        MetricTile(title: "Längste Distanz", value: formattedDistance(w.distanceKm), icon: "ruler", color: .green, subtitle: w.startDate.formatted(.dateTime.day().month(.abbreviated)))
+                        MetricTile(title: lt("Längste Distanz"), value: formattedDistance(w.distanceKm), icon: "ruler", color: .green, subtitle: w.startDate.formatted(.dateTime.day().month(.abbreviated)))
                     }
                     if let w = fastest, w.averageSpeedKmh > 0 {
                         MetricTile(title: "Schnellstes Tempo", value: String(format: "%.1f km/h", w.averageSpeedKmh), icon: "bolt.fill", color: .yellow, subtitle: w.displayName)
                     }
                     if let w = longestTime {
-                        MetricTile(title: "Längstes Workout", value: formatDuration(w.duration), icon: "stopwatch", color: .teal, subtitle: w.displayName)
+                        MetricTile(title: lt("Längstes Workout"), value: formatDuration(w.duration), icon: "stopwatch", color: .teal, subtitle: w.displayName)
                     }
                     if let d = bestSteps {
                         MetricTile(title: "Meiste Schritte", value: d.steps.formatted(), icon: "figure.walk", color: .blue, subtitle: d.date.formatted(.dateTime.day().month(.abbreviated)))
                     }
                     if let w = bestScore {
-                        MetricTile(title: "Bester Score", value: "\(w.score(settings: settings).displayScore)", icon: "star.fill", color: .orange, subtitle: w.score(settings: settings).grade.rawValue)
+                        MetricTile(title: lt("Bester Score"), value: "\(w.score(settings: settings).displayScore)", icon: "star.fill", color: .orange, subtitle: w.score(settings: settings).grade.rawValue)
                     }
                 }
             }
@@ -470,11 +475,11 @@ struct StatisticsView: View {
                 }
             }
             HStack(spacing: 6) {
-                Text("weniger").font(.caption2).foregroundStyle(.secondary)
+                Text(lt("weniger")).font(.caption2).foregroundStyle(.secondary)
                 ForEach([0.0, 0.25, 0.5, 0.75, 1.0], id: \.self) { v in
                     RoundedRectangle(cornerRadius: 2).fill(heatColor(intensity: v)).frame(width: 14, height: 14)
                 }
-                Text("mehr").font(.caption2).foregroundStyle(.secondary)
+                Text(lt("mehr")).font(.caption2).foregroundStyle(.secondary)
             }
             .padding(.top, 4)
         }
