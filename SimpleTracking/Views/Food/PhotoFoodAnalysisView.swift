@@ -46,15 +46,15 @@ struct PhotoFoodAnalysisView: View {
                     errorSection
                 }
             }
-            .navigationTitle("Foto-Analyse")
+            .navigationTitle(lt("Foto-Analyse"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Abbrechen") { dismiss() }
+                    Button(lt("Abbrechen")) { dismiss() }
                 }
                 if !items.isEmpty {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button("Alle speichern") { saveAll() }
+                        Button(lt("Alle speichern")) { saveAll() }
                     }
                 }
             }
@@ -81,8 +81,8 @@ struct PhotoFoodAnalysisView: View {
                 .padding(.top, 40)
 
             Text(FoodPhotoAnalyzer.isLLMAvailable
-                 ? "Apple Intelligence analysiert dein Foto und schätzt Kalorien & Kohlenhydrate."
-                 : "Nur grobe Schätzung möglich — dein Gerät unterstützt Apple Intelligence nicht.")
+                 ? lt("Apple Intelligence analysiert dein Foto und schätzt Kalorien & Kohlenhydrate.")
+                 : lt("Nur grobe Schätzung möglich — dein Gerät unterstützt Apple Intelligence nicht."))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -94,13 +94,13 @@ struct PhotoFoodAnalysisView: View {
                 Button {
                     showCamera = true
                 } label: {
-                    Label("Foto aufnehmen", systemImage: "camera.fill")
+                    Label(lt("Foto aufnehmen"), systemImage: "camera.fill")
                         .frame(maxWidth: .infinity).padding()
                 }
                 .buttonStyle(.borderedProminent)
 
                 PhotosPicker(selection: $selectedItem, matching: .images) {
-                    Label("Aus Mediathek wählen", systemImage: "photo.on.rectangle")
+                    Label(lt("Aus Mediathek wählen"), systemImage: "photo.on.rectangle")
                         .frame(maxWidth: .infinity).padding()
                 }
                 .buttonStyle(.bordered)
@@ -124,16 +124,16 @@ struct PhotoFoodAnalysisView: View {
             }
 
             VStack(spacing: 6) {
-                Text("Was ist auf dem Foto?")
+                Text(lt("Was ist auf dem Foto?"))
                     .font(.title3.bold())
-                Text("Der Hinweis verbessert die Erkennung.")
+                Text(lt("Der Hinweis verbessert die Erkennung."))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
 
             HStack(spacing: 16) {
-                kindButton(title: "Essen", systemImage: "fork.knife", kind: .food, tint: .orange)
-                kindButton(title: "Getränk", systemImage: "cup.and.saucer.fill", kind: .drink, tint: .blue)
+                kindButton(title: lt("Essen"), systemImage: "fork.knife", kind: .food, tint: .orange)
+                kindButton(title: lt("Getränk"), systemImage: "cup.and.saucer.fill", kind: .drink, tint: .blue)
             }
             .padding(.horizontal)
 
@@ -170,8 +170,8 @@ struct PhotoFoodAnalysisView: View {
         let available = FoodPhotoAnalyzer.isLLMAvailable
         return HStack(spacing: 6) {
             Image(systemName: available ? "checkmark.seal.fill" : "exclamationmark.triangle.fill")
-            Text(available ? "Apple Intelligence verfügbar (iOS \(UIDevice.current.systemVersion))"
-                           : "Apple Intelligence nicht verfügbar — Fallback auf Vision-Heuristik")
+            Text(available ? lf("Apple Intelligence verfügbar (iOS %@)", UIDevice.current.systemVersion)
+                           : lt("Apple Intelligence nicht verfügbar — Fallback auf Vision-Heuristik"))
                 .font(.caption)
         }
         .foregroundStyle(available ? .green : .orange)
@@ -193,7 +193,7 @@ struct PhotoFoodAnalysisView: View {
                 ProgressView().scaleEffect(0.85)
                 Image(systemName: currentStageIcon)
                     .foregroundStyle(Color.accentColor)
-                Text(currentStageMessage.isEmpty ? "Starte Analyse…" : currentStageMessage)
+                Text(currentStageMessage.isEmpty ? lt("Starte Analyse…") : currentStageMessage)
                     .font(.subheadline.weight(.medium))
                 Spacer()
             }
@@ -217,7 +217,7 @@ struct PhotoFoodAnalysisView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 8) {
                     if progressLog.isEmpty {
-                        Text("KI-Verlauf erscheint hier…")
+                        Text(lt("KI-Verlauf erscheint hier…"))
                             .font(.caption)
                             .foregroundStyle(.tertiary)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -296,13 +296,13 @@ struct PhotoFoodAnalysisView: View {
                     diagnosticsCard(d)
                 }
 
-                DatePicker("Zeit", selection: $timestamp).padding(.horizontal)
+                DatePicker(lt("Zeit"), selection: $timestamp).padding(.horizontal)
 
                 HStack {
-                    Text("\(items.count) \(items.count == 1 ? "Bestandteil" : "Bestandteile") erkannt")
+                    Text(items.count == 1 ? lf("%d Bestandteil erkannt", items.count) : lf("%d Bestandteile erkannt", items.count))
                         .font(.caption).foregroundStyle(.secondary)
                     Spacer()
-                    Text("Wischen oder Mülleimer zum Entfernen")
+                    Text(lt("Wischen oder Mülleimer zum Entfernen"))
                         .font(.caption2).foregroundStyle(.tertiary)
                 }
                 .padding(.horizontal)
@@ -325,7 +325,7 @@ struct PhotoFoodAnalysisView: View {
 
     private func diagnosticsCard(_ d: AnalysisDiagnostics) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Label("Diagnose", systemImage: "stethoscope").font(.caption.bold())
+            Label(lt("Diagnose"), systemImage: "stethoscope").font(.caption.bold())
 
             diagRow("iOS", d.iOSVersion)
             diagRow("LLM verfügbar", d.llmAvailable ? "ja" : "nein")
@@ -412,7 +412,7 @@ struct PhotoFoodAnalysisView: View {
             withAnimation(.easeOut(duration: 0.25)) {
                 progressLog.append(ProgressEntry(
                     icon: "viewfinder",
-                    title: "Bildlabels erkannt",
+                    title: lt("Bildlabels erkannt"),
                     detail: labels.prefix(5).joined(separator: ", "),
                     isReasoning: false
                 ))
@@ -423,7 +423,7 @@ struct PhotoFoodAnalysisView: View {
             withAnimation(.easeOut(duration: 0.25)) {
                 progressLog.append(ProgressEntry(
                     icon: "brain",
-                    title: "Überlegung",
+                    title: lt("Überlegung"),
                     detail: trimmed.isEmpty ? nil : trimmed,
                     isReasoning: true
                 ))
@@ -434,7 +434,7 @@ struct PhotoFoodAnalysisView: View {
             withAnimation(.easeOut(duration: 0.25)) {
                 progressLog.append(ProgressEntry(
                     icon: "checkmark.circle",
-                    title: "Selbstprüfung",
+                    title: lt("Selbstprüfung"),
                     detail: trimmed.isEmpty ? nil : trimmed,
                     isReasoning: true
                 ))
@@ -493,7 +493,7 @@ struct RecognizedItemRow: View {
 
             HStack(alignment: .top, spacing: 8) {
                 VStack(alignment: .leading, spacing: 6) {
-                    TextField("Name", text: $item.name).font(.headline)
+                    TextField(lt("Name"), text: $item.name).font(.headline)
                     HStack {
                         numberField("Portion", value: Binding(
                             get: { Double(item.portionGrams) },

@@ -35,7 +35,7 @@ struct FoodLogView: View {
                 tint: .orange
             ),
             AppHeaderMetric(
-                title: "BE",
+                title: lt("BE"),
                 value: String(format: "%.1f", totals.be),
                 systemImage: "square.grid.2x2.fill",
                 tint: .purple
@@ -49,7 +49,7 @@ struct FoodLogView: View {
         HStack {
             Button { shift(days: -1) } label: { Image(systemName: "chevron.left") }
             Spacer()
-            DatePicker("Datum", selection: $selectedDate, displayedComponents: .date)
+            DatePicker(lt("Datum"), selection: $selectedDate, displayedComponents: .date)
                 .labelsHidden()
             Spacer()
             Button { shift(days: 1) } label: { Image(systemName: "chevron.right") }
@@ -70,9 +70,9 @@ struct FoodLogView: View {
     private var totalsCard: some View {
         let t = store.totals(on: selectedDate)
         return HStack(spacing: 14) {
-            totalTile(title: "Kalorien", value: String(format: "%.0f", t.kcal), unit: "kcal", color: .orange, icon: "flame.fill")
-            totalTile(title: "Kohlenhyd.", value: String(format: "%.0f", t.carbs), unit: "g", color: .blue, icon: "leaf.fill")
-            totalTile(title: "BE", value: String(format: "%.1f", t.be), unit: "BE", color: .purple, icon: "square.grid.2x2.fill")
+            totalTile(title: lt("Kalorien"), value: String(format: "%.0f", t.kcal), unit: "kcal", color: .orange, icon: "flame.fill")
+            totalTile(title: lt("Kohlenhyd."), value: String(format: "%.0f", t.carbs), unit: "g", color: .blue, icon: "leaf.fill")
+            totalTile(title: lt("BE"), value: String(format: "%.1f", t.be), unit: "BE", color: .purple, icon: "square.grid.2x2.fill")
         }
         .padding(.horizontal)
         .padding(.bottom, 10)
@@ -99,9 +99,9 @@ struct FoodLogView: View {
         return Group {
             if entries.isEmpty {
                 ContentUnavailableView(
-                    "Keine Einträge",
+                    lt("Keine Einträge"),
                     systemImage: "takeoutbag.and.cup.and.straw",
-                    description: Text("Tippe auf + um ein Essen oder Getränk hinzuzufügen.")
+                    description: Text(lt("Tippe auf + um ein Essen oder Getränk hinzuzufügen."))
                 )
             } else {
                 List {

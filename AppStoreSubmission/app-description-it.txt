@@ -3,7 +3,9 @@ SimpleTracking – Allenamenti, alimentazione e passi. Tutto a colpo d'occhio.
 SimpleTracking ti accompagna nella tua giornata attiva: allenamenti con GPS, passi, calorie e tracciamento dell'alimentazione - senza fronzoli, senza abbonamento, con il pieno controllo sui tuoi dati.
 
 TRACCIAMENTO ALLENAMENTI
-• 19 tipi di attività: corsa, ciclismo, escursionismo, nuoto, allenamento della forza, yoga, HIIT e altro
+• 21 tipi di attività: corsa, ciclismo, escursionismo, nuoto, allenamento della forza, yoga, HIIT e altro
+• Anche attività leggere: camminata, e-bike, giardinaggio – evidenziate a colori come movimento rilassato
+• Ordinamento intelligente: gli sport più usati appaiono per primi
 • Mappa in tempo reale con registrazione GPS del percorso
 • Altitudine, ritmo, distanza, calorie in tempo reale
 • Inserimento manuale per allenamenti indoor e sessioni in palestra
@@ -26,6 +28,13 @@ GAMIFICATION
 • 14 obiettivi per i tuoi traguardi
 • Classifiche tramite Game Center
 • Sincronizzazione CloudKit tra iPhone e iPad
+
+CONTEST E TEAM
+• Daily Streak, somma totale, gara di punteggio o obiettivo calorie
+• Con amici, in team o a livello aziendale con sotto-team per i reparti
+• Classifica in diretta e grafico cronologico
+• Promemoria locali 24h prima della scadenza
+• Unisciti tramite codice o link iMessage
 
 PRIVACY
 • L'analisi foto avviene interamente sul tuo dispositivo (Apple Intelligence)

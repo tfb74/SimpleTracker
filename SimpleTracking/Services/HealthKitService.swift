@@ -354,8 +354,60 @@ final class HealthKitService {
             }
         }
         union.sort { $0.startDate > $1.startDate }
-        print("[HealthKit] union after dedupe: \(union.count) workouts (A=\(a.count), B=\(b.count), C=\(c.count))")
-        return union
+        print("[HealthKit] union after UUID dedupe: \(union.count) workouts (A=\(a.count), B=\(b.count), C=\(c.count))")
+
+        // --- Content dedupe (gleicher Inhalt, verschiedene UUIDs) ----------
+        // Häufiges Szenario: App hat das Workout zweimal nach HealthKit
+        // geschrieben (z.B. wegen Draft-Recovery nach Crash), oder Watch +
+        // iPhone haben parallel geschrieben. UUIDs sind unterschiedlich, aber
+        // Inhalt identisch → in der UI als 1 Workout zeigen.
+        let deduped = contentDeduplicated(union)
+        if deduped.count != union.count {
+            print("[HealthKit] content-dedupe removed \(union.count - deduped.count) duplicate(s)")
+        }
+        return deduped
+    }
+
+    /// Gruppiert Workouts mit identischem Inhalt und gibt pro Gruppe genau
+    /// einen Repräsentanten zurück (bevorzugt: aus dieser App geschrieben).
+    /// "Identischer Inhalt" = gleicher Aktivitäts-Typ + Start innerhalb ±5s
+    /// + Dauer innerhalb ±5s.
+    private func contentDeduplicated(_ workouts: [HKWorkout]) -> [HKWorkout] {
+        let bundleID = Bundle.main.bundleIdentifier ?? "de.baumannheim.SimpleTracking"
+
+        // Komplexitäts-Halbierung: erst nach Start-Sekunde grob bucketen
+        var buckets: [Int: [HKWorkout]] = [:]
+        for hw in workouts {
+            let bucket = Int(hw.startDate.timeIntervalSince1970 / 5) // 5-Sek-Buckets
+            buckets[bucket, default: []].append(hw)
+        }
+
+        var keep: [HKWorkout] = []
+        var consumed = Set<UUID>()
+        for hw in workouts {
+            guard !consumed.contains(hw.uuid) else { continue }
+
+            let bucket = Int(hw.startDate.timeIntervalSince1970 / 5)
+            // Kandidaten aus diesem + Nachbar-Bucket holen (für Workouts die
+            // genau an einer 5s-Grenze liegen)
+            let candidates = (buckets[bucket] ?? []) + (buckets[bucket - 1] ?? []) + (buckets[bucket + 1] ?? [])
+
+            let group = candidates.filter {
+                !consumed.contains($0.uuid) &&
+                $0.workoutActivityType == hw.workoutActivityType &&
+                abs($0.startDate.timeIntervalSince(hw.startDate)) < 5 &&
+                abs($0.duration - hw.duration) < 5
+            }
+
+            // Repräsentant wählen: bevorzugt SimpleTracking-Source, sonst neuester
+            let representative = group.first(where: { $0.sourceRevision.source.bundleIdentifier == bundleID })
+                ?? group.max(by: { ($0.metadata?[HKMetadataKeyExternalUUID] != nil ? 0 : 1) < ($1.metadata?[HKMetadataKeyExternalUUID] != nil ? 0 : 1) })
+                ?? hw
+
+            keep.append(representative)
+            for g in group { consumed.insert(g.uuid) }
+        }
+        return keep.sorted { $0.startDate > $1.startDate }
     }
 
     /// Single HKSampleQuery helper used by the multi-strategy fetcher.
@@ -550,6 +602,18 @@ final class HealthKitService {
         routePoints: [RoutePoint],
         customName: String? = nil
     ) async throws {
+        // KRITISCH: Schutz gegen doppeltes Schreiben. Wenn die App z.B. nach
+        // Crash den Draft erneut speichern will, aber das ursprüngliche Save
+        // schon durchgegangen war, würde sonst ein zweiter identischer
+        // HKWorkout entstehen → in der Liste taucht das Workout doppelt auf.
+        // Vor dem Schreiben prüfen ob bereits ein Workout im Zeitfenster
+        // existiert (von uns geschrieben, gleicher Typ).
+        if await ownWorkoutAlreadyExists(start: start, end: end, type: type) {
+            print("[HealthKit] saveWorkout: duplicate detected (\(type) @ \(start)) — skipping write")
+            await loadWorkouts()
+            return
+        }
+
         // Neuer HKWorkoutBuilder-Pfad (iOS 17+). Samples werden direkt am
         // Workout angefügt — Tages-Aggregate aktualisieren sich genauso wie
         // beim alten Pfad mit separaten Saves.
@@ -652,6 +716,177 @@ final class HealthKitService {
         } catch {
             print("[HealthKit] writeFoodSamples failed: \(error.localizedDescription)")
             return []
+        }
+    }
+
+    /// Prüft ob bereits ein eigenes Workout im Zeitfenster vorhanden ist.
+    /// Wird vor dem Schreiben aufgerufen um doppelte Einträge zu verhindern.
+    func ownWorkoutAlreadyExists(start: Date, end: Date, type: WorkoutType) async -> Bool {
+        let bundleID = Bundle.main.bundleIdentifier ?? "de.baumannheim.SimpleTracking"
+        let pred = HKQuery.predicateForSamples(
+            withStart: start.addingTimeInterval(-30),
+            end: end.addingTimeInterval(30),
+            options: []
+        )
+        let sort = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+        let samples = await sampleQuery(predicate: pred, sort: sort)
+        return samples.contains { hw in
+            hw.sourceRevision.source.bundleIdentifier == bundleID &&
+            hw.workoutActivityType == type.hkWorkoutActivityType &&
+            abs(hw.startDate.timeIntervalSince(start)) < 30
+        }
+    }
+
+    /// Findet und löscht doppelte Workouts aus Apple Health. Pro Duplikat-
+    /// Gruppe bleibt **einer** stehen (bevorzugt das SimpleTracking-Workout
+    /// mit Route, falls vorhanden). Gibt zurück wie viele entfernt wurden.
+    /// Wird über Settings → „Doppelte Workouts entfernen" angestoßen.
+    @discardableResult
+    func removeDuplicateWorkouts() async -> Int {
+        let all = await fetchAllHKWorkouts()  // bereits content-dedupliziert
+
+        // Erneut Strategien A+B+C aufrufen ohne Dedupe, damit wir ALLE
+        // Duplikate sehen, nicht nur die schon herausgefilterten.
+        let sort = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+        let raw = await sampleQuery(predicate: nil, sort: sort)
+        let bundleID = Bundle.main.bundleIdentifier ?? "de.baumannheim.SimpleTracking"
+
+        // Gruppe nach (start ±5s, type, duration ±5s)
+        var groups: [[HKWorkout]] = []
+        var consumed = Set<UUID>()
+        for hw in raw {
+            guard !consumed.contains(hw.uuid) else { continue }
+            let group = raw.filter {
+                !consumed.contains($0.uuid) &&
+                $0.workoutActivityType == hw.workoutActivityType &&
+                abs($0.startDate.timeIntervalSince(hw.startDate)) < 5 &&
+                abs($0.duration - hw.duration) < 5
+            }
+            for g in group { consumed.insert(g.uuid) }
+            if group.count > 1 {
+                groups.append(group)
+            }
+        }
+
+        var deletedCount = 0
+        for group in groups {
+            // Behalte den besten: SimpleTracking-Source + Route bevorzugt
+            let sorted = group.sorted { a, b in
+                let aIsOurs = a.sourceRevision.source.bundleIdentifier == bundleID ? 1 : 0
+                let bIsOurs = b.sourceRevision.source.bundleIdentifier == bundleID ? 1 : 0
+                if aIsOurs != bIsOurs { return aIsOurs > bIsOurs }
+                // Beide gleicher Status: behalte den älteren (mehr potenzielle
+                // verknüpfte Samples wie Route, HR-Daten etc.)
+                return a.startDate < b.startDate
+            }
+            let keep = sorted.first!
+            let toDelete = sorted.dropFirst()
+            for hw in toDelete {
+                // Nur eigene Workouts wirklich löschen — fremde Quellen anrühren
+                // wir nicht, das wäre destruktiv für andere Apps.
+                guard hw.sourceRevision.source.bundleIdentifier == bundleID else { continue }
+                do {
+                    try await store.delete(hw)
+                    deletedCount += 1
+                    print("[HealthKit] removed duplicate workout \(hw.workoutActivityType.rawValue) @ \(hw.startDate)")
+                } catch {
+                    print("[HealthKit] failed to delete duplicate: \(error.localizedDescription)")
+                }
+            }
+            _ = keep
+        }
+
+        if deletedCount > 0 {
+            await loadWorkouts()
+        }
+        _ = all
+        return deletedCount
+    }
+
+    /// Rekonstruiert FoodEntries aus zuvor geschriebenen Apple-Health-Samples
+    /// (nur unsere eigenen, gefiltert über source bundleIdentifier). Wird vom
+    /// FoodLogStore.recoverFromHealthKit() benutzt um nach lokalem Datenverlust
+    /// die Mahlzeiten zurückzuholen.
+    func fetchOwnFoodEntries() async -> [FoodEntry] {
+        guard HKHealthStore.isHealthDataAvailable() else { return [] }
+        let bundleID = Bundle.main.bundleIdentifier ?? "de.baumannheim.SimpleTracking"
+
+        // Lade alle 3 Sample-Typen parallel
+        async let kcalSamples  = fetchOwnDietarySamples(.dietaryEnergyConsumed, bundleID: bundleID)
+        async let carbSamples  = fetchOwnDietarySamples(.dietaryCarbohydrates, bundleID: bundleID)
+        async let waterSamples = fetchOwnDietarySamples(.dietaryWater,         bundleID: bundleID)
+
+        let kcal  = await kcalSamples
+        let carbs = await carbSamples
+        let water = await waterSamples
+
+        // Gruppiere nach FoodType-Metadata + Minute, weil ein Eintrag aus bis
+        // zu 3 Samples zusammengesetzt sein kann (kcal + carbs + water).
+        struct Group { var name: String; var ts: Date; var kcal: Double = 0; var carbs: Double = 0; var ml: Double = 0; var sampleIDs: [String] = [] }
+        var grouped: [String: Group] = [:]
+
+        func key(name: String, ts: Date) -> String {
+            let minute = Int(ts.timeIntervalSince1970 / 60)
+            return "\(name.lowercased())|\(minute)"
+        }
+
+        for s in kcal {
+            let name = (s.metadata?[HKMetadataKeyFoodType] as? String) ?? lt("Mahlzeit")
+            let k = key(name: name, ts: s.startDate)
+            var g = grouped[k] ?? Group(name: name, ts: s.startDate)
+            g.kcal += s.quantity.doubleValue(for: .kilocalorie())
+            g.sampleIDs.append(s.uuid.uuidString)
+            grouped[k] = g
+        }
+        for s in carbs {
+            let name = (s.metadata?[HKMetadataKeyFoodType] as? String) ?? lt("Mahlzeit")
+            let k = key(name: name, ts: s.startDate)
+            var g = grouped[k] ?? Group(name: name, ts: s.startDate)
+            g.carbs += s.quantity.doubleValue(for: .gram())
+            g.sampleIDs.append(s.uuid.uuidString)
+            grouped[k] = g
+        }
+        for s in water {
+            let name = (s.metadata?[HKMetadataKeyFoodType] as? String) ?? lt("Getränk")
+            let k = key(name: name, ts: s.startDate)
+            var g = grouped[k] ?? Group(name: name, ts: s.startDate)
+            g.ml += s.quantity.doubleValue(for: .literUnit(with: .milli))
+            g.sampleIDs.append(s.uuid.uuidString)
+            grouped[k] = g
+        }
+
+        return grouped.values.map { g in
+            let isDrink = g.ml > 0 && g.kcal == 0
+            return FoodEntry(
+                timestamp: g.ts,
+                name: g.name,
+                kind: isDrink ? .drink : .food,
+                portionGrams: nil,
+                portionMilliliters: isDrink ? g.ml : nil,
+                calories: g.kcal,
+                carbsGrams: g.carbs,
+                source: .manual,
+                healthKitSampleIDs: g.sampleIDs
+            )
+        }.sorted { $0.timestamp > $1.timestamp }
+    }
+
+    private func fetchOwnDietarySamples(
+        _ id: HKQuantityTypeIdentifier,
+        bundleID: String
+    ) async -> [HKQuantitySample] {
+        guard let t = HKQuantityType.quantityType(forIdentifier: id) else { return [] }
+        return await withCheckedContinuation { cont in
+            let q = HKSampleQuery(sampleType: t,
+                                  predicate: nil,
+                                  limit: HKObjectQueryNoLimit,
+                                  sortDescriptors: nil) { _, samples, _ in
+                let mine = (samples as? [HKQuantitySample] ?? []).filter {
+                    $0.sourceRevision.source.bundleIdentifier == bundleID
+                }
+                cont.resume(returning: mine)
+            }
+            store.execute(q)
         }
     }
 

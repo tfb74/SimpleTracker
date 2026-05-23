@@ -57,6 +57,16 @@
 		B3C6438F66A303D2C7100098 /* SimpleTrackingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67072E3AF083859B8F0DA369 /* SimpleTrackingApp.swift */; };
 		B6FA5942EAD959D2A76A80F9 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CCF82E4F33954FB73164EF /* DashboardView.swift */; };
 		B95CFB2FE50297D61C26719D /* WorkoutFavoriteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B92C4BD3563D27D109EF17B /* WorkoutFavoriteStore.swift */; };
+		6D10BF78A2854343AD466CBC /* WorkoutUsageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2078C0FFCBA949289CB70F76 /* WorkoutUsageStore.swift */; };
+		ED919A1B6D5D4DBEA216D970 /* ContestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826871523A9940ACB6EE8D78 /* ContestModels.swift */; };
+		2F8EF64F7D2149EEA019947B /* ContestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48949B274860419E93D3752B /* ContestService.swift */; };
+		130CEE109D1C4FAF96F4011F /* TeamService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE04A441B0FF493B95F3EED9 /* TeamService.swift */; };
+		039ECCF8BEE3450BA4D7A6EE /* ContestProgressService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AC97933CC64188BD246C71 /* ContestProgressService.swift */; };
+		C0F1B178F4764D0FA13EB7BE /* ContestNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6214B11B1CC745BEBFB50619 /* ContestNotificationService.swift */; };
+		F8017734C969403DA0E40B86 /* ContestListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB35481AAF5B4F83A2AE451B /* ContestListView.swift */; };
+		CDE50D185C0F4B7CBB791A26 /* ContestDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD866776D7EF4F6DB1DC7640 /* ContestDetailView.swift */; };
+		AF5D679E71C140D8A4CCB0EB /* ContestCreateSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2635B6A7E764E1B8CE410BE /* ContestCreateSheet.swift */; };
+		663C31D55F29488298A7B1A4 /* TeamManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F21050E437453090DC4D92 /* TeamManagementView.swift */; };
 		B9F6FA1C5E3ED8F010682E10 /* ManualWorkoutEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA2A4E5E1CE061A3E57D48C /* ManualWorkoutEntryView.swift */; };
 		BBD2C244AA0C142F16152AAF /* TrackingStatusWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A709E137D6CA5B6472DDD03 /* TrackingStatusWidget.swift */; };
 		BD782DFAB85AFBE4EB6DA7FF /* QuickFoodPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515FECDBCEB3B0D0EF07C115 /* QuickFoodPreset.swift */; };
@@ -74,11 +84,16 @@
 		EBEA9520E6258982D6F6B805 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1E6A4916A0E7437E5AB93A /* FriendsView.swift */; };
 		FBC86EC691FC452DA8F37B58 /* FriendCodeShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2855AE227C214E5CAB01AA86 /* FriendCodeShareView.swift */; };
 		7B042966388D460CA95F8100 /* CheerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4BEB9D54174C7F9B7BC654 /* CheerSheet.swift */; };
+		7435B086C1404B749C387D3C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D57A42C9A44B6AA70F134F /* OnboardingView.swift */; };
 		EDA0679CB0400E985B324D53 /* WorkoutSurfaceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1C4232A16B1DCB7B632CCF /* WorkoutSurfaceService.swift */; };
 		EF4E3D56FF06435BEF498A68 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AACFFEA7C9755DCB920747A /* AdService.swift */; };
 		F23C9114ACD28C0EB4E80874 /* QuickFoodStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D245E177D79D9FBF2B02C2A /* QuickFoodStore.swift */; };
 		F3F313767BE83B399251E94B /* LocalAchievementStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4701C6465B715D6F21CD5035 /* LocalAchievementStore.swift */; };
 		F760D9F3AF65F8D7E270B4FE /* WorkoutHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14697FD1A03A348C8DD58D80 /* WorkoutHistoryView.swift */; };
+		4B7730877D4E4023B7D7FAB6 /* ActivityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7703FF8CD9B434FB72C170D /* ActivityDetailView.swift */; };
+		F782E9623FAD43EEAD0973D0 /* FriendProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8975E39BE491F9F2CAC90 /* FriendProfileView.swift */; };
+		9DA5899B66FC4C1497432E6C /* DirectMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EEF79385084D789BBA7720 /* DirectMessageView.swift */; };
+		2877E3235FB247A6AAAB0F71 /* ContactMatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E0949BF7E0443B94C61CFB /* ContactMatchService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +165,27 @@
 		658920A04C0706839927A9FA /* SimpleTracking.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleTracking.entitlements; sourceTree = "<group>"; };
 		67072E3AF083859B8F0DA369 /* SimpleTrackingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackingApp.swift; sourceTree = "<group>"; };
 		6B92C4BD3563D27D109EF17B /* WorkoutFavoriteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFavoriteStore.swift; sourceTree = "<group>"; };
+		2078C0FFCBA949289CB70F76 /* WorkoutUsageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutUsageStore.swift; sourceTree = "<group>"; };
+		826871523A9940ACB6EE8D78 /* ContestModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestModels.swift; sourceTree = "<group>"; };
+		48949B274860419E93D3752B /* ContestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestService.swift; sourceTree = "<group>"; };
+		FE04A441B0FF493B95F3EED9 /* TeamService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamService.swift; sourceTree = "<group>"; };
+		15AC97933CC64188BD246C71 /* ContestProgressService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestProgressService.swift; sourceTree = "<group>"; };
+		6214B11B1CC745BEBFB50619 /* ContestNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestNotificationService.swift; sourceTree = "<group>"; };
+		BB35481AAF5B4F83A2AE451B /* ContestListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestListView.swift; sourceTree = "<group>"; };
+		BD866776D7EF4F6DB1DC7640 /* ContestDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestDetailView.swift; sourceTree = "<group>"; };
+		B2635B6A7E764E1B8CE410BE /* ContestCreateSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestCreateSheet.swift; sourceTree = "<group>"; };
+		35F21050E437453090DC4D92 /* TeamManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamManagementView.swift; sourceTree = "<group>"; };
+		7A3D5C8E9F1B4A2C8D6E1F23 /* Contests */ = {
+			isa = PBXGroup;
+			children = (
+				B2635B6A7E764E1B8CE410BE /* ContestCreateSheet.swift */,
+				BD866776D7EF4F6DB1DC7640 /* ContestDetailView.swift */,
+				BB35481AAF5B4F83A2AE451B /* ContestListView.swift */,
+				35F21050E437453090DC4D92 /* TeamManagementView.swift */,
+			);
+			path = Contests;
+			sourceTree = "<group>";
+		};
 		771523E0B21ADD17AA5B0111 /* WorkoutDraftStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDraftStore.swift; sourceTree = "<group>"; };
 		7869A4DF88B4B0F87CAEA129 /* CloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitService.swift; sourceTree = "<group>"; };
 		78CA8FE64B7833748010AD83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -198,7 +234,13 @@
 		FC1E6A4916A0E7437E5AB93A /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		2855AE227C214E5CAB01AA86 /* FriendCodeShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCodeShareView.swift; sourceTree = "<group>"; };
 		9E4BEB9D54174C7F9B7BC654 /* CheerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheerSheet.swift; sourceTree = "<group>"; };
+		B6D57A42C9A44B6AA70F134F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		6DA68E4F35684DCCB7BB9FB8 /* Onboarding */ = {isa = PBXGroup; children = (B6D57A42C9A44B6AA70F134F /* OnboardingView.swift */); path = Onboarding; sourceTree = "<group>"; };
 		FEE85FCC4302BD4356ED2E08 /* CaloricEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloricEstimator.swift; sourceTree = "<group>"; };
+		B7703FF8CD9B434FB72C170D /* ActivityDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailView.swift; sourceTree = "<group>"; };
+		1AC8975E39BE491F9F2CAC90 /* FriendProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileView.swift; sourceTree = "<group>"; };
+		45EEF79385084D789BBA7720 /* DirectMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectMessageView.swift; sourceTree = "<group>"; };
+		80E0949BF7E0443B94C61CFB /* ContactMatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactMatchService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +274,8 @@
 				70EFC2860C911E2F4FEA5DCA /* Dashboard */,
 				7D8F2D80B2A285FA5EE70D0E /* Food */,
 				79B516FA0D9D4103E58A5552 /* Friends */,
+				7A3D5C8E9F1B4A2C8D6E1F23 /* Contests */,
+				6DA68E4F35684DCCB7BB9FB8 /* Onboarding */,
 				7E775B41C0BAAAECE7AF80D5 /* History */,
 				5B0BF521105DA47F5F009B5E /* Import */,
 				F7F3BA9F6FBCA8D4CC693EE9 /* Map */,
@@ -273,9 +317,15 @@
 				7E3027143CE52153DCACF74B /* RouteCache.swift */,
 				5D01A12E68433EE17EFE5E10 /* WatchConnectivityService.swift */,
 				771523E0B21ADD17AA5B0111 /* WorkoutDraftStore.swift */,
+				48949B274860419E93D3752B /* ContestService.swift */,
+				80E0949BF7E0443B94C61CFB /* ContactMatchService.swift */,
+				15AC97933CC64188BD246C71 /* ContestProgressService.swift */,
+				6214B11B1CC745BEBFB50619 /* ContestNotificationService.swift */,
+				FE04A441B0FF493B95F3EED9 /* TeamService.swift */,
 				6B92C4BD3563D27D109EF17B /* WorkoutFavoriteStore.swift */,
 				3D1C4232A16B1DCB7B632CCF /* WorkoutSurfaceService.swift */,
 				5D52A4DC4A928D6C97729CAE /* WorkoutTypeSuggestionService.swift */,
+				2078C0FFCBA949289CB70F76 /* WorkoutUsageStore.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -349,6 +399,9 @@
 				9E4BEB9D54174C7F9B7BC654 /* CheerSheet.swift */,
 				2855AE227C214E5CAB01AA86 /* FriendCodeShareView.swift */,
 				FC1E6A4916A0E7437E5AB93A /* FriendsView.swift */,
+				45EEF79385084D789BBA7720 /* DirectMessageView.swift */,
+				1AC8975E39BE491F9F2CAC90 /* FriendProfileView.swift */,
+				B7703FF8CD9B434FB72C170D /* ActivityDetailView.swift */,
 			);
 			path = Friends;
 			sourceTree = "<group>";
@@ -436,6 +489,7 @@
 		BF1EE703AB59C87C5AE9F325 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				826871523A9940ACB6EE8D78 /* ContestModels.swift */,
 				2CC3D6CD46ABA05374E8B7D9 /* FoodEntry.swift */,
 				515FECDBCEB3B0D0EF07C115 /* QuickFoodPreset.swift */,
 				8884A9C2C1BCBDE44B4369DF /* RoutePoint.swift */,
@@ -657,8 +711,12 @@
 				45C7A450F26973E78A834E19 /* FoodNameLookupService.swift in Sources */,
 				AF0AB498CAB0AFC715BC97DD /* FoodPhotoAnalyzer.swift in Sources */,
 				7B042966388D460CA95F8100 /* CheerSheet.swift in Sources */,
+				7435B086C1404B749C387D3C /* OnboardingView.swift in Sources */,
 				FBC86EC691FC452DA8F37B58 /* FriendCodeShareView.swift in Sources */,
 				EBEA9520E6258982D6F6B805 /* FriendsView.swift in Sources */,
+				9DA5899B66FC4C1497432E6C /* DirectMessageView.swift in Sources */,
+				F782E9623FAD43EEAD0973D0 /* FriendProfileView.swift in Sources */,
+				4B7730877D4E4023B7D7FAB6 /* ActivityDetailView.swift in Sources */,
 				7EE33A4C95F1AEF5DF0E5D8F /* GameCenterService.swift in Sources */,
 				95B1730F89B8B26AD98E8981 /* HealthKitService.swift in Sources */,
 				C8774AA9882534AB34C68709 /* ImportView.swift in Sources */,
@@ -689,6 +747,17 @@
 				D57BDC80CF9546D1139496D4 /* WorkoutDraft.swift in Sources */,
 				3698B044ED2B6D56306B1855 /* WorkoutDraftStore.swift in Sources */,
 				B95CFB2FE50297D61C26719D /* WorkoutFavoriteStore.swift in Sources */,
+				6D10BF78A2854343AD466CBC /* WorkoutUsageStore.swift in Sources */,
+				ED919A1B6D5D4DBEA216D970 /* ContestModels.swift in Sources */,
+				2F8EF64F7D2149EEA019947B /* ContestService.swift in Sources */,
+				2877E3235FB247A6AAAB0F71 /* ContactMatchService.swift in Sources */,
+				130CEE109D1C4FAF96F4011F /* TeamService.swift in Sources */,
+				039ECCF8BEE3450BA4D7A6EE /* ContestProgressService.swift in Sources */,
+				C0F1B178F4764D0FA13EB7BE /* ContestNotificationService.swift in Sources */,
+				F8017734C969403DA0E40B86 /* ContestListView.swift in Sources */,
+				CDE50D185C0F4B7CBB791A26 /* ContestDetailView.swift in Sources */,
+				AF5D679E71C140D8A4CCB0EB /* ContestCreateSheet.swift in Sources */,
+				663C31D55F29488298A7B1A4 /* TeamManagementView.swift in Sources */,
 				F760D9F3AF65F8D7E270B4FE /* WorkoutHistoryView.swift in Sources */,
 				248D84F53A2FEF3F6F650CDD /* WorkoutRecord.swift in Sources */,
 				951EFD32B09FDE746E029C55 /* WorkoutScore.swift in Sources */,

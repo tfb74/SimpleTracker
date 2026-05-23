@@ -20,9 +20,27 @@ enum WorkoutType: String, CaseIterable, Codable, Identifiable {
     case golf
     case skating
     case skiing
+    // Leichte Aktivitäten — werden im Picker farblich abgesetzt
+    case eBike
+    case gardening
     case other
 
     var id: String { rawValue }
+
+    /// Kategorie zur visuellen Gruppierung im Picker.
+    /// `light` = entspannte Aktivität (Gehen, E-Bike, Gartenarbeit)
+    /// `standard` = klassisches Training
+    enum Category {
+        case standard
+        case light
+    }
+
+    var category: Category {
+        switch self {
+        case .walking, .eBike, .gardening: return .light
+        default: return .standard
+        }
+    }
 
     var displayName: String {
         switch self {
@@ -44,6 +62,8 @@ enum WorkoutType: String, CaseIterable, Codable, Identifiable {
         case .golf: return "Golf"
         case .skating: return lt("Skaten")
         case .skiing: return lt("Ski")
+        case .eBike: return lt("E-Bike")
+        case .gardening: return lt("Gartenarbeit")
         case .other: return lt("Sonstiges")
         }
     }
@@ -68,6 +88,8 @@ enum WorkoutType: String, CaseIterable, Codable, Identifiable {
         case .golf: return "figure.golf"
         case .skating: return "figure.skating"
         case .skiing: return "figure.skiing.downhill"
+        case .eBike: return "bicycle"
+        case .gardening: return "leaf.fill"
         case .other: return "figure.mixed.cardio"
         }
     }
@@ -92,6 +114,8 @@ enum WorkoutType: String, CaseIterable, Codable, Identifiable {
         case .golf: return .golf
         case .skating: return .skatingSports
         case .skiing: return .downhillSkiing
+        case .eBike: return .cycling
+        case .gardening: return .other
         case .other: return .other
         }
     }

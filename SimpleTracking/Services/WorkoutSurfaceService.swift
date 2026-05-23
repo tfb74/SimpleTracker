@@ -106,6 +106,19 @@ final class WorkoutSurfaceService {
         Task { await endLiveActivities(with: state) }
     }
 
+    /// Beim App-Start aufrufen: räumt verwaiste Live Activities weg, die durch
+    /// frühere Versionen mit verzögerter Dismissal-Policy auf dem Lock Screen
+    /// kleben geblieben sind, obwohl das Workout längst beendet wurde.
+    /// Nur sicher zu rufen, wenn KEIN Workout gerade aktiv ist.
+    func purgeOrphanLiveActivities() {
+        Task {
+            for activity in Activity<WorkoutActivityAttributes>.activities {
+                await activity.end(nil, dismissalPolicy: .immediate)
+            }
+            await MainActor.run { self.liveActivity = nil }
+        }
+    }
+
     func updateStatistics(
         healthKit: HealthKitService,
         settings: UserSettings,
@@ -173,9 +186,13 @@ final class WorkoutSurfaceService {
     }
 
     private func endLiveActivities(with state: WorkoutActivityAttributes.ContentState) async {
+        // WICHTIG: .immediate verwenden, sonst bleibt die Live Activity bis zu 20 Min
+        // auf dem Lock Screen sichtbar und der eingebaute Timer (Text(timerInterval:))
+        // tickt weiter hoch — Nutzer denken das Workout läuft noch, obwohl GPS und
+        // alles längst gestoppt ist.
         let content = ActivityContent(state: state, staleDate: nil)
         for activity in Activity<WorkoutActivityAttributes>.activities {
-            await activity.end(content, dismissalPolicy: .after(Date().addingTimeInterval(20 * 60)))
+            await activity.end(content, dismissalPolicy: .immediate)
         }
         liveActivity = nil
     }

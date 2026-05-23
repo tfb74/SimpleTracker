@@ -24,29 +24,29 @@ struct BarcodeEntryView: View {
                 if product == nil && !loading {
                     scannerSection
                 } else if loading {
-                    ProgressView("Lade Produktdaten…").frame(maxWidth: .infinity, maxHeight: .infinity)
+                    ProgressView(lt("Lade Produktdaten…")).frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if let p = product {
                     productForm(for: p)
                 }
             }
-            .navigationTitle("Barcode")
+            .navigationTitle(lt("Barcode"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Abbrechen") { dismiss() }
+                    Button(lt("Abbrechen")) { dismiss() }
                 }
                 if product != nil {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button("Speichern") { save() }
+                        Button(lt("Speichern")) { save() }
                     }
                 }
             }
-            .alert("Nicht gefunden", isPresented: .init(
+            .alert(lt("Nicht gefunden"), isPresented: .init(
                 get: { errorMessage != nil },
                 set: { if !$0 { errorMessage = nil } }
             ), actions: {
-                Button("Erneut scannen") { scannedCode = nil }
-                Button("Manuell") {
+                Button(lt("Erneut scannen")) { scannedCode = nil }
+                Button(lt("Manuell")) {
                     dismiss()
                     // User can tap "Manuell" in the main picker again.
                 }
@@ -66,7 +66,7 @@ struct BarcodeEntryView: View {
             BarcodeScannerRepresentable(onScan: { scannedCode = $0 })
                 .ignoresSafeArea(edges: .bottom)
                 .overlay(alignment: .top) {
-                    Text("Richte die Kamera auf den Barcode")
+                    Text(lt("Richte die Kamera auf den Barcode"))
                         .font(.footnote)
                         .padding(8)
                         .background(.ultraThinMaterial, in: Capsule())
@@ -74,9 +74,9 @@ struct BarcodeEntryView: View {
                 }
         } else {
             ContentUnavailableView(
-                "Barcode-Scan nicht verfügbar",
+                lt("Barcode-Scan nicht verfügbar"),
                 systemImage: "exclamationmark.triangle",
-                description: Text("Dein Gerät unterstützt keinen DataScanner. Nutze stattdessen die manuelle Eingabe.")
+                description: Text(lt("Dein Gerät unterstützt keinen DataScanner. Nutze stattdessen die manuelle Eingabe."))
             )
         }
     }
@@ -89,20 +89,20 @@ struct BarcodeEntryView: View {
         let carbs = p.carbsPer100g * factor
 
         return Form {
-            Section("Produkt") {
+            Section(lt("Produkt")) {
                 HStack {
                     VStack(alignment: .leading) {
                         Text(p.name).font(.headline)
                         if let b = p.brand { Text(b).font(.caption).foregroundStyle(.secondary) }
-                        Text("Barcode: \(p.barcode)").font(.caption2).foregroundStyle(.tertiary)
+                        Text(lf("Barcode: %@", p.barcode)).font(.caption2).foregroundStyle(.tertiary)
                     }
                     Spacer()
                 }
             }
 
-            Section("Zeitpunkt & Art") {
-                DatePicker("Zeit", selection: $timestamp)
-                Picker("Art", selection: $kind) {
+            Section(lt("Zeitpunkt & Art")) {
+                DatePicker(lt("Zeit"), selection: $timestamp)
+                Picker(lt("Art"), selection: $kind) {
                     ForEach(FoodKind.allCases, id: \.self) {
                         Label($0.displayName, systemImage: $0.systemImage).tag($0)
                     }
@@ -110,9 +110,9 @@ struct BarcodeEntryView: View {
                 .pickerStyle(.segmented)
             }
 
-            Section("Portion") {
+            Section(lt("Portion")) {
                 HStack {
-                    Text("Menge")
+                    Text(lt("Menge"))
                     Spacer()
                     TextField("g", value: $portionGrams, format: .number)
                         .keyboardType(.decimalPad)
@@ -123,10 +123,10 @@ struct BarcodeEntryView: View {
                 Slider(value: $portionGrams, in: 10...500, step: 5)
             }
 
-            Section("Nährwerte (berechnet)") {
-                row("Kalorien", value: String(format: "%.0f kcal", kcal), color: .orange)
-                row("Kohlenhydrate", value: String(format: "%.1f g", carbs), color: .blue)
-                row("Broteinheiten", value: String(format: "%.1f BE", carbs / 12), color: .purple)
+            Section(lt("Nährwerte (berechnet)")) {
+                row(lt("Kalorien"), value: String(format: "%.0f kcal", kcal), color: .orange)
+                row(lt("Kohlenhydrate"), value: String(format: "%.1f g", carbs), color: .blue)
+                row(lt("Broteinheiten"), value: String(format: "%.1f BE", carbs / 12), color: .purple)
             }
         }
     }
@@ -147,7 +147,7 @@ struct BarcodeEntryView: View {
         do {
             product = try await OpenFoodFactsService.lookup(barcode: code)
         } catch {
-            errorMessage = "Das Produkt mit Barcode \(code) ist nicht in Open Food Facts hinterlegt."
+            errorMessage = lf("Das Produkt mit Barcode %@ ist nicht in Open Food Facts hinterlegt.", code)
             scannedCode = nil
         }
     }

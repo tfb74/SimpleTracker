@@ -136,4 +136,18 @@ Nach Deploy:
      - `STActivity.timestamp` → **SORTABLE**
      - `STReaction.activityID` → **QUERYABLE**
      - `STReaction.timestamp` → **SORTABLE**
+     - **Contest-Schema:**
+     - `STContest.contestID` → **QUERYABLE**
+     - `STContest.inviteCode` → **QUERYABLE**
+     - `STContest.ownerCode` → **QUERYABLE**
+     - `STContestParticipant.contestID` → **QUERYABLE**
+     - `STContestParticipant.userCode` → **QUERYABLE**
+     - `STContestProgress.contestID` → **QUERYABLE**
+     - `STContestProgress.userCode` → **QUERYABLE**
+     - `STContestProgress.progressDate` → **SORTABLE**
+     - `STTeam.teamID` → **QUERYABLE**
+     - `STTeam.inviteCode` → **QUERYABLE**
+     - `STTeam.parentTeamID` → **QUERYABLE**
+     - `STTeamMembership.teamID` → **QUERYABLE**
+     - `STTeamMembership.userCode` → **QUERYABLE**
 4. Vor App-Store-Submission: **Deploy Schema** von Development zu Production

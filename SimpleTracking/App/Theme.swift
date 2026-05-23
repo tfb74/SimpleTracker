@@ -122,11 +122,25 @@ struct UserAvatarView: View {
     let preset: ProfileAvatarPreset
     let fallbackImage: UIImage?
 
+    /// Beim Init optional ein Contact-Lookup triggern. Wenn true, wird
+    /// ContactMatchService nach einem passenden Kontakt-Photo zum `name`
+    /// gefragt; Match überschreibt nichts, sondern ergänzt nur den Fall
+    /// dass `photoData` und `fallbackImage` beide nil sind.
+    var tryContactPhoto: Bool = false
+
+    @State private var contactMatch = ContactMatchService.shared
+
     private var resolvedImage: UIImage? {
         if let photoData, let image = UIImage(data: photoData) {
             return image
         }
-        return fallbackImage
+        if let fallbackImage {
+            return fallbackImage
+        }
+        if tryContactPhoto, !name.isEmpty {
+            return contactMatch.photo(for: name)
+        }
+        return nil
     }
 
     private var initials: String {

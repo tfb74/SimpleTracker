@@ -15,7 +15,7 @@ struct ImportView: View {
                     .foregroundStyle(Color.accentColor)
 
                 VStack(spacing: 10) {
-                    Text("Apple Health importieren")
+                    Text(lt("Apple Health importieren"))
                         .font(.title2.bold())
                         .multilineTextAlignment(.center)
 
@@ -38,7 +38,7 @@ struct ImportView: View {
                         if isImporting {
                             HStack(spacing: 8) {
                                 ProgressView().tint(.white)
-                                Text("Importiere…")
+                                Text(lt("Importiere…"))
                             }
                         } else {
                             Text(importDone ? "Erneut importieren" : "Jetzt importieren")
@@ -56,7 +56,7 @@ struct ImportView: View {
 
                 Spacer()
             }
-            .navigationTitle("Importieren")
+            .navigationTitle(lt("Importieren"))
             .animation(.spring, value: importDone)
         }
     }

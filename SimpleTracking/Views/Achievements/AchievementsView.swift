@@ -27,13 +27,13 @@ struct AchievementsView: View {
                 if settings.gameCenterSyncEnabled && gameCenter.isAuthenticated {
                     HStack(spacing: 12) {
                         Button { gameCenter.showLeaderboards() } label: {
-                            Label("Bestenlisten", systemImage: "list.number")
+                            Label(lt("Bestenlisten"), systemImage: "list.number")
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
 
                         Button { gameCenter.showAchievements() } label: {
-                            Label("Game Center", systemImage: "gamecontroller.fill")
+                            Label(lt("Game Center"), systemImage: "gamecontroller.fill")
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
@@ -42,7 +42,7 @@ struct AchievementsView: View {
                     .padding(.bottom)
                 }
             }
-            .navigationTitle("Erfolge")
+            .navigationTitle(lt("Erfolge"))
             .task {
                 gameCenter.evaluateAchievements(for: healthKit.workouts,
                                                 todaySteps: healthKit.todaySteps,
@@ -71,9 +71,9 @@ struct AchievementsView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(settings.gameCenterSyncEnabled && gameCenter.isAuthenticated
                      ? gameCenter.playerName
-                     : "Erfolge")
+                     : lt("Erfolge"))
                     .font(.headline)
-                Text("\(gameCenter.unlockedAchievements.count) / \(Achievement.allCases.count) freigeschaltet")
+                Text(lf("%d / %d freigeschaltet", gameCenter.unlockedAchievements.count, Achievement.allCases.count))
                     .font(.caption).foregroundStyle(.secondary)
             }
             Spacer()

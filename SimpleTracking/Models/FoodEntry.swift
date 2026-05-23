@@ -51,6 +51,11 @@ struct FoodEntry: Identifiable, Codable, Hashable {
     /// Optional + Default nil, damit alte persistierte Einträge weiterhin dekodieren.
     var healthKitSampleIDs: [String]? = nil
 
+    /// True wenn dieser Eintrag mit Freunden geteilt wurde (Activity in Public
+    /// CloudKit DB). Default false — Privatsphäre ist Standard, Sharing ist
+    /// expliziter Opt-In pro Eintrag.
+    var sharedWithFriends: Bool? = nil
+
     /// Broteinheiten — 1 BE = 12 g Kohlenhydrate
     var breadUnits: Double { resolvedNutrition.breadUnits }
     var resolvedCalories: Double { resolvedNutrition.calories }
@@ -82,7 +87,8 @@ struct FoodEntry: Identifiable, Codable, Hashable {
          carbsGrams: Double,
          source: FoodSource,
          barcode: String? = nil,
-         healthKitSampleIDs: [String]? = nil) {
+         healthKitSampleIDs: [String]? = nil,
+         sharedWithFriends: Bool? = nil) {
         self.id = id
         self.timestamp = timestamp
         self.name = name
@@ -94,6 +100,7 @@ struct FoodEntry: Identifiable, Codable, Hashable {
         self.source = source
         self.barcode = barcode
         self.healthKitSampleIDs = healthKitSampleIDs
+        self.sharedWithFriends = sharedWithFriends
     }
 
     static func carbs(fromBreadUnits breadUnits: Double) -> Double {

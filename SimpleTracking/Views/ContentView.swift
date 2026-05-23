@@ -164,14 +164,14 @@ private struct WeeklyInterstitialPromptSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack {
-                Label("Gesponsert", systemImage: "megaphone.fill")
+                Label(lt("Gesponsert"), systemImage: "megaphone.fill")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Spacer()
             }
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("Gesponserter Hinweis")
+                Text(lt("Gesponserter Hinweis"))
                     .font(.title3.weight(.bold))
                     .foregroundStyle(.primary)
 
@@ -179,21 +179,21 @@ private struct WeeklyInterstitialPromptSheet: View {
                     .font(.body)
                     .foregroundStyle(.secondary)
 
-                Text("Diese Anzeige unterstützt die Weiterentwicklung von SimpleTracking.")
+                Text(lt("Diese Anzeige unterstützt die Weiterentwicklung von SimpleTracking."))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
 
             VStack(spacing: 10) {
                 Button(action: onContinue) {
-                    Text("Jetzt ansehen")
+                    Text(lt("Jetzt ansehen"))
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
 
                 if prompt.canSkip {
                     Button(action: onSkip) {
-                        Text("Später")
+                        Text(lt("Später"))
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.bordered)
@@ -205,9 +205,9 @@ private struct WeeklyInterstitialPromptSheet: View {
 
     private var descriptionText: String {
         if prompt.canSkip {
-            return "Einmal pro Woche zeigen wir dir einen gesponserten Vollbild-Hinweis. Du kannst ihn diese Woche noch \(prompt.skipsRemaining)x überspringen."
+            return lf("Einmal pro Woche zeigen wir dir einen gesponserten Vollbild-Hinweis. Du kannst ihn diese Woche noch %dx überspringen.", prompt.skipsRemaining)
         }
-        return "Diese Wochenanzeige ist jetzt fällig. Nach dem Schließen bleibt für diese Woche wieder Ruhe."
+        return lt("Diese Wochenanzeige ist jetzt fällig. Nach dem Schließen bleibt für diese Woche wieder Ruhe.")
     }
 }
 
@@ -227,15 +227,15 @@ private struct DebugInterstitialPreviewView: View {
                 Spacer()
 
                 VStack(alignment: .leading, spacing: 14) {
-                    Text("Gesponsert")
+                    Text(lt("Gesponsert"))
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.white.opacity(0.8))
 
-                    Text("Fullscreen-Ad Vorschau")
+                    Text(lt("Fullscreen-Ad Vorschau"))
                         .font(.largeTitle.weight(.bold))
                         .foregroundStyle(.white)
 
-                    Text("Im Simulator erzwingen wir hier eine sichtbare Vorschau, damit du die Wochenlogik sauber testen kannst.")
+                    Text(lt("Im Simulator erzwingen wir hier eine sichtbare Vorschau, damit du die Wochenlogik sauber testen kannst."))
                         .font(.body)
                         .foregroundStyle(.white.opacity(0.92))
                 }
@@ -248,7 +248,7 @@ private struct DebugInterstitialPreviewView: View {
                 Spacer()
 
                 Button(action: onDismiss) {
-                    Text("Anzeige schließen")
+                    Text(lt("Anzeige schließen"))
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)

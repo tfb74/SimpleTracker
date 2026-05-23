@@ -41,7 +41,7 @@ struct DashboardView: View {
                 tint: .blue
             ),
             AppHeaderMetric(
-                title: "Bester Score",
+                title: lt("Bester Score"),
                 value: bestScore.map(String.init) ?? "--",
                 systemImage: "star.fill",
                 tint: .yellow
@@ -99,7 +99,7 @@ struct DashboardView: View {
             HStack(spacing: 10) {
                 balanceTile(title: lt("Verbraucht"), value: burned,   color: .orange, icon: "flame.fill")
                 balanceTile(title: lt("Aufgenommen"), value: consumed, color: .red,    icon: "fork.knife")
-                balanceTile(title: "BE",          value: food.be,  color: .purple, icon: "square.grid.2x2.fill", isBE: true)
+                balanceTile(title: lt("BE"),          value: food.be,  color: .purple, icon: "square.grid.2x2.fill", isBE: true)
             }
 
             GeometryReader { geo in

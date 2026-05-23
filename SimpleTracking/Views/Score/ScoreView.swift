@@ -28,12 +28,12 @@ struct ScoreBadge: View {
                 VStack(spacing: 0) {
                     Text("\(score.displayScore)")
                         .font(.title3.bold().monospacedDigit())
-                    Text("Pkt.")
+                    Text(lt("Pkt."))
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
             }
-            Text("Bewertung \(score.grade.rawValue)")
+            Text(lf("Bewertung %@", score.grade.rawValue))
                 .font(.caption.bold())
                 .foregroundStyle(gradeColor)
         }
@@ -83,9 +83,9 @@ struct ScoreBreakdownView: View {
                     ScoreBadge(score: score)
                     Spacer()
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text("Fitness-Score")
+                        Text(lt("Fitness-Score"))
                             .font(.headline)
-                        Text("Berechnung anzeigen")
+                        Text(lt("Berechnung anzeigen"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -101,32 +101,32 @@ struct ScoreBreakdownView: View {
 
             if expanded {
                 VStack(spacing: 8) {
-                    breakdownRow("Kalorien-Punkte",
+                    breakdownRow(lt("Kalorien-Punkte"),
                                  value: score.breakdown.caloriePoints,
                                  icon: "flame.fill", color: .orange)
-                    breakdownRow("Distanz-Punkte (\(score.breakdown.bmiLabel), Faktor ×\(String(format: "%.0f", score.breakdown.distanceFactor)))",
+                    breakdownRow(lf("Distanz-Punkte (%@, Faktor ×%.0f)", score.breakdown.bmiLabel, score.breakdown.distanceFactor),
                                  value: score.breakdown.distancePoints,
                                  icon: "map.fill", color: .blue)
-                    breakdownRow("Dauer-Punkte",
+                    breakdownRow(lt("Dauer-Punkte"),
                                  value: score.breakdown.durationPoints,
                                  icon: "timer", color: .purple)
 
                     Divider()
 
-                    factorRow("Alters-Faktor",
+                    factorRow(lt("Alters-Faktor"),
                               value: score.breakdown.ageFactor,
                               icon: "person.fill")
-                    factorRow("Intensitäts-Bonus",
+                    factorRow(lt("Intensitäts-Bonus"),
                               value: score.breakdown.intensityBonus,
                               icon: "bolt.fill")
 
                     Divider()
 
                     HStack {
-                        Text("Gesamt-Score")
+                        Text(lt("Gesamt-Score"))
                             .font(.subheadline.bold())
                         Spacer()
-                        Text("\(score.displayScore) Punkte")
+                        Text(lf("%d Punkte", score.displayScore))
                             .font(.subheadline.bold().monospacedDigit())
                     }
                 }

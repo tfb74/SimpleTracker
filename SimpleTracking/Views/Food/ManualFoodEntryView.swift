@@ -71,6 +71,9 @@ struct ManualFoodEntryView: View {
     @State private var showAddPreset = false
     @State private var presetBeingDeleted: QuickFoodPreset?
 
+    /// Opt-In: Mahlzeit mit Friends teilen. Default OFF — Privacy zuerst.
+    @State private var shareWithFriends: Bool = false
+
     init(defaultDate: Date, draft: RecognizedFoodItem? = nil, onComplete: @escaping () -> Void) {
         self.defaultDate = defaultDate
         self.onComplete = onComplete
@@ -126,10 +129,10 @@ struct ManualFoodEntryView: View {
                         }
                     } label: {
                         HStack {
-                            Label("Quick-Auswahl", systemImage: "bolt.fill")
+                            Label(lt("Quick-Auswahl"), systemImage: "bolt.fill")
                                 .foregroundStyle(.primary)
                             Spacer()
-                            Text(showQuickSelect ? "schließen" : "öffnen")
+                            Text(showQuickSelect ? lt("schließen") : lt("öffnen"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Image(systemName: "chevron.down")
@@ -141,9 +144,9 @@ struct ManualFoodEntryView: View {
                     }
 
                     if showQuickSelect {
-                        Picker("Kategorie", selection: $quickCategory) {
-                            Label("Getränke",  systemImage: "cup.and.saucer.fill").tag(FoodKind.drink)
-                            Label("Snacks",    systemImage: "fork.knife").tag(FoodKind.food)
+                        Picker(lt("Kategorie"), selection: $quickCategory) {
+                            Label(lt("Getränke"),  systemImage: "cup.and.saucer.fill").tag(FoodKind.drink)
+                            Label(lt("Snacks"),    systemImage: "fork.knife").tag(FoodKind.food)
                         }
                         .pickerStyle(.segmented)
 
@@ -164,7 +167,7 @@ struct ManualFoodEntryView: View {
                                 VStack(spacing: 4) {
                                     Image(systemName: "plus.circle.fill")
                                         .font(.title2)
-                                    Text("Eigenes")
+                                    Text(lt("Eigenes"))
                                         .font(.caption2.weight(.semibold))
                                 }
                                 .frame(maxWidth: .infinity, minHeight: 72)
@@ -178,14 +181,14 @@ struct ManualFoodEntryView: View {
                     }
                 } footer: {
                     if showQuickSelect {
-                        Text("Tippen = sofort hinzufügen. Lang drücken = eigenen Preset löschen. Eingebaute Presets können nicht gelöscht werden.")
+                        Text(lt("Tippen = sofort hinzufügen. Lang drücken = eigenen Preset löschen. Eingebaute Presets können nicht gelöscht werden."))
                     }
                 }
 
                 // MARK: Manual entry
-                Section("Zeitpunkt & Art") {
-                    DatePicker("Zeit", selection: $timestamp)
-                    Picker("Art", selection: $kind) {
+                Section(lt("Zeitpunkt & Art")) {
+                    DatePicker(lt("Zeit"), selection: $timestamp)
+                    Picker(lt("Art"), selection: $kind) {
                         ForEach(FoodKind.allCases, id: \.self) {
                             Label($0.displayName, systemImage: $0.systemImage).tag($0)
                         }
@@ -193,15 +196,15 @@ struct ManualFoodEntryView: View {
                     .pickerStyle(.segmented)
                 }
 
-                Section("Name") {
-                    TextField("z. B. Spaghetti oder Gänsebraten", text: $name)
+                Section(lt("Name")) {
+                    TextField(lt("z. B. Spaghetti oder Gänsebraten"), text: $name)
                         .textInputAutocapitalization(.sentences)
                         .onChange(of: name) { _, new in triggerNameLookup(new) }
 
                     if isLoadingSuggestion {
                         HStack(spacing: 8) {
                             ProgressView().scaleEffect(0.75)
-                            Text("Nährwerte werden gesucht…")
+                            Text(lt("Nährwerte werden gesucht…"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -213,7 +216,7 @@ struct ManualFoodEntryView: View {
                                 Image(systemName: "sparkles")
                                     .font(.caption)
                                     .foregroundStyle(.purple)
-                                Text("Vorschlag für typische Portion (\(s.portionGrams) g):")
+                                Text(lf("Vorschlag für typische Portion (%d g):", s.portionGrams))
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -223,7 +226,7 @@ struct ManualFoodEntryView: View {
                                 let be = Double(s.carbsGrams) / 12.0
                                 suggestionPill(String(format: "%.1f BE", be), color: .purple)
                                 Spacer()
-                                Button("Übernehmen") { applySuggestion(s) }
+                                Button(lt("Übernehmen")) { applySuggestion(s) }
                                     .font(.caption.weight(.semibold))
                                     .buttonStyle(.borderedProminent)
                                     .controlSize(.mini)
@@ -235,7 +238,7 @@ struct ManualFoodEntryView: View {
 
                 Section {
                     HStack(spacing: 0) {
-                        Picker("Metrik", selection: $metric) {
+                        Picker(lt("Metrik"), selection: $metric) {
                             ForEach(Metric.allCases) { m in
                                 Text(m.rawValue).tag(m)
                             }
@@ -244,7 +247,7 @@ struct ManualFoodEntryView: View {
                         .frame(maxWidth: .infinity)
                         .clipped()
 
-                        Picker("Wert", selection: amountBinding) {
+                        Picker(lt("Wert"), selection: amountBinding) {
                             ForEach(1...999, id: \.self) { n in
                                 Text("\(n)").tag(n)
                             }
@@ -257,7 +260,7 @@ struct ManualFoodEntryView: View {
                     .listRowInsets(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
 
                     HStack {
-                        Text("Auswahl")
+                        Text(lt("Auswahl"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         Spacer()
@@ -276,42 +279,55 @@ struct ManualFoodEntryView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Abgeleitete Werte")
+                        Text(lt("Abgeleitete Werte"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
 
                         HStack(spacing: 10) {
                             derivedMetricPill(
-                                title: "Kalorien",
+                                title: lt("Kalorien"),
                                 value: caloriePreviewLabel,
                                 color: .orange
                             )
                             derivedMetricPill(
-                                title: "Kohlenhydrate",
+                                title: lt("Kohlenhydrate"),
                                 value: String(format: "%.0f g", nutritionPreview.carbsGrams),
                                 color: .blue
                             )
                             derivedMetricPill(
-                                title: "BE",
+                                title: lt("BE"),
                                 value: String(format: "%.1f BE", nutritionPreview.breadUnits),
                                 color: .purple
                             )
                         }
                     }
                 } header: {
-                    Text("Wert")
+                    Text(lt("Wert"))
                 } footer: {
-                    Text("Wähle links, ob du Kalorien, Kohlenhydrate oder Broteinheiten eingibst. 1 BE = 12 g Kohlenhydrate. Wenn KH oder BE vorliegen, werden Kalorien mit 4 kcal pro g KH geschätzt.")
+                    Text(lt("Wähle links, ob du Kalorien, Kohlenhydrate oder Broteinheiten eingibst. 1 BE = 12 g Kohlenhydrate. Wenn KH oder BE vorliegen, werden Kalorien mit 4 kcal pro g KH geschätzt."))
+                }
+
+                Section {
+                    Toggle(isOn: $shareWithFriends) {
+                        Label {
+                            Text(lt("Mit Freunden teilen"))
+                        } icon: {
+                            Image(systemName: "person.2.fill")
+                                .foregroundStyle(.orange)
+                        }
+                    }
+                } footer: {
+                    Text(lt("Optional: Diese Mahlzeit erscheint im Friends-Feed deiner verbundenen Freunde. Standardmäßig bleiben Mahlzeiten privat."))
                 }
             }
-            .navigationTitle("Manuell")
+            .navigationTitle(lt("Manuell"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Abbrechen") { dismiss() }
+                    Button(lt("Abbrechen")) { dismiss() }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Speichern") { save() }
+                    Button(lt("Speichern")) { save() }
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
@@ -324,11 +340,11 @@ struct ManualFoodEntryView: View {
                                      set: { if !$0 { presetBeingDeleted = nil } }),
                 titleVisibility: .visible
             ) {
-                Button("Löschen", role: .destructive) {
+                Button(lt("Löschen"), role: .destructive) {
                     if let p = presetBeingDeleted { quickStore.remove(p) }
                     presetBeingDeleted = nil
                 }
-                Button("Abbrechen", role: .cancel) { presetBeingDeleted = nil }
+                Button(lt("Abbrechen"), role: .cancel) { presetBeingDeleted = nil }
             }
         }
     }
@@ -388,7 +404,8 @@ struct ManualFoodEntryView: View {
             portionMilliliters: nil,
             calories: calories,
             carbsGrams: carbs,
-            source: .manual
+            source: .manual,
+            sharedWithFriends: shareWithFriends ? true : nil
         )
         store.add(entry)
         dismiss()
@@ -516,12 +533,12 @@ private struct AddQuickPresetView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Allgemein") {
-                    TextField("Name", text: $name)
+                Section(lt("Allgemein")) {
+                    TextField(lt("Name"), text: $name)
                         .textInputAutocapitalization(.sentences)
-                    Picker("Art", selection: $kind) {
-                        Label("Essen", systemImage: "fork.knife").tag(FoodKind.food)
-                        Label("Getränk", systemImage: "cup.and.saucer.fill").tag(FoodKind.drink)
+                    Picker(lt("Art"), selection: $kind) {
+                        Label(lt("Essen"), systemImage: "fork.knife").tag(FoodKind.food)
+                        Label(lt("Getränk"), systemImage: "cup.and.saucer.fill").tag(FoodKind.drink)
                     }
                     .pickerStyle(.segmented)
                     .onChange(of: kind) { _, new in
@@ -531,10 +548,10 @@ private struct AddQuickPresetView: View {
                             : QuickFoodPreset.customSymbolChoicesFood
                         if !choices.contains(symbol) { symbol = choices.first ?? "fork.knife" }
                     }
-                    TextField("Portion (z. B. 250 ml oder 60 g)", text: $portion)
+                    TextField(lt("Portion (z. B. 250 ml oder 60 g)"), text: $portion)
                 }
 
-                Section("Symbol") {
+                Section(lt("Symbol")) {
                     let choices = kind == .drink
                         ? QuickFoodPreset.customSymbolChoicesDrink
                         : QuickFoodPreset.customSymbolChoicesFood
@@ -551,22 +568,22 @@ private struct AddQuickPresetView: View {
                     }
                 }
 
-                Section("Nährwerte pro Portion") {
-                    Stepper("Kalorien: \(kcal) kcal", value: $kcal, in: 0...2000, step: 5)
-                    Stepper("Kohlenhydrate: \(carbs) g", value: $carbs, in: 0...300, step: 1)
+                Section(lt("Nährwerte pro Portion")) {
+                    Stepper(lf("Kalorien: %d kcal", kcal), value: $kcal, in: 0...2000, step: 5)
+                    Stepper(lf("Kohlenhydrate: %d g", carbs), value: $carbs, in: 0...300, step: 1)
                     Text(String(format: "≈ %.1f BE", Double(carbs) / 12.0))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("Preset hinzufügen")
+            .navigationTitle(lt("Preset hinzufügen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Abbrechen") { dismiss() }
+                    Button(lt("Abbrechen")) { dismiss() }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Hinzufügen") {
+                    Button(lt("Hinzufügen")) {
                         let p = QuickFoodPreset(
                             name: name.trimmingCharacters(in: .whitespaces),
                             systemImage: symbol,

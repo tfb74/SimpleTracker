@@ -8,6 +8,9 @@ struct FriendsView: View {
     @State private var showAddFriend = false
     @State private var showShareCode = false
 
+    @State private var showNamePrompt = false
+    @State private var nameDraft = ""
+
     var body: some View {
         NavigationStack {
             List {
@@ -18,11 +21,14 @@ struct FriendsView: View {
                 if !cloudKit.feed.isEmpty {
                     feedSection
                 }
+                if cloudKit.isAvailable && !inboxFriends.isEmpty {
+                    inboxSection
+                }
                 if cloudKit.isAvailable {
                     friendsSection
                 }
             }
-            .navigationTitle("Freunde & Feed")
+            .navigationTitle(lt("Freunde & Feed"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if cloudKit.isAvailable {
@@ -51,7 +57,16 @@ struct FriendsView: View {
             }
             .task {
                 cloudKit.markAllRead()
+                await cloudKit.refreshFriendProfiles()  // aktualisiert Namen/Avatare
                 await cloudKit.refreshFeed()
+                await cloudKit.refreshMessages()
+                // Contact-Photos vorladen — bei erster Nutzung wird hier
+                // die Berechtigung angefragt. Wenn der User ablehnt,
+                // fallen wir auf Avatar-Preset zurück.
+                await ContactMatchService.shared.requestAccessIfNeeded()
+                await ContactMatchService.shared.preloadPhotos(
+                    for: cloudKit.friends.map(\.displayName)
+                )
             }
         }
     }
@@ -70,9 +85,22 @@ struct FriendsView: View {
                 )
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(displayName)
-                        .font(.headline)
-                    Text("Dein Code")
+                    Button {
+                        nameDraft = settings.profileName
+                        showNamePrompt = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text(displayName)
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                            Image(systemName: "pencil.circle.fill")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+
+                    Text(lt("Dein Code"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
@@ -102,18 +130,95 @@ struct FriendsView: View {
             }
             .padding(.vertical, 4)
         } header: {
-            Text("Mein Profil")
+            Text(lt("Mein Profil"))
         } footer: {
-            Text("Teile deinen Code mit Freunden, damit sie dich hinzufügen können.")
+            Text(lt("Teile deinen Code mit Freunden, damit sie dich hinzufügen können."))
+        }
+        .alert(lt("Wie sollen wir dich nennen?"), isPresented: $showNamePrompt) {
+            TextField(lt("Dein Name"), text: $nameDraft)
+                .textInputAutocapitalization(.words)
+            Button(lt("Speichern")) {
+                let trimmed = nameDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !trimmed.isEmpty else { return }
+                settings.profileName = String(trimmed.prefix(40))
+                Task { await cloudKit.republishProfile() }
+            }
+            Button(lt("Abbrechen"), role: .cancel) { }
+        } message: {
+            Text(lt("Wir nutzen den Namen nur in deinem Friends-Feed und in Contests."))
         }
     }
 
     // MARK: - Activity Feed
 
     private var feedSection: some View {
-        Section("Aktivitäten") {
+        Section(lt("Aktivitäten")) {
             ForEach(cloudKit.feed.prefix(20)) { activity in
-                FeedRowView(activity: activity)
+                NavigationLink {
+                    ActivityDetailView(activity: activity)
+                } label: {
+                    FeedRowView(activity: activity)
+                }
+            }
+        }
+    }
+
+    // MARK: - Inbox (Direkt-Nachrichten)
+
+    /// Friends mit denen es eine bestehende Konversation gibt — sortiert
+    /// nach letzter Nachricht, ungelesene zuerst.
+    private var inboxFriends: [(friend: FriendProfile, last: DirectMessage, unread: Int)] {
+        cloudKit.friends.compactMap { f -> (FriendProfile, DirectMessage, Int)? in
+            let msgs = cloudKit.conversation(with: f.code)
+            guard let last = msgs.last else { return nil }
+            let unread = msgs.filter { $0.toCode == cloudKit.myFriendCode && $0.readAt == nil }.count
+            return (f, last, unread)
+        }
+        .sorted { lhs, rhs in
+            if (lhs.2 > 0) != (rhs.2 > 0) { return lhs.2 > rhs.2 }
+            return lhs.1.timestamp > rhs.1.timestamp
+        }
+    }
+
+    private var inboxSection: some View {
+        Section(lt("Nachrichten")) {
+            ForEach(inboxFriends.prefix(10), id: \.friend.id) { item in
+                NavigationLink {
+                    DirectMessageView(peer: item.friend)
+                } label: {
+                    HStack(spacing: 10) {
+                        UserAvatarView(
+                            size: 34,
+                            name: item.friend.displayName,
+                            photoData: nil,
+                            preset: item.friend.avatarPresetEnum,
+                            fallbackImage: nil,
+                            tryContactPhoto: true
+                        )
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            HStack {
+                                Text(item.friend.presentableName)
+                                    .font(.subheadline.weight(.semibold))
+                                if item.unread > 0 {
+                                    Text("\(item.unread)")
+                                        .font(.caption2.weight(.bold))
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 6).padding(.vertical, 1)
+                                        .background(Color.red, in: Capsule())
+                                }
+                            }
+                            Text(item.last.text)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
+                        Spacer()
+                        Text(item.last.timestamp.relativeShort)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
         }
     }
@@ -129,9 +234,9 @@ struct FriendsView: View {
                         Image(systemName: "person.2.slash")
                             .font(.largeTitle)
                             .foregroundStyle(.secondary)
-                        Text("Noch keine Freunde")
+                        Text(lt("Noch keine Freunde"))
                             .foregroundStyle(.secondary)
-                        Button("Freund hinzufügen") { showAddFriend = true }
+                        Button(lt("Freund hinzufügen")) { showAddFriend = true }
                             .buttonStyle(.borderedProminent)
                     }
                     .padding(.vertical, 20)
@@ -140,7 +245,11 @@ struct FriendsView: View {
                 .listRowBackground(Color.clear)
             } else {
                 ForEach(cloudKit.friends) { friend in
-                    FriendRowView(friend: friend)
+                    NavigationLink {
+                        FriendProfileView(friend: friend)
+                    } label: {
+                        FriendRowView(friend: friend)
+                    }
                 }
                 .onDelete { offsets in
                     for index in offsets {
@@ -149,23 +258,25 @@ struct FriendsView: View {
                 }
             }
         } header: {
-            Text("Freunde (\(cloudKit.friends.count))")
+            Text(lf("Freunde (%d)", cloudKit.friends.count))
         }
     }
 
-    // MARK: - Coming Soon Banner
+    // MARK: - iCloud-nicht-verfügbar Hinweis
 
+    /// Wird angezeigt, wenn der Nutzer nicht in iCloud eingeloggt ist oder
+    /// CloudKit aus anderem Grund nicht erreichbar ist.
     private var comingSoonBanner: some View {
         Section {
             VStack(spacing: 14) {
-                Image(systemName: "person.2.wave.2.fill")
+                Image(systemName: "icloud.slash")
                     .font(.system(size: 40))
-                    .foregroundStyle(.blue.gradient)
+                    .foregroundStyle(.orange.gradient)
 
                 VStack(spacing: 6) {
-                    Text("Community – bald verfügbar")
+                    Text(lt("iCloud nicht verfügbar"))
                         .font(.headline)
-                    Text("Verbinde dich mit Freunden, teile Workouts und verfolge Achievements gemeinsam. Dein persönlicher Code ist schon bereit.")
+                    Text(lt("Melde dich in den iOS-Einstellungen mit deiner Apple ID an, um Freunde hinzuzufügen und Aktivitäten zu teilen. Dein persönlicher Code ist trotzdem schon bereit."))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -208,7 +319,7 @@ private struct FeedRowView: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 4) {
-                        Text(activity.displayName)
+                        Text(activity.presentableName)
                             .font(.subheadline.weight(.semibold))
                         if !activity.isRead {
                             Circle()
@@ -263,6 +374,8 @@ private struct FeedRowView: View {
         switch activity.eventType {
         case .achievement:
             return "trophy.fill"
+        case .meal:
+            return "fork.knife"
         case .workout:
             return activity.workoutType?.systemImage ?? "figure.run"
         }
@@ -271,6 +384,7 @@ private struct FeedRowView: View {
     private var iconColor: Color {
         switch activity.eventType {
         case .achievement: return .yellow
+        case .meal:        return .orange
         case .workout:     return .blue
         }
     }
@@ -283,25 +397,21 @@ private struct FriendRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            ZStack {
-                LinearGradient(
-                    colors: (ProfileAvatarPreset(rawValue: friend.avatarPreset) ?? .person).gradientColors,
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                Image(systemName: (ProfileAvatarPreset(rawValue: friend.avatarPreset) ?? .person).systemImage)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
-            .frame(width: 38, height: 38)
-            .clipShape(Circle())
+            UserAvatarView(
+                size: 38,
+                name: friend.displayName,
+                photoData: nil,
+                preset: friend.avatarPresetEnum,
+                fallbackImage: nil,
+                tryContactPhoto: true
+            )
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(friend.displayName)
+                Text(friend.presentableName)
                     .font(.subheadline.weight(.semibold))
                 Text(friend.code)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
                     .fontDesign(.monospaced)
             }
 
@@ -323,6 +433,11 @@ struct AddFriendSheet: View {
     @State private var isAdding  = false
     @State private var errorMsg: String? = nil
 
+    // Reciprocal-Share-Rückfrage nach erfolgreichem Hinzufügen
+    @State private var pendingReciprocalCode: String? = nil
+    @State private var pendingReciprocalName: String = ""
+    @State private var showReciprocalPrompt = false
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
@@ -332,9 +447,9 @@ struct AddFriendSheet: View {
                     .padding(.top, 16)
 
                 VStack(spacing: 6) {
-                    Text("Freund hinzufügen")
+                    Text(lt("Freund hinzufügen"))
                         .font(.title2.weight(.bold))
-                    Text("Gib den 7-stelligen Code deines Freundes ein.\nBeispiel: ABC-123")
+                    Text(lt("Gib den 7-stelligen Code deines Freundes ein.\nBeispiel: ABC-123"))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -373,7 +488,7 @@ struct AddFriendSheet: View {
                         if isAdding {
                             ProgressView()
                         } else {
-                            Text("Hinzufügen")
+                            Text(lt("Hinzufügen"))
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -387,7 +502,7 @@ struct AddFriendSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Abbrechen") { dismiss() }
+                    Button(lt("Abbrechen")) { dismiss() }
                 }
             }
         }
@@ -397,6 +512,24 @@ struct AddFriendSheet: View {
             if let prefilledCode, code.isEmpty {
                 code = normalizeIncomingCode(prefilledCode)
             }
+        }
+        .alert(lt("Status auch teilen?"), isPresented: $showReciprocalPrompt) {
+            Button(lt("Ja, auch teilen")) {
+                if let target = pendingReciprocalCode {
+                    Task {
+                        try? await cloudKit.offerReciprocalShare(toCode: target)
+                        dismiss()
+                    }
+                } else {
+                    dismiss()
+                }
+            }
+            Button(lt("Nein, nur folgen"), role: .cancel) {
+                dismiss()
+            }
+        } message: {
+            Text(lf("Möchtest du deine Aktivitäten auch mit %@ teilen? Dann sieht %@ dich ebenfalls im Friends-Feed.",
+                    pendingReciprocalName, pendingReciprocalName))
         }
     }
 
@@ -411,7 +544,16 @@ struct AddFriendSheet: View {
         errorMsg = nil
         do {
             try await cloudKit.addFriend(code: code)
-            dismiss()
+            // Nach erfolgreichem Add: zugehörigen Friend aus der frisch
+            // aktualisierten Liste finden und Reciprocal-Share-Dialog anzeigen.
+            let normalized = code.uppercased()
+            if let added = cloudKit.friends.first(where: { $0.code == normalized }) {
+                pendingReciprocalCode = added.code
+                pendingReciprocalName = added.displayName
+                showReciprocalPrompt  = true
+            } else {
+                dismiss()
+            }
         } catch {
             errorMsg = error.localizedDescription
         }
@@ -421,10 +563,15 @@ struct AddFriendSheet: View {
 
 // MARK: - Date Helper
 
-private extension Date {
+/// Public extension — wird auch in FriendProfileView, ActivityDetailView,
+/// DirectMessageView genutzt. Vorher private auf FriendsView.swift, jetzt
+/// hier weil das logisch zum Friends-Modul gehört aber nicht mehr file-scoped.
+extension Date {
     var relativeShort: String {
         let diff = Date().timeIntervalSince(self)
-        if diff < 3_600 {
+        if diff < 60 {
+            return "jetzt"
+        } else if diff < 3_600 {
             return "\(Int(diff / 60))m"
         } else if diff < 86_400 {
             return "\(Int(diff / 3_600))h"

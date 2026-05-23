@@ -14,19 +14,19 @@ struct AddFoodSheet: View {
         NavigationStack {
             VStack(spacing: 14) {
                 methodButton(.manual,
-                             title: "Manuell eingeben",
-                             subtitle: "Name, Menge, Kalorien und Kohlenhydrate selbst angeben.",
+                             title: lt("Manuell eingeben"),
+                             subtitle: lt("Name, Menge, Kalorien und Kohlenhydrate selbst angeben."),
                              icon: "square.and.pencil",
                              color: .blue)
 
                 methodButton(.barcode,
-                             title: "Barcode scannen",
-                             subtitle: "Verpackte Lebensmittel — Nährwerte aus Open Food Facts.",
+                             title: lt("Barcode scannen"),
+                             subtitle: lt("Verpackte Lebensmittel — Nährwerte aus Open Food Facts."),
                              icon: "barcode.viewfinder",
                              color: .green)
 
                 methodButton(.photo,
-                             title: "Foto analysieren",
+                             title: lt("Foto analysieren"),
                              subtitle: FoodPhotoAnalyzer.isLLMAvailable
                                  ? "Apple Intelligence erkennt Speisen und schätzt Nährwerte."
                                  : "Ohne Apple Intelligence nur grobe Schätzung über Bildlabels.",
@@ -35,11 +35,11 @@ struct AddFoodSheet: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Eintrag hinzufügen")
+            .navigationTitle(lt("Eintrag hinzufügen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Abbrechen") { dismiss() }
+                    Button(lt("Abbrechen")) { dismiss() }
                 }
             }
             .sheet(item: $mode) { selected in

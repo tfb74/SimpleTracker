@@ -14,10 +14,17 @@ struct ActiveWorkoutView: View {
 
     @State private var favoriteStore    = WorkoutFavoriteStore.shared
     @State private var customSportStore = CustomSportStore.shared
+    @State private var usageStore       = WorkoutUsageStore.shared
     @State private var selectedType:     WorkoutType = .running
     @State private var selectedCustomSport: CustomSport? = nil
     @State private var showAddCustomSport = false
     @State private var isActive          = false
+    @State private var isPaused          = false
+    /// Akkumulierte Pause-Dauer in Sekunden — bei jedem Resume um die Dauer
+    /// der letzten Pause erhöht.
+    @State private var accumulatedPause:  TimeInterval = 0
+    /// Zeitpunkt zu dem die aktuelle Pause begann.
+    @State private var pauseStart:        Date?
     @State private var workoutStart:     Date?
     @State private var elapsed:          TimeInterval = 0
     @State private var timer:            Timer?
@@ -116,7 +123,7 @@ struct ActiveWorkoutView: View {
             }
             .buttonStyle(.plain)
             .padding(12)
-            .accessibilityLabel(isMapExpanded ? "Karte verkleinern" : "Karte maximieren")
+            .accessibilityLabel(isMapExpanded ? lt("Karte verkleinern") : lt("Karte maximieren"))
         }
     }
 
@@ -160,8 +167,8 @@ struct ActiveWorkoutView: View {
     private var workoutTypePicker: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
-                // Favoriten (built-in) zuerst
-                let favTypes = WorkoutType.allCases.filter { favoriteStore.isFavorite($0) }
+                // Favoriten (built-in) zuerst — Favoriten untereinander nach Häufigkeit sortiert
+                let favTypes = usageStore.sortedByUsage(WorkoutType.allCases.filter { favoriteStore.isFavorite($0) })
                 if !favTypes.isEmpty {
                     ForEach(favTypes) { type in
                         builtInTypeChip(type)
@@ -195,13 +202,14 @@ struct ActiveWorkoutView: View {
                             if selectedCustomSport?.id == sport.id { selectedCustomSport = nil }
                             customSportStore.remove(sport)
                         } label: {
-                            Label("Entfernen", systemImage: "trash")
+                            Label(lt("Entfernen"), systemImage: "trash")
                         }
                     }
                 }
 
-                // Alle Standard-Typen (Favoriten ohne Duplikat)
-                ForEach(WorkoutType.allCases.filter { !favoriteStore.isFavorite($0) }) { type in
+                // Alle Standard-Typen (Favoriten ohne Duplikat) — sortiert nach Häufigkeit der Nutzung
+                let nonFavTypes = usageStore.sortedByUsage(WorkoutType.allCases.filter { !favoriteStore.isFavorite($0) })
+                ForEach(nonFavTypes) { type in
                     builtInTypeChip(type)
                 }
 
@@ -209,7 +217,7 @@ struct ActiveWorkoutView: View {
                 Button { showAddCustomSport = true } label: {
                     VStack(spacing: 4) {
                         Image(systemName: "plus.circle.fill").font(.title3)
-                        Text("Eigene").font(.caption2)
+                        Text(lt("Eigene")).font(.caption2)
                     }
                     .padding(.horizontal, 14).padding(.vertical, 10)
                     .background(Color.accentColor.opacity(0.15))
@@ -225,7 +233,16 @@ struct ActiveWorkoutView: View {
     }
 
     private func builtInTypeChip(_ type: WorkoutType) -> some View {
-        Button {
+        let isSelected = selectedCustomSport == nil && selectedType == type
+        // Leichte Aktivitäten (Gehen, E-Bike, Gartenarbeit) bekommen
+        // einen Teal-Akzent, damit man auf einen Blick sieht: das ist
+        // entspannte Bewegung, kein Workout im klassischen Sinn.
+        let isLight = type.category == .light
+        let accent: Color = isLight ? .teal : Color.accentColor
+        let bgUnselected: Color = isLight ? Color.teal.opacity(0.12) : Color.secondary.opacity(0.15)
+        let fgUnselected: Color = isLight ? .teal : .primary
+
+        return Button {
             selectedType = type
             selectedCustomSport = nil
         } label: {
@@ -242,8 +259,8 @@ struct ActiveWorkoutView: View {
                 Text(type.displayName).font(.caption2)
             }
             .padding(.horizontal, 14).padding(.vertical, 10)
-            .background(selectedCustomSport == nil && selectedType == type ? Color.accentColor : Color.secondary.opacity(0.15))
-            .foregroundStyle(selectedCustomSport == nil && selectedType == type ? .white : .primary)
+            .background(isSelected ? accent : bgUnselected)
+            .foregroundStyle(isSelected ? Color.white : fgUnselected)
             .clipShape(Capsule())
         }
         .contextMenu {
@@ -251,7 +268,7 @@ struct ActiveWorkoutView: View {
                 favoriteStore.toggle(type)
             } label: {
                 Label(
-                    favoriteStore.isFavorite(type) ? "Aus Favoriten" : "Als Favorit",
+                    favoriteStore.isFavorite(type) ? lt("Aus Favoriten") : lt("Als Favorit"),
                     systemImage: favoriteStore.isFavorite(type) ? "star.slash" : "star"
                 )
             }
@@ -281,27 +298,94 @@ struct ActiveWorkoutView: View {
     }
 
     private var startStopButton: some View {
-        Button(action: isActive ? stopWorkout : startWorkout) {
-            Text(isActive ? lt("Workout beenden") : lt("Workout starten"))
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(isActive ? Color.red : Color.accentColor)
-                .foregroundStyle(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+        VStack(spacing: 10) {
+            if isPaused {
+                // Pause-Indikator über den Buttons
+                HStack(spacing: 6) {
+                    Image(systemName: "pause.circle.fill")
+                        .foregroundStyle(.orange)
+                    Text(lt("Pausiert"))
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.orange)
+                }
+                .padding(.bottom, 2)
+            }
+
+            if isActive {
+                HStack(spacing: 10) {
+                    // Pause/Resume — links, sekundär
+                    Button(action: togglePause) {
+                        HStack(spacing: 6) {
+                            Image(systemName: isPaused ? "play.fill" : "pause.fill")
+                            Text(isPaused ? lt("Fortsetzen") : lt("Pause"))
+                        }
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(isPaused ? Color.green : Color.orange)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                    }
+
+                    // Stop — rechts, destruktiv
+                    Button(action: stopWorkout) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "stop.fill")
+                            Text(lt("Beenden"))
+                        }
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.red)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                    }
+                }
+            } else {
+                Button(action: startWorkout) {
+                    Text(lt("Workout starten"))
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.accentColor)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                }
+            }
         }
         .padding()
     }
 
+    /// Pause toggle: misst die aktuelle Pause-Dauer und addiert sie zu
+    /// `accumulatedPause`, sodass `elapsed` weiterhin die echte Aktivzeit zeigt.
+    private func togglePause() {
+        if isPaused {
+            // Resume
+            if let started = pauseStart {
+                accumulatedPause += Date().timeIntervalSince(started)
+            }
+            pauseStart = nil
+            isPaused = false
+            location.resumeTracking()
+        } else {
+            // Pause
+            pauseStart = Date()
+            isPaused = true
+            location.pauseTracking()
+        }
+        persistCurrentDraft(status: .active)
+        refreshWorkoutSurface()
+    }
+
     private func draftRecoveryCard(_ draft: WorkoutDraft) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(draft.status == .pendingSave ? "Ungesichertes Workout gefunden" : "Laufendes Workout wiederherstellen")
+            Text(draft.status == .pendingSave ? lt("Ungesichertes Workout gefunden") : lt("Laufendes Workout wiederherstellen"))
                 .font(.headline)
             Text(draftSummary(draft))
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            Button(draft.status == .pendingSave ? "Workout jetzt sichern" : "Workout fortsetzen") {
+            Button(draft.status == .pendingSave ? lt("Workout jetzt sichern") : lt("Workout fortsetzen")) {
                 switch draft.status {
                 case .active:
                     restoreDraft(draft)
@@ -312,7 +396,7 @@ struct ActiveWorkoutView: View {
             .buttonStyle(.borderedProminent)
             .disabled(isSavingRecoveredDraft)
 
-            Button("Entwurf verwerfen", role: .destructive) {
+            Button(lt("Entwurf verwerfen"), role: .destructive) {
                 draftStore.clear()
             }
             .buttonStyle(.bordered)
@@ -382,6 +466,8 @@ struct ActiveWorkoutView: View {
 
     private func startWorkout() {
         draftStore.clear()
+        // Nutzung zählen — sortiert den Picker beim nächsten Mal entsprechend
+        usageStore.recordUsage(of: selectedType)
         location.requestAuthorization()
         location.startTracking()
         let start        = Date()
@@ -391,6 +477,9 @@ struct ActiveWorkoutView: View {
         lastDraftSaveMark = -1
         lastSurfaceUpdateMark = -1
         isActive        = true
+        isPaused        = false
+        accumulatedPause = 0
+        pauseStart       = nil
         persistCurrentDraft(status: .active)
         workoutSurface.startWorkout(
             workoutName: selectedWorkoutName,
@@ -402,6 +491,11 @@ struct ActiveWorkoutView: View {
         )
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            // Bei PAUSE: kein Timer-Inkrement, kein Milestone-Check, kein Autosave
+            guard !isPaused else {
+                refreshWorkoutSurface()
+                return
+            }
             elapsed += 1
             checkMilestone()
             autosaveIfNeeded()
@@ -413,9 +507,16 @@ struct ActiveWorkoutView: View {
         let workoutName = selectedWorkoutName
         let workoutSymbol = selectedWorkoutSymbol
         let unit = trackingDistanceUnit
+        // Falls noch in Pause: aktuelle Pause-Dauer für korrekte elapsed-Zeit
+        // im finalen HK-Workout einrechnen.
+        if isPaused, let pStart = pauseStart {
+            accumulatedPause += Date().timeIntervalSince(pStart)
+        }
         let route = location.stopTracking()
         timer?.invalidate(); timer = nil
         isActive = false
+        isPaused = false
+        pauseStart = nil
 
         guard let start = workoutStart else { return }
         let end      = Date()
@@ -461,6 +562,16 @@ struct ActiveWorkoutView: View {
     }
 
     private func restoreDraft(_ draft: WorkoutDraft) {
+        // Pause-State aus Draft wiederherstellen (Achtung: wenn die App während
+        // der Pause beendet wurde, läuft die Pause-Dauer währenddessen weiter).
+        let priorPauseSeconds = draft.pausedSeconds ?? 0
+        let restorePaused = draft.isPaused == true
+        var totalPause = priorPauseSeconds
+        if restorePaused, let pStart = draft.pauseStartedAt {
+            // Pause läuft noch — Zeit bis jetzt mitzählen für korrektes elapsed
+            totalPause += Date().timeIntervalSince(pStart)
+        }
+
         draftStore.save(
             WorkoutDraft(
                 id: draft.id,
@@ -469,17 +580,25 @@ struct ActiveWorkoutView: View {
                 lastUpdated: Date(),
                 distanceMeters: draft.distanceMeters,
                 route: draft.route,
-                status: .active
+                status: .active,
+                pausedSeconds: priorPauseSeconds,
+                isPaused: restorePaused ? true : nil,
+                pauseStartedAt: draft.pauseStartedAt
             )
         )
         selectedType = draft.workoutType
         workoutStart = draft.startDate
-        elapsed = max(0, Date().timeIntervalSince(draft.startDate))
+        // elapsed = (now - start) - totalPause → echte Aktivzeit
+        elapsed = max(0, Date().timeIntervalSince(draft.startDate) - totalPause)
+        accumulatedPause = priorPauseSeconds
+        isPaused = restorePaused
+        pauseStart = restorePaused ? draft.pauseStartedAt : nil
         previousDistance = draft.distanceMeters
         lastDraftSaveMark = -1
         lastSurfaceUpdateMark = -1
         location.requestAuthorization()
         location.startTracking(route: draft.route, totalDistanceMeters: draft.distanceMeters)
+        if restorePaused { location.pauseTracking() }
         isActive = true
         timer?.invalidate()
         workoutSurface.startWorkout(
@@ -491,6 +610,10 @@ struct ActiveWorkoutView: View {
             unit: trackingDistanceUnit
         )
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            guard !isPaused else {
+                refreshWorkoutSurface()
+                return
+            }
             elapsed += 1
             checkMilestone()
             autosaveIfNeeded()
@@ -519,7 +642,10 @@ struct ActiveWorkoutView: View {
             lastUpdated: Date(),
             distanceMeters: distanceMeters ?? location.totalDistanceMeters,
             route: route ?? location.recordedRoute,
-            status: status
+            status: status,
+            pausedSeconds: accumulatedPause > 0 ? accumulatedPause : nil,
+            isPaused: isPaused ? true : nil,
+            pauseStartedAt: pauseStart
         )
         draftStore.save(draft)
     }
@@ -623,11 +749,11 @@ private struct AddCustomSportSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Name der Sportart") {
-                    TextField("z. B. Bouldern, Crossfit, Kickboxen", text: $name)
+                Section(lt("Name der Sportart")) {
+                    TextField(lt("z. B. Bouldern, Crossfit, Kickboxen"), text: $name)
                         .textInputAutocapitalization(.sentences)
                 }
-                Section("Symbol") {
+                Section(lt("Symbol")) {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 44))], spacing: 6) {
                         ForEach(CustomSportStore.symbolChoices, id: \.self) { s in
                             Image(systemName: s)
@@ -641,14 +767,14 @@ private struct AddCustomSportSheet: View {
                     }
                 }
             }
-            .navigationTitle("Sportart hinzufügen")
+            .navigationTitle(lt("Sportart hinzufügen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Abbrechen") { dismiss() }
+                    Button(lt("Abbrechen")) { dismiss() }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Hinzufügen") {
+                    Button(lt("Hinzufügen")) {
                         store.add(name: name, symbol: symbol)
                         dismiss()
                     }

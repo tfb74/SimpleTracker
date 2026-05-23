@@ -28,7 +28,7 @@ struct WorkoutHistoryView: View {
                                 Button(role: .destructive) {
                                     Task { await healthKit.deleteWorkout(workout) }
                                 } label: {
-                                    Label("Löschen", systemImage: "trash")
+                                    Label(lt("Löschen"), systemImage: "trash")
                                 }
                             }
                         }
@@ -36,7 +36,7 @@ struct WorkoutHistoryView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("Verlauf")
+            .navigationTitle(lt("Verlauf"))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 16) {
@@ -45,7 +45,7 @@ struct WorkoutHistoryView: View {
                         } label: {
                             Image(systemName: "plus")
                         }
-                        .accessibilityLabel("Workout manuell eintragen")
+                        .accessibilityLabel(lt("Workout manuell eintragen"))
 
                         Button {
                             Task { await runImport() }
@@ -57,7 +57,7 @@ struct WorkoutHistoryView: View {
                             }
                         }
                         .disabled(isImporting)
-                        .accessibilityLabel("Von Apple Health laden")
+                        .accessibilityLabel(lt("Von Apple Health laden"))
                     }
                 }
             }
@@ -66,7 +66,7 @@ struct WorkoutHistoryView: View {
             }
             .overlay {
                 if healthKit.isLoading {
-                    ProgressView("Lade…")
+                    ProgressView(lt("Lade…"))
                 } else if healthKit.workouts.isEmpty {
                     emptyState
                 }
@@ -82,9 +82,9 @@ struct WorkoutHistoryView: View {
                 .foregroundStyle(.secondary)
 
             VStack(spacing: 6) {
-                Text("Keine Workouts")
+                Text(lt("Keine Workouts"))
                     .font(.title3.bold())
-                Text("Starte dein erstes Workout oder lade deine Daten aus Apple Health – inklusive Apple Watch-Aufzeichnungen.")
+                Text(lt("Starte dein erstes Workout oder lade deine Daten aus Apple Health – inklusive Apple Watch-Aufzeichnungen."))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -98,12 +98,12 @@ struct WorkoutHistoryView: View {
                     if isImporting {
                         HStack(spacing: 6) {
                             ProgressView().tint(.white)
-                            Text("Importiere…")
+                            Text(lt("Importiere…"))
                         }
                     } else if showImportDone {
-                        Label("Geladen", systemImage: "checkmark")
+                        Label(lt("Geladen"), systemImage: "checkmark")
                     } else {
-                        Label("Von Apple Health laden", systemImage: "square.and.arrow.down")
+                        Label(lt("Von Apple Health laden"), systemImage: "square.and.arrow.down")
                     }
                 }
                 .font(.subheadline.weight(.semibold))

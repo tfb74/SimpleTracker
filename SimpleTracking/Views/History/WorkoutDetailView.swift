@@ -40,20 +40,20 @@ struct WorkoutDetailView: View {
             }
         }
         .confirmationDialog(
-            "Workout löschen?",
+            lt("Workout löschen?"),
             isPresented: $showDeleteConfirm,
             titleVisibility: .visible
         ) {
-            Button("Löschen", role: .destructive) {
+            Button(lt("Löschen"), role: .destructive) {
                 Task { await performDelete() }
             }
-            Button("Abbrechen", role: .cancel) { }
+            Button(lt("Abbrechen"), role: .cancel) { }
         } message: {
-            Text("Das Workout wird endgültig entfernt. Falls es von SimpleTracking in Apple Health geschrieben wurde, wird es auch dort gelöscht.")
+            Text(lt("Das Workout wird endgültig entfernt. Falls es von SimpleTracking in Apple Health geschrieben wurde, wird es auch dort gelöscht."))
         }
         .overlay {
             if isDeleting {
-                ProgressView("Lösche…")
+                ProgressView(lt("Lösche…"))
                     .padding(24)
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
             }
@@ -74,7 +74,7 @@ struct WorkoutDetailView: View {
             } else {
                 RoundedRectangle(cornerRadius: 16)
                     .fill(Color.secondary.opacity(0.15))
-                    .overlay { Label("Keine Route", systemImage: "map").foregroundStyle(.secondary) }
+                    .overlay { Label(lt("Keine Route"), systemImage: "map").foregroundStyle(.secondary) }
             }
         }
     }
@@ -98,25 +98,25 @@ struct WorkoutDetailView: View {
             Divider()
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                DetailMetric(label: "Distanz",
+                DetailMetric(label: lt("Distanz"),
                              value: workout.formattedDistance(unit: settings.unitPreference),
                              icon: "map", color: .blue)
-                DetailMetric(label: "Kalorien",
+                DetailMetric(label: lt("Kalorien"),
                              value: String(format: "%.0f kcal", workout.activeCalories),
                              icon: "flame", color: .orange)
-                DetailMetric(label: "Schritte",
+                DetailMetric(label: lt("Schritte"),
                              value: workout.steps > 0 ? workout.steps.formatted() : "--",
                              icon: "figure.walk", color: .green)
-                DetailMetric(label: settings.unitPreference == .metric ? "Ø Tempo" : "Ø Pace",
+                DetailMetric(label: settings.unitPreference == .metric ? lt("Ø Tempo") : lt("Ø Pace"),
                              value: settings.unitPreference == .metric ? workout.pacePerKm : workout.pacePerMile,
                              icon: "speedometer", color: .purple)
-                DetailMetric(label: "Max. Tempo",
+                DetailMetric(label: lt("Max. Tempo"),
                              value: settings.unitPreference == .metric
                                  ? String(format: "%.1f km/h", workout.maxSpeedKmh)
                                  : String(format: "%.1f mph", workout.maxSpeedMPS * 2.23694),
                              icon: "gauge.open.with.lines.needle.67percent", color: .red)
                 if workout.heartRateAvg > 0 {
-                    DetailMetric(label: "Ø Herzrate",
+                    DetailMetric(label: lt("Ø Herzrate"),
                                  value: String(format: "%.0f bpm", workout.heartRateAvg),
                                  icon: "heart.fill", color: .pink)
                 }

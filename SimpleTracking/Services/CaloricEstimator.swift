@@ -126,6 +126,9 @@ enum CaloricEstimator {
         case .golf:       return 4.3
         case .skating:    return 7.0
         case .skiing:     return 6.0
+        // Leichte Aktivitäten — niedriger MET
+        case .eBike:      return 4.0    // E-Bike mit Motor-Unterstützung
+        case .gardening:  return 3.5    // typische Gartenarbeit (Pflanzen, Jäten)
         case .other:      return 4.0
         }
     }

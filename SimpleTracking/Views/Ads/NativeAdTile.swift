@@ -45,7 +45,7 @@ private struct DebugAdLoadStatusTile: View {
                     .foregroundStyle(.red)
                     .lineLimit(3)
             } else {
-                Text("Test-Ad wird geladen…")
+                Text(lt("Test-Ad wird geladen…"))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -303,7 +303,7 @@ private struct SimulatorNativeAdPreviewTile: View {
     var body: some View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Gesponsert")
+                Text(lt("Gesponsert"))
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(.secondary)
 

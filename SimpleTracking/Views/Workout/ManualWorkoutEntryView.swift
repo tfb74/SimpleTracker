@@ -6,6 +6,7 @@ struct ManualWorkoutEntryView: View {
     @Environment(UserSettings.self) private var settings
 
     @State private var favoriteStore = WorkoutFavoriteStore.shared
+    @State private var usageStore    = WorkoutUsageStore.shared
 
     // Aktivitätsauswahl
     @State private var selectedType: WorkoutType = .strength
@@ -48,12 +49,14 @@ struct ManualWorkoutEntryView: View {
 
     private var filteredTypes: [WorkoutType] {
         let lower = searchText.lowercased()
-        guard !lower.isEmpty else { return WorkoutType.allCases }
-        return WorkoutType.allCases.filter { $0.displayName.lowercased().contains(lower) }
+        let base = lower.isEmpty
+            ? WorkoutType.allCases
+            : WorkoutType.allCases.filter { $0.displayName.lowercased().contains(lower) }
+        return usageStore.sortedByUsage(base)
     }
 
     private var favoriteTypes: [WorkoutType] {
-        WorkoutType.allCases.filter { favoriteStore.isFavorite($0) }
+        usageStore.sortedByUsage(WorkoutType.allCases.filter { favoriteStore.isFavorite($0) })
     }
 
     var body: some View {
@@ -64,7 +67,7 @@ struct ManualWorkoutEntryView: View {
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .foregroundStyle(.secondary)
-                        TextField("Suchen oder Aktivität eingeben…", text: $searchText)
+                        TextField(lt("Suchen oder Aktivität eingeben…"), text: $searchText)
                             .textInputAutocapitalization(.sentences)
                             .onChange(of: searchText) { _, new in triggerSuggestion(new) }
                         if !searchText.isEmpty {
@@ -78,7 +81,7 @@ struct ManualWorkoutEntryView: View {
                     if isSuggesting {
                         HStack(spacing: 8) {
                             ProgressView().scaleEffect(0.75)
-                            Text("Passende Aktivität wird gesucht…")
+                            Text(lt("Passende Aktivität wird gesucht…"))
                                 .font(.caption).foregroundStyle(.secondary)
                         }
                     } else if let suggested = suggestedType, !searchText.isEmpty {
@@ -89,7 +92,7 @@ struct ManualWorkoutEntryView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "sparkles").foregroundStyle(.purple)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("LLM-Vorschlag")
+                                    Text(lt("LLM-Vorschlag"))
                                         .font(.caption2).foregroundStyle(.secondary)
                                     Text(suggested.displayName)
                                         .font(.subheadline).foregroundStyle(.primary)
@@ -103,24 +106,24 @@ struct ManualWorkoutEntryView: View {
                         .buttonStyle(.plain)
                     }
                 } header: {
-                    Text("Aktivität")
+                    Text(lt("Aktivität"))
                 } footer: {
                     if WorkoutTypeSuggestionService.isAvailable {
-                        Text("Gib z.\u{00A0}B. \"Beinpresse\" oder \"Zumba\" ein - das KI-Modell schlaegt den passenden Typ vor.")
+                        Text(lt("Gib z. B. \"Beinpresse\" oder \"Zumba\" ein - das KI-Modell schlägt den passenden Typ vor."))
                     }
                 }
 
                 // MARK: Favoriten
                 if !favoriteTypes.isEmpty && searchText.isEmpty {
-                    Section("Favoriten") {
+                    Section(lt("Favoriten")) {
                         activityGrid(favoriteTypes)
                     }
                 }
 
                 // MARK: Alle / gefilterte Aktivitäten
-                Section(searchText.isEmpty ? "Alle Aktivitäten" : "Ergebnisse") {
+                Section(searchText.isEmpty ? lt("Alle Aktivitäten") : lt("Ergebnisse")) {
                     if filteredTypes.isEmpty {
-                        Text("Keine Treffer")
+                        Text(lt("Keine Treffer"))
                             .font(.subheadline).foregroundStyle(.secondary)
                     } else {
                         activityGrid(filteredTypes)
@@ -128,22 +131,22 @@ struct ManualWorkoutEntryView: View {
                 }
 
                 // MARK: Zeitpunkt, Dauer & Intensität
-                Section("Zeitpunkt & Dauer") {
-                    DatePicker("Datum & Uhrzeit", selection: $workoutDate)
+                Section(lt("Zeitpunkt & Dauer")) {
+                    DatePicker(lt("Datum & Uhrzeit"), selection: $workoutDate)
 
                     HStack(spacing: 0) {
-                        Picker("Stunden", selection: $durationHours) {
+                        Picker(lt("Stunden"), selection: $durationHours) {
                             ForEach(0...23, id: \.self) { h in
-                                Text("\(h) Std").tag(h)
+                                Text(lf("%d Std", h)).tag(h)
                             }
                         }
                         .pickerStyle(.wheel)
                         .frame(maxWidth: .infinity)
                         .clipped()
 
-                        Picker("Minuten", selection: $durationMinutes) {
+                        Picker(lt("Minuten"), selection: $durationMinutes) {
                             ForEach(0...59, id: \.self) { m in
-                                Text("\(m) Min").tag(m)
+                                Text(lf("%d Min", m)).tag(m)
                             }
                         }
                         .pickerStyle(.wheel)
@@ -154,23 +157,23 @@ struct ManualWorkoutEntryView: View {
                     .listRowInsets(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
 
                     HStack {
-                        Text("Dauer")
+                        Text(lt("Dauer"))
                             .font(.caption).foregroundStyle(.secondary)
                         Spacer()
                         let h = durationHours, m = durationMinutes
                         if h > 0 && m > 0 {
-                            Text("\(h) Std \(m) Min").font(.callout.bold())
+                            Text(lf("%d Std %d Min", h, m)).font(.callout.bold())
                         } else if h > 0 {
-                            Text("\(h) Std").font(.callout.bold())
+                            Text(lf("%d Std", h)).font(.callout.bold())
                         } else {
-                            Text("\(m) Min").font(.callout.bold())
+                            Text(lf("%d Min", m)).font(.callout.bold())
                         }
                     }
 
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Intensität")
+                        Text(lt("Intensität"))
                             .font(.caption).foregroundStyle(.secondary)
-                        Picker("Intensität", selection: $intensity) {
+                        Picker(lt("Intensität"), selection: $intensity) {
                             ForEach(WorkoutIntensity.allCases) { level in
                                 Label(level.rawValue, systemImage: level.systemImage)
                                     .tag(level)
@@ -183,22 +186,22 @@ struct ManualWorkoutEntryView: View {
 
                 // MARK: Kalorien
                 Section {
-                    Toggle("Kalorien manuell angeben", isOn: $caloriesEnabled)
+                    Toggle(lt("Kalorien manuell angeben"), isOn: $caloriesEnabled)
                     if caloriesEnabled {
                         Stepper(
-                            "Kalorien: \(calories) kcal",
+                            lf("Kalorien: %d kcal", calories),
                             value: $calories, in: 0...5000, step: 10
                         )
                     }
                 } header: {
-                    Text("Kalorien (optional)")
+                    Text(lt("Kalorien (optional)"))
                 } footer: {
                     if caloriesEnabled {
-                        Text("Manuell eingegebene Kalorien werden direkt übernommen.")
+                        Text(lt("Manuell eingegebene Kalorien werden direkt übernommen."))
                     } else if durationSec > 0 {
-                        Text("Schätzung für \(selectedType.displayName) · \(intensity.rawValue)e Intensität: ca. \(estimatedCalories) kcal.")
+                        Text(lf("Schätzung für %@: ca. %d kcal.", selectedType.displayName, estimatedCalories))
                     } else {
-                        Text("Kalorien werden aus Aktivität, Dauer und Intensität geschätzt.")
+                        Text(lt("Kalorien werden aus Aktivität, Dauer und Intensität geschätzt."))
                     }
                 }
 
@@ -208,14 +211,14 @@ struct ManualWorkoutEntryView: View {
                     }
                 }
             }
-            .navigationTitle("Workout eintragen")
+            .navigationTitle(lt("Workout eintragen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Abbrechen") { dismiss() }
+                    Button(lt("Abbrechen")) { dismiss() }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Speichern") {
+                    Button(lt("Speichern")) {
                         Task { await save() }
                     }
                     .fontWeight(.semibold)
@@ -224,7 +227,7 @@ struct ManualWorkoutEntryView: View {
             }
             .overlay {
                 if isSaving {
-                    ProgressView("Speichern…")
+                    ProgressView(lt("Speichern…"))
                         .padding(24)
                         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
                 }
@@ -254,7 +257,7 @@ struct ManualWorkoutEntryView: View {
                         favoriteStore.toggle(type)
                     } label: {
                         Label(
-                            favoriteStore.isFavorite(type) ? "Aus Favoriten entfernen" : "Als Favorit merken",
+                            favoriteStore.isFavorite(type) ? lt("Aus Favoriten entfernen") : lt("Als Favorit merken"),
                             systemImage: favoriteStore.isFavorite(type) ? "star.slash" : "star"
                         )
                     }
@@ -291,6 +294,9 @@ struct ManualWorkoutEntryView: View {
         isSaving = true
         saveError = nil
 
+        // Nutzung zählen — Picker sortiert beim nächsten Mal entsprechend
+        usageStore.recordUsage(of: selectedType)
+
         let start = workoutDate
         let end = workoutDate.addingTimeInterval(durationSec)
         let cal = caloriesEnabled ? Double(calories) : Double(estimatedCalories)
@@ -308,7 +314,7 @@ struct ManualWorkoutEntryView: View {
             dismiss()
         } catch {
             isSaving = false
-            saveError = "Speichern fehlgeschlagen: \(error.localizedDescription)"
+            saveError = lf("Speichern fehlgeschlagen: %@", error.localizedDescription)
         }
     }
 }
@@ -320,12 +326,17 @@ private struct WorkoutTypeChip: View {
     let isSelected: Bool
     let isFavorite: Bool
 
+    private var isLight: Bool { type.category == .light }
+    private var accent: Color { isLight ? .teal : Color.accentColor }
+    private var unselectedFg: Color { isLight ? .teal : .primary }
+    private var unselectedBg: Color { isLight ? Color.teal.opacity(0.10) : Color(.secondarySystemBackground) }
+
     var body: some View {
         VStack(spacing: 6) {
             ZStack(alignment: .topTrailing) {
                 Image(systemName: type.systemImage)
                     .font(.title2)
-                    .foregroundStyle(isSelected ? .white : .primary)
+                    .foregroundStyle(isSelected ? .white : unselectedFg)
                     .frame(maxWidth: .infinity)
 
                 if isFavorite {
@@ -337,18 +348,18 @@ private struct WorkoutTypeChip: View {
             }
             Text(type.displayName)
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(isSelected ? .white : .primary)
+                .foregroundStyle(isSelected ? .white : unselectedFg)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
         }
         .frame(maxWidth: .infinity, minHeight: 72)
         .padding(.horizontal, 8)
         .padding(.vertical, 8)
-        .background(isSelected ? Color.accentColor : Color(.secondarySystemBackground))
+        .background(isSelected ? accent : unselectedBg)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(isSelected ? Color.clear : Color.secondary.opacity(0.2), lineWidth: 1)
+                .stroke(isSelected ? Color.clear : (isLight ? Color.teal.opacity(0.4) : Color.secondary.opacity(0.2)), lineWidth: 1)
         )
         .animation(.easeInOut(duration: 0.15), value: isSelected)
     }

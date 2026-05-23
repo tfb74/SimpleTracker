@@ -28,11 +28,11 @@ struct FriendCodeShareView: View {
     }
 
     private var shareSubject: String {
-        "\(displayName) auf SimpleTracking"
+        lf("%@ auf SimpleTracking", displayName)
     }
 
     private var shareMessage: String {
-        "Folge mir in SimpleTracking. Tippe auf den Link, um meinen Code automatisch zu übernehmen:"
+        lt("Folge mir in SimpleTracking. Tippe auf den Link, um meinen Code automatisch zu übernehmen:")
     }
 
     var body: some View {
@@ -53,7 +53,7 @@ struct FriendCodeShareView: View {
                 }
 
                 VStack(spacing: 4) {
-                    Text("Dein Code")
+                    Text(lt("Dein Code"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Text(code)
@@ -61,7 +61,7 @@ struct FriendCodeShareView: View {
                         .foregroundStyle(Color.accentColor)
                 }
 
-                Text("Freunde tippen den Code in \"Freund hinzufügen\" ein, oder scannen den QR-Code mit der Kamera.")
+                Text(lt("Freunde tippen den Code in \"Freund hinzufügen\" ein, oder scannen den QR-Code mit der Kamera."))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -74,7 +74,7 @@ struct FriendCodeShareView: View {
                     subject: Text(shareSubject),
                     message: Text(shareMessage)
                 ) {
-                    Label("Teilen…", systemImage: "square.and.arrow.up")
+                    Label(lt("Teilen…"), systemImage: "square.and.arrow.up")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
@@ -82,17 +82,17 @@ struct FriendCodeShareView: View {
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal)
 
-                Button("Code kopieren") {
+                Button(lt("Code kopieren")) {
                     UIPasteboard.general.string = code
                     UISelectionFeedbackGenerator().selectionChanged()
                 }
                 .padding(.bottom)
             }
-            .navigationTitle("Code teilen")
+            .navigationTitle(lt("Code teilen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Fertig") { dismiss() }
+                    Button(lt("Fertig")) { dismiss() }
                 }
             }
         }

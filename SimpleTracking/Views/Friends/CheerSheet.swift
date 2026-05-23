@@ -33,7 +33,7 @@ struct CheerSheet: View {
             VStack(spacing: 18) {
                 // Empfänger-Headline
                 VStack(spacing: 4) {
-                    Text(lf("Reagieren auf %@", activity.displayName))
+                    Text(lf("Reagieren auf %@", activity.presentableName))
                         .font(.headline)
                     Text(activity.eventTitle)
                         .font(.caption)

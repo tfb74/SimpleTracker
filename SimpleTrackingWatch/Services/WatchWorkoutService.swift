@@ -80,20 +80,51 @@ final class WatchWorkoutService: NSObject {
 
     func stopWorkout() async throws {
         stopTimer()
+
+        // Reihenfolge wichtig: erst Datensammlung beenden, dann Workout
+        // finalisieren, dann Session beenden. Sonst bleibt die HK-Session
+        // hängen und Watch zeigt weiter „Now Playing"-Workout-Indikator,
+        // der GPS-Chip wird nicht freigegeben.
+        do {
+            try await builder?.endCollection(at: Date())
+            _ = try await builder?.finishWorkout()
+        } catch {
+            // Selbst wenn finalisieren scheitert: Session sauber beenden,
+            // sonst läuft der Workout-Indikator ewig.
+            print("[Watch] finishWorkout failed: \(error.localizedDescription)")
+        }
         session?.end()
-        try await builder?.endCollection(at: Date())
-        _ = try await builder?.finishWorkout()
+
+        // Delegate-Verbindungen kappen damit keine Late-Callbacks mehr
+        // Metriken befüllen.
+        builder?.delegate = nil
+        session?.delegate = nil
+
+        // Hartes Tear-Down: ohne nil bleibt die Session in der HK-Runtime
+        // referenziert und der „Now Playing"-Status bleibt aktiv.
+        builder = nil
+        session = nil
 
         isActive             = false
         isPaused             = false
-        currentMetrics.isActive = false
+        currentMetrics       = WorkoutMetrics()    // setzt isActive automatisch auf false
         elapsedSeconds       = 0
-        currentMetrics       = WorkoutMetrics()
-        sendMetrics()
+        previousMilestoneMeters = 0
+        sendMetrics()  // teilt iPhone mit: Workout ist vorbei
     }
 
-    func pauseWorkout()  { session?.pause();  isPaused = true;  stopTimer() }
-    func resumeWorkout() { session?.resume(); isPaused = false; startTimer() }
+    func pauseWorkout()  {
+        guard isActive else { return }
+        session?.pause()
+        isPaused = true
+        stopTimer()
+    }
+    func resumeWorkout() {
+        guard isActive else { return }
+        session?.resume()
+        isPaused = false
+        startTimer()
+    }
 
     // MARK: - Timer
 
@@ -182,6 +213,9 @@ extension WatchWorkoutService: HKLiveWorkoutBuilderDelegate {
     func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {}
 
     func workoutBuilder(_ workoutBuilder: HKLiveWorkoutBuilder, didCollectDataOf collectedTypes: Set<HKSampleType>) {
+        // Late-Callback nach Workout-Ende ignorieren — sonst tauchen alte
+        // Werte in einer eigentlich beendeten Session wieder auf.
+        guard isActive else { return }
         for type in collectedTypes {
             guard let qt = type as? HKQuantityType else { continue }
             let stats = workoutBuilder.statistics(for: qt)

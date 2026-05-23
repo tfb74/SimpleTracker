@@ -3,7 +3,9 @@ SimpleTracking – Workout, Ernährung und Schritte. Alles auf einen Blick.
 SimpleTracking begleitet dich durch deinen aktiven Alltag: GPS-Workouts, Schritte, Kalorien und Ernährungstracking – ohne Schnickschnack, ohne Abo, mit voller Kontrolle über deine Daten.
 
 WORKOUT-TRACKING
-• 19 Aktivitätstypen: Laufen, Radfahren, Wandern, Schwimmen, Krafttraining, Yoga, HIIT und mehr
+• 21 Aktivitätstypen: Laufen, Radfahren, Wandern, Schwimmen, Krafttraining, Yoga, HIIT und mehr
+• Auch leichte Aktivitäten: Gehen, E-Bike, Gartenarbeit – farblich abgesetzt als entspannte Bewegung
+• Smart-Sortierung: deine meistgenutzten Sportarten erscheinen zuerst
 • Live-Karte mit GPS-Aufzeichnung deiner Route
 • Höhe, Pace, Distanz, Kalorien in Echtzeit
 • Manuelle Eintragung für Indoor-Workouts und Studio-Sessions
@@ -26,6 +28,13 @@ GAMIFICATION
 • 14 Achievements für deine Meilensteine
 • Leaderboards via Game Center
 • CloudKit-Sync zwischen iPhone und iPad
+
+CONTESTS & TEAMS
+• Daily Streak, Gesamtsumme, Score-Race oder Kalorien-Ziel
+• Mit Freunden, im Team oder firmenweit mit Sub-Teams für Abteilungen
+• Live-Leaderboard und Verlaufs-Chart
+• Lokale Erinnerungen 24h vor Deadline
+• Beitritt per Code oder iMessage-Link
 
 DATENSCHUTZ
 • Foto-Analyse läuft komplett auf deinem Gerät (Apple Intelligence)

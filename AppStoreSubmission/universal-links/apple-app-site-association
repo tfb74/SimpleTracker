@@ -7,8 +7,12 @@
         "paths": [
           "/SimpleTracker/friend",
           "/SimpleTracker/friend/*",
+          "/SimpleTracker/contest",
+          "/SimpleTracker/contest/*",
           "/friend",
-          "/friend/*"
+          "/friend/*",
+          "/contest",
+          "/contest/*"
         ]
       }
     ]
